@@ -71,6 +71,8 @@ Enjoy!
 <<<<<<< HEAD
 =======
 >>>>>>> 811b2c111d6cea159c607bd32cbd01c5469480e3
+=======
+>>>>>>> 811b2c111d6cea159c607bd32cbd01c5469480e3
 
 Symfony Standard Edition
 
