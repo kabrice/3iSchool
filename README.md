@@ -1,3 +1,4 @@
+
 Symfony Standard Edition
 ========================
 
@@ -68,6 +69,8 @@ Enjoy!
 [13]: https://symfony.com/doc/3.0/bundles/SensioGeneratorBundle/index.html
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 811b2c111d6cea159c607bd32cbd01c5469480e3
 
 Symfony Standard Edition
 
