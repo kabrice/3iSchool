@@ -14,3 +14,15 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+.idea/.name
+.idea/3ischool.iml
+.idea/compiler.xml
+.idea/copyright/
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
+.idea/symfony2.xml
+.idea/vcs.xml
+
+
