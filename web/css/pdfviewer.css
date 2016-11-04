@@ -1,0 +1,98 @@
+#pdfviewer-left{
+    margin-left: -15px;
+    margin-top: -50px;
+}
+
+#pdfviewer-right{
+
+    margin-left: -37px;
+    margin-top: -78px;
+    width: 37%;
+    height: 650px;
+}
+
+.panel-heading,
+.panel{
+    border: 1px solid rgba(99, 99, 99, 0.21) ;
+
+}
+.panel-body{
+    height: 650px;
+}
+
+.panel{
+    width: 107%;
+    margin-left: -17px;
+}
+
+.panel-heading{
+    text-align: center;
+
+
+    font-weight:bold;
+}
+
+body{
+    background-color: rgba(229, 229, 229, 0.27) !important;
+    margin: 0; height: 100%;
+    height: 100%;
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 15pt;
+    color: #2a3136;
+}
+
+.btn-question{
+    background-color: #e84e0f;
+    float: right;
+    border: none;
+    color: white;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 10px;
+
+}
+
+.delimiter{
+    border: 1px solid #d5d5d5;
+    border-top: none;
+    clear: both;
+    width: 430px;
+}
+
+.question-page{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    color: #5a6974;
+    width: 150px;
+
+}
+.question-title{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    color: #414c54;
+    font-weight: bold;
+
+}
+.question-explication{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    color: #414c54;
+}
+td img{
+    width: 50px;
+    height: 50px;
+}
+
+table{
+    margin-top: 10px;
+}
+
+td{
+    padding: 10px;
+    padding-left: 0px;
+    cursor: pointer;
+}
+
+/*
+table, th, td {
+    border: 1px solid black;
+}*/
