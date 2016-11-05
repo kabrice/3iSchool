@@ -19,14 +19,14 @@ class Niveau
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false, unique=true)
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @ORM\OneToMany(targetEntity="Etudiant", mappedBy="niveau")
@@ -67,5 +67,46 @@ class Niveau
     public function getLibelle()
     {
         return $this->libelle;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     *
+     * @return Niveau
+     */
+    public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants[] = $etudiant;
+
+        return $this;
+    }
+
+    /**
+     * Remove etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     */
+    public function removeEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants->removeElement($etudiant);
+    }
+
+    /**
+     * Get etudiants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEtudiants()
+    {
+        return $this->etudiants;
     }
 }

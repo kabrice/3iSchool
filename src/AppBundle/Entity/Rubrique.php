@@ -20,35 +20,35 @@ class Rubrique
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255, unique=true)
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="imageRoot", type="string", length=255)
      */
-    private $imageRoot;
+    protected $imageRoot;
 
     /**
      * @var string
      *
      * @ORM\Column(name="presentation", type="string", length=10000)
      */
-    private $presentation;
+    protected $presentation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="importance", type="text")
+     * @ORM\Column(name="importance", type="text", length=512)
      */
-    private $importance;
+    protected $importance;
 
 
     /**
@@ -67,12 +67,12 @@ class Rubrique
     /**
      * @ManyToMany(targetEntity="Groupe", inversedBy="rubriques")
      */
-    private $groupes;
+    protected $groupes;
 
     /**
      * @ManyToMany(targetEntity="SousRubrique", mappedBy="rubriques")
      */
-    private $sousRubriques;
+    protected $sousRubriques;
 
     /**
      * Get id
@@ -178,5 +178,140 @@ class Rubrique
     public function getImportance()
     {
         return $this->importance;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sousRubriques = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add contenus
+     *
+     * @param \AppBundle\Entity\Contenu $contenus
+     *
+     * @return Rubrique
+     */
+    public function addContenus(\AppBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus[] = $contenus;
+
+        return $this;
+    }
+
+    /**
+     * Remove contenus
+     *
+     * @param \AppBundle\Entity\Contenu $contenus
+     */
+    public function removeContenus(\AppBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus->removeElement($contenus);
+    }
+
+    /**
+     * Get contenus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContenus()
+    {
+        return $this->contenus;
+    }
+
+    /**
+     * Set typeRubrique
+     *
+     * @param \AppBundle\Entity\TypeRubrique $typeRubrique
+     *
+     * @return Rubrique
+     */
+    public function setTypeRubrique(\AppBundle\Entity\TypeRubrique $typeRubrique = null)
+    {
+        $this->typeRubrique = $typeRubrique;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRubrique
+     *
+     * @return \AppBundle\Entity\TypeRubrique
+     */
+    public function getTypeRubrique()
+    {
+        return $this->typeRubrique;
+    }
+
+    /**
+     * Add groupe
+     *
+     * @param \AppBundle\Entity\Groupe $groupe
+     *
+     * @return Rubrique
+     */
+    public function addGroupe(\AppBundle\Entity\Groupe $groupe)
+    {
+        $this->groupes[] = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupe
+     *
+     * @param \AppBundle\Entity\Groupe $groupe
+     */
+    public function removeGroupe(\AppBundle\Entity\Groupe $groupe)
+    {
+        $this->groupes->removeElement($groupe);
+    }
+
+    /**
+     * Get groupes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupes()
+    {
+        return $this->groupes;
+    }
+
+    /**
+     * Add sousRubrique
+     *
+     * @param \AppBundle\Entity\SousRubrique $sousRubrique
+     *
+     * @return Rubrique
+     */
+    public function addSousRubrique(\AppBundle\Entity\SousRubrique $sousRubrique)
+    {
+        $this->sousRubriques[] = $sousRubrique;
+
+        return $this;
+    }
+
+    /**
+     * Remove sousRubrique
+     *
+     * @param \AppBundle\Entity\SousRubrique $sousRubrique
+     */
+    public function removeSousRubrique(\AppBundle\Entity\SousRubrique $sousRubrique)
+    {
+        $this->sousRubriques->removeElement($sousRubrique);
+    }
+
+    /**
+     * Get sousRubriques
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSousRubriques()
+    {
+        return $this->sousRubriques;
     }
 }

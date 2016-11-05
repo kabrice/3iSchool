@@ -19,35 +19,35 @@ class Vote
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="num_ref", type="integer")
      */
-    private $num_ref;
+    protected $num_ref;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ref", type="string", length=255)
      */
-    private $ref;
+    protected $ref;
 
     /**
      * @var int
      *
      * @ORM\Column(name="valeur", type="integer")
      */
-    private $valeur;
+    protected $valeur;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_vote", type="datetimetz")
      */
-    private $dateVote;
+    protected $dateVote;
 
 
     /**

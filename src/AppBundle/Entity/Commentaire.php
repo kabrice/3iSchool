@@ -20,49 +20,49 @@ class Commentaire
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="text", nullable=false, unique=true)
+     * @ORM\Column(name="libelle", type="text")
      */
-    private $libelle;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="depth", type="integer")
-     */
-    private $depth;
+    protected $libelle;
 
     /**
      * @var int
      *
      * @ORM\Column(name="parent_id", type="integer")
      */
-    private $parent_id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="nombre_like", type="integer")
-     */
-    private $nombreLike;
+    protected $parent_id;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_publication", type="datetimetz", nullable=false)
      */
-    private $datePublication;
+    protected $datePublication;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="depth", type="integer")
+     */
+    protected $depth;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nombre_like", type="integer")
+     */
+    protected $nombreLike;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="report", type="boolean")
      */
-    private $report;
+    protected $report;
 
     /**
      * @ORM\ManyToOne(targetEntity="Contribution", inversedBy="commentaires")
@@ -71,9 +71,14 @@ class Commentaire
     protected $contribution;
 
     /**
-     * @ManyToMany(targetEntity="User", mappedBy="commentaires")
+     * @ManyToMany(targetEntity="Enseignant", mappedBy="commentaires")
      */
-    private $users;
+    protected $enseignants;
+
+    /**
+     * @ManyToMany(targetEntity="Etudiant", mappedBy="commentaires")
+     */
+    protected $etudiants;
 
 
     /**
@@ -111,30 +116,6 @@ class Commentaire
     }
 
     /**
-     * Set depth
-     *
-     * @param integer $depth
-     *
-     * @return Commentaire
-     */
-    public function setDepth($depth)
-    {
-        $this->depth = $depth;
-
-        return $this;
-    }
-
-    /**
-     * Get depth
-     *
-     * @return int
-     */
-    public function getDepth()
-    {
-        return $this->depth;
-    }
-
-    /**
      * Set parentId
      *
      * @param integer $parentId
@@ -156,30 +137,6 @@ class Commentaire
     public function getParentId()
     {
         return $this->parent_id;
-    }
-
-    /**
-     * Set nombreLike
-     *
-     * @param integer $nombreLike
-     *
-     * @return Commentaire
-     */
-    public function setNombreLike($nombreLike)
-    {
-        $this->nombreLike = $nombreLike;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreLike
-     *
-     * @return int
-     */
-    public function getNombreLike()
-    {
-        return $this->nombreLike;
     }
 
     /**
@@ -207,6 +164,54 @@ class Commentaire
     }
 
     /**
+     * Set depth
+     *
+     * @param integer $depth
+     *
+     * @return Commentaire
+     */
+    public function setDepth($depth)
+    {
+        $this->depth = $depth;
+
+        return $this;
+    }
+
+    /**
+     * Get depth
+     *
+     * @return int
+     */
+    public function getDepth()
+    {
+        return $this->depth;
+    }
+
+    /**
+     * Set nombreLike
+     *
+     * @param integer $nombreLike
+     *
+     * @return Commentaire
+     */
+    public function setNombreLike($nombreLike)
+    {
+        $this->nombreLike = $nombreLike;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreLike
+     *
+     * @return int
+     */
+    public function getNombreLike()
+    {
+        return $this->nombreLike;
+    }
+
+    /**
      * Set report
      *
      * @param boolean $report
@@ -228,5 +233,105 @@ class Commentaire
     public function getReport()
     {
         return $this->report;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->enseignants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set contribution
+     *
+     * @param \AppBundle\Entity\Contribution $contribution
+     *
+     * @return Commentaire
+     */
+    public function setContribution(\AppBundle\Entity\Contribution $contribution = null)
+    {
+        $this->contribution = $contribution;
+
+        return $this;
+    }
+
+    /**
+     * Get contribution
+     *
+     * @return \AppBundle\Entity\Contribution
+     */
+    public function getContribution()
+    {
+        return $this->contribution;
+    }
+
+    /**
+     * Add enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     *
+     * @return Commentaire
+     */
+    public function addEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants[] = $enseignant;
+
+        return $this;
+    }
+
+    /**
+     * Remove enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     */
+    public function removeEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants->removeElement($enseignant);
+    }
+
+    /**
+     * Get enseignants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEnseignants()
+    {
+        return $this->enseignants;
+    }
+
+    /**
+     * Add etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     *
+     * @return Commentaire
+     */
+    public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants[] = $etudiant;
+
+        return $this;
+    }
+
+    /**
+     * Remove etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     */
+    public function removeEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants->removeElement($etudiant);
+    }
+
+    /**
+     * Get etudiants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEtudiants()
+    {
+        return $this->etudiants;
     }
 }

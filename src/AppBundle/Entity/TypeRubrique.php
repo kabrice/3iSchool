@@ -19,14 +19,14 @@ class TypeRubrique
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255, nullable=false, unique=true)
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @ORM\OneToMany(targetEntity="Rubrique", mappedBy="typeRubrique")
@@ -67,5 +67,46 @@ class TypeRubrique
     public function getLibelle()
     {
         return $this->libelle;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rubriques = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add rubrique
+     *
+     * @param \AppBundle\Entity\Rubrique $rubrique
+     *
+     * @return TypeRubrique
+     */
+    public function addRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    {
+        $this->rubriques[] = $rubrique;
+
+        return $this;
+    }
+
+    /**
+     * Remove rubrique
+     *
+     * @param \AppBundle\Entity\Rubrique $rubrique
+     */
+    public function removeRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    {
+        $this->rubriques->removeElement($rubrique);
+    }
+
+    /**
+     * Get rubriques
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRubriques()
+    {
+        return $this->rubriques;
     }
 }

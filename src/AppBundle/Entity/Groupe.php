@@ -20,24 +20,24 @@ class Groupe
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", nullable=false, unique=true)
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @ManyToMany(targetEntity="Enseignant", inversedBy="groupes")
      */
-    private $enseignants;
+    protected $enseignants;
 
     /**
      * @ManyToMany(targetEntity="Rubrique", mappedBy="groupes")
      */
-    private $rubriques;
+    protected $rubriques;
 
 
 
@@ -78,5 +78,116 @@ class Groupe
     public function getLibelle()
     {
         return $this->libelle;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->enseignants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rubriques = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etudiantGroupePromotions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     *
+     * @return Groupe
+     */
+    public function addEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants[] = $enseignant;
+
+        return $this;
+    }
+
+    /**
+     * Remove enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     */
+    public function removeEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants->removeElement($enseignant);
+    }
+
+    /**
+     * Get enseignants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEnseignants()
+    {
+        return $this->enseignants;
+    }
+
+    /**
+     * Add rubrique
+     *
+     * @param \AppBundle\Entity\Rubrique $rubrique
+     *
+     * @return Groupe
+     */
+    public function addRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    {
+        $this->rubriques[] = $rubrique;
+
+        return $this;
+    }
+
+    /**
+     * Remove rubrique
+     *
+     * @param \AppBundle\Entity\Rubrique $rubrique
+     */
+    public function removeRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    {
+        $this->rubriques->removeElement($rubrique);
+    }
+
+    /**
+     * Get rubriques
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRubriques()
+    {
+        return $this->rubriques;
+    }
+
+    /**
+     * Add etudiantGroupePromotion
+     *
+     * @param \AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion
+     *
+     * @return Groupe
+     */
+    public function addEtudiantGroupePromotion(\AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion)
+    {
+        $this->etudiantGroupePromotions[] = $etudiantGroupePromotion;
+
+        return $this;
+    }
+
+    /**
+     * Remove etudiantGroupePromotion
+     *
+     * @param \AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion
+     */
+    public function removeEtudiantGroupePromotion(\AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion)
+    {
+        $this->etudiantGroupePromotions->removeElement($etudiantGroupePromotion);
+    }
+
+    /**
+     * Get etudiantGroupePromotions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEtudiantGroupePromotions()
+    {
+        return $this->etudiantGroupePromotions;
     }
 }

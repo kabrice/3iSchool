@@ -19,15 +19,14 @@ class Promotion
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="text", nullable=false, unique=true)
+     * @ORM\Column(name="libelle", type="string", length=255, nullable=false, unique=true)
      */
-    private $libelle;
-
+    protected $libelle;
 
     /**
      * @ORM\OneToMany(targetEntity="EtudiantGroupePromotion", mappedBy="promotion")
@@ -68,5 +67,46 @@ class Promotion
     public function getLibelle()
     {
         return $this->libelle;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->etudiantGroupePromotions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add etudiantGroupePromotion
+     *
+     * @param \AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion
+     *
+     * @return Promotion
+     */
+    public function addEtudiantGroupePromotion(\AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion)
+    {
+        $this->etudiantGroupePromotions[] = $etudiantGroupePromotion;
+
+        return $this;
+    }
+
+    /**
+     * Remove etudiantGroupePromotion
+     *
+     * @param \AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion
+     */
+    public function removeEtudiantGroupePromotion(\AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion)
+    {
+        $this->etudiantGroupePromotions->removeElement($etudiantGroupePromotion);
+    }
+
+    /**
+     * Get etudiantGroupePromotions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEtudiantGroupePromotions()
+    {
+        return $this->etudiantGroupePromotions;
     }
 }

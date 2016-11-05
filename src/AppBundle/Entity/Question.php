@@ -20,56 +20,56 @@ class Question
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="text", nullable=false, unique=true)
+     * @ORM\Column(name="libelle", type="text")
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_publication", type="datetimetz", nullable=false)
      */
-    private $datePublication;
+    protected $datePublication;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nombre_like", type="integer")
      */
-    private $nombreLike;
+    protected $nombreLike;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nombre_dislike", type="integer")
      */
-    private $nombreDislike;
+    protected $nombreDislike;
 
     /**
      * @var string
      *
      * @ORM\Column(name="image_root", type="string", length=255, nullable=false)
      */
-    private $imageRoot;
+    protected $imageRoot;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="report", type="boolean")
      */
-    private $report;
+    protected $report;
 
     /**
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="questions")
@@ -90,9 +90,15 @@ class Question
     protected $contributions;
 
     /**
-     * @ManyToMany(targetEntity="User", mappedBy="questions")
+     * @ManyToMany(targetEntity="Enseignant", mappedBy="questions")
      */
-    private $users;
+    protected $enseignants;
+
+    /**
+     * @ManyToMany(targetEntity="Etudiant", mappedBy="questions")
+     */
+    protected $etudiants;
+
 
     /**
      * Get id
@@ -270,5 +276,164 @@ class Question
     public function getReport()
     {
         return $this->report;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contributions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->enseignants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set contenu
+     *
+     * @param \AppBundle\Entity\Contenu $contenu
+     *
+     * @return Question
+     */
+    public function setContenu(\AppBundle\Entity\Contenu $contenu = null)
+    {
+        $this->contenu = $contenu;
+
+        return $this;
+    }
+
+    /**
+     * Get contenu
+     *
+     * @return \AppBundle\Entity\Contenu
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
+
+    /**
+     * Set typeQuestion
+     *
+     * @param \AppBundle\Entity\TypeQuestion $typeQuestion
+     *
+     * @return Question
+     */
+    public function setTypeQuestion(\AppBundle\Entity\TypeQuestion $typeQuestion = null)
+    {
+        $this->typeQuestion = $typeQuestion;
+
+        return $this;
+    }
+
+    /**
+     * Get typeQuestion
+     *
+     * @return \AppBundle\Entity\TypeQuestion
+     */
+    public function getTypeQuestion()
+    {
+        return $this->typeQuestion;
+    }
+
+    /**
+     * Add contribution
+     *
+     * @param \AppBundle\Entity\Contribution $contribution
+     *
+     * @return Question
+     */
+    public function addContribution(\AppBundle\Entity\Contribution $contribution)
+    {
+        $this->contributions[] = $contribution;
+
+        return $this;
+    }
+
+    /**
+     * Remove contribution
+     *
+     * @param \AppBundle\Entity\Contribution $contribution
+     */
+    public function removeContribution(\AppBundle\Entity\Contribution $contribution)
+    {
+        $this->contributions->removeElement($contribution);
+    }
+
+    /**
+     * Get contributions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContributions()
+    {
+        return $this->contributions;
+    }
+
+    /**
+     * Add enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     *
+     * @return Question
+     */
+    public function addEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants[] = $enseignant;
+
+        return $this;
+    }
+
+    /**
+     * Remove enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     */
+    public function removeEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants->removeElement($enseignant);
+    }
+
+    /**
+     * Get enseignants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEnseignants()
+    {
+        return $this->enseignants;
+    }
+
+    /**
+     * Add etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     *
+     * @return Question
+     */
+    public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants[] = $etudiant;
+
+        return $this;
+    }
+
+    /**
+     * Remove etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     */
+    public function removeEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants->removeElement($etudiant);
+    }
+
+    /**
+     * Get etudiants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEtudiants()
+    {
+        return $this->etudiants;
     }
 }

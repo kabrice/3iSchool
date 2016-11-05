@@ -20,42 +20,42 @@ class Contribution
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="text", nullable=false, unique=true)
+     * @ORM\Column(name="libelle", type="text")
      */
-    private $libelle;
+    protected $libelle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255, nullable=false, unique=true)
      */
-    private $type;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="nombre_like", type="integer")
-     */
-    private $nombreLike;
+    protected $type;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_publication", type="datetimetz", nullable=false)
      */
-    private $datePublication;
+    protected $datePublication;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nombre_like", type="integer")
+     */
+    protected $nombreLike;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="report", type="boolean")
      */
-    private $report;
+    protected $report;
 
     /**
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="contributions")
@@ -70,9 +70,15 @@ class Contribution
     protected $commentaires;
 
     /**
-     * @ManyToMany(targetEntity="User", mappedBy="contributions")
+     * @ManyToMany(targetEntity="Enseignant", mappedBy="contributions")
      */
-    private $users;
+    protected $enseignants;
+
+    /**
+     * @ManyToMany(targetEntity="Etudiant", mappedBy="contributions")
+     */
+    protected $etudiants;
+
 
     /**
      * Get id
@@ -133,30 +139,6 @@ class Contribution
     }
 
     /**
-     * Set nombreLike
-     *
-     * @param integer $nombreLike
-     *
-     * @return Contribution
-     */
-    public function setNombreLike($nombreLike)
-    {
-        $this->nombreLike = $nombreLike;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreLike
-     *
-     * @return int
-     */
-    public function getNombreLike()
-    {
-        return $this->nombreLike;
-    }
-
-    /**
      * Set datePublication
      *
      * @param \DateTime $datePublication
@@ -181,6 +163,30 @@ class Contribution
     }
 
     /**
+     * Set nombreLike
+     *
+     * @param integer $nombreLike
+     *
+     * @return Contribution
+     */
+    public function setNombreLike($nombreLike)
+    {
+        $this->nombreLike = $nombreLike;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreLike
+     *
+     * @return int
+     */
+    public function getNombreLike()
+    {
+        return $this->nombreLike;
+    }
+
+    /**
      * Set report
      *
      * @param boolean $report
@@ -202,5 +208,140 @@ class Contribution
     public function getReport()
     {
         return $this->report;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->enseignants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set question
+     *
+     * @param \AppBundle\Entity\Question $question
+     *
+     * @return Contribution
+     */
+    public function setQuestion(\AppBundle\Entity\Question $question = null)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return \AppBundle\Entity\Question
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Add commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     *
+     * @return Contribution
+     */
+    public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires[] = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     */
+    public function removeCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires->removeElement($commentaire);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
+    }
+
+    /**
+     * Add enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     *
+     * @return Contribution
+     */
+    public function addEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants[] = $enseignant;
+
+        return $this;
+    }
+
+    /**
+     * Remove enseignant
+     *
+     * @param \AppBundle\Entity\Enseignant $enseignant
+     */
+    public function removeEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    {
+        $this->enseignants->removeElement($enseignant);
+    }
+
+    /**
+     * Get enseignants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEnseignants()
+    {
+        return $this->enseignants;
+    }
+
+    /**
+     * Add etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     *
+     * @return Contribution
+     */
+    public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants[] = $etudiant;
+
+        return $this;
+    }
+
+    /**
+     * Remove etudiant
+     *
+     * @param \AppBundle\Entity\Etudiant $etudiant
+     */
+    public function removeEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    {
+        $this->etudiants->removeElement($etudiant);
+    }
+
+    /**
+     * Get etudiants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEtudiants()
+    {
+        return $this->etudiants;
     }
 }
