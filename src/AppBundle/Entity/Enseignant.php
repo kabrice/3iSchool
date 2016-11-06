@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
 
@@ -22,7 +23,7 @@ class Enseignant
      */
     protected $id;
 
-    /*** Start
+
     /**
      * @var string
      *
@@ -43,6 +44,8 @@ class Enseignant
      * @ORM\Column(name="prenom", type="string", length=255)
      */
     protected $prenom;
+
+
 
     /**
      * @var \DateTime
@@ -75,7 +78,7 @@ class Enseignant
      */
     protected $EnseignantContenus;
 
-    /***Stop
+
 
     /**
      * @ManyToMany(targetEntity="Groupe", mappedBy="enseignants")
@@ -96,6 +99,7 @@ class Enseignant
      */
     public function __construct()
     {
+        $this->dateCreation = new DateTime();
         $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contributions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();

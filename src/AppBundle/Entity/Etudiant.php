@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
 
@@ -28,7 +29,7 @@ class Etudiant
      */
     protected $niveau;
     
-    /*** Start
+
     /**
      * @var string
      *
@@ -57,12 +58,6 @@ class Etudiant
      */
     protected $dateCreation;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="anonyme", type="boolean")
-     */
-    protected $anonyme;
 
     /**
      * @var bool
@@ -115,6 +110,7 @@ class Etudiant
      */
     public function __construct()
     {
+        $this->dateCreation = new DateTime();
         $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contributions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();

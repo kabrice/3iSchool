@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
 
@@ -214,6 +215,7 @@ class Contribution
      */
     public function __construct()
     {
+        $this->datePublication = new DateTime();
         $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enseignants = new \Doctrine\Common\Collections\ArrayCollection();
         $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();

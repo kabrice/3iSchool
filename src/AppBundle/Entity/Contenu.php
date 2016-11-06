@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -103,6 +104,7 @@ class Contenu
      */
     public function __construct()
     {
+        $this->datePublication = new DateTime();
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enseignantContenus = new \Doctrine\Common\Collections\ArrayCollection();
         $this->etudiantContenus = new \Doctrine\Common\Collections\ArrayCollection();
