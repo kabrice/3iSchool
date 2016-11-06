@@ -39,14 +39,14 @@ class Rubrique
     /**
      * @var string
      *
-     * @ORM\Column(name="presentation", type="string", length=10000)
+     * @ORM\Column(name="presentation", type="text")
      */
     protected $presentation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="importance", type="text", length=512)
+     * @ORM\Column(name="importance", type="text")
      */
     protected $importance;
 
