@@ -313,4 +313,62 @@ class Enseignant
     {
         return $this->EnseignantContenus;
     }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Enseignant
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Add groupe
+     *
+     * @param \AppBundle\Entity\Groupe $groupe
+     *
+     * @return Enseignant
+     */
+    public function addGroupe(\AppBundle\Entity\Groupe $groupe)
+    {
+        $this->groupes[] = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupe
+     *
+     * @param \AppBundle\Entity\Groupe $groupe
+     */
+    public function removeGroupe(\AppBundle\Entity\Groupe $groupe)
+    {
+        $this->groupes->removeElement($groupe);
+    }
+
+    /**
+     * Get groupes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupes()
+    {
+        return $this->groupes;
+    }
 }

@@ -190,30 +190,6 @@ class Etudiant
     }
 
     /**
-     * Set anonyme
-     *
-     * @param boolean $anonyme
-     *
-     * @return Etudiant
-     */
-    public function setAnonyme($anonyme)
-    {
-        $this->anonyme = $anonyme;
-
-        return $this;
-    }
-
-    /**
-     * Get anonyme
-     *
-     * @return boolean
-     */
-    public function getAnonyme()
-    {
-        return $this->anonyme;
-    }
-
-    /**
      * Set membreBDE
      *
      * @param boolean $membreBDE
@@ -395,5 +371,29 @@ class Etudiant
     public function getEtudiantContenus()
     {
         return $this->EtudiantContenus;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Etudiant
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }

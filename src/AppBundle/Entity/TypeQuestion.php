@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="type_question")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\typeQuestionRepository")
  */
-class typeQuestion
+class TypeQuestion
 {
     /**
      * @var int
@@ -50,7 +50,7 @@ class typeQuestion
      *
      * @param string $libelle
      *
-     * @return typeQuestion
+     * @return TypeQuestion
      */
     public function setLibelle($libelle)
     {
@@ -81,7 +81,7 @@ class typeQuestion
      *
      * @param \AppBundle\Entity\Question $question
      *
-     * @return typeQuestion
+     * @return TypeQuestion
      */
     public function addQuestion(\AppBundle\Entity\Question $question)
     {
