@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
- * Contribution
+ * Reponse
  *
- * @ORM\Table(name="contribution")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ContributionRepository")
+ * @ORM\Table(name="reponse")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ReponseRepository")
  */
-class Contribution
+class Reponse
 {
     /**
      * @var int
@@ -59,24 +59,24 @@ class Contribution
     protected $report;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Question", inversedBy="contributions")
+     * @ORM\ManyToOne(targetEntity="Question", inversedBy="reponses")
      * @var Question
      */
     protected $question;
 
     /**
-     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="contribution")
+     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="reponse")
      * @var Commentaire[]
      */
     protected $commentaires;
 
     /**
-     * @ManyToMany(targetEntity="Enseignant", mappedBy="contributions")
+     * @ManyToMany(targetEntity="Enseignant", mappedBy="reponses")
      */
     protected $enseignants;
 
     /**
-     * @ManyToMany(targetEntity="Etudiant", mappedBy="contributions")
+     * @ManyToMany(targetEntity="Etudiant", mappedBy="reponses")
      */
     protected $etudiants;
 
@@ -96,7 +96,7 @@ class Contribution
      *
      * @param string $libelle
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function setLibelle($libelle)
     {
@@ -120,7 +120,7 @@ class Contribution
      *
      * @param string $type
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function setType($type)
     {
@@ -144,7 +144,7 @@ class Contribution
      *
      * @param \DateTime $datePublication
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function setDatePublication($datePublication)
     {
@@ -168,7 +168,7 @@ class Contribution
      *
      * @param integer $nombreLike
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function setNombreLike($nombreLike)
     {
@@ -192,7 +192,7 @@ class Contribution
      *
      * @param boolean $report
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function setReport($report)
     {
@@ -226,7 +226,7 @@ class Contribution
      *
      * @param \AppBundle\Entity\Question $question
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function setQuestion(\AppBundle\Entity\Question $question = null)
     {
@@ -250,7 +250,7 @@ class Contribution
      *
      * @param \AppBundle\Entity\Commentaire $commentaire
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
     {
@@ -284,7 +284,7 @@ class Contribution
      *
      * @param \AppBundle\Entity\Enseignant $enseignant
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function addEnseignant(\AppBundle\Entity\Enseignant $enseignant)
     {
@@ -318,7 +318,7 @@ class Contribution
      *
      * @param \AppBundle\Entity\Etudiant $etudiant
      *
-     * @return Contribution
+     * @return Reponse
      */
     public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
     {

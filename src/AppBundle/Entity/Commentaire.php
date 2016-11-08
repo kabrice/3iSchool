@@ -65,10 +65,10 @@ class Commentaire
     protected $report;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Contribution", inversedBy="commentaires")
-     * @var Contribution
+     * @ORM\ManyToOne(targetEntity="Reponse", inversedBy="commentaires")
+     * @var Reponse
      */
-    protected $contribution;
+    protected $reponse;
 
     /**
      * @ManyToMany(targetEntity="Enseignant", mappedBy="commentaires")
@@ -244,27 +244,27 @@ class Commentaire
     }
 
     /**
-     * Set contribution
+     * Set reponse
      *
-     * @param \AppBundle\Entity\Contribution $contribution
+     * @param \AppBundle\Entity\Reponse $reponse
      *
      * @return Commentaire
      */
-    public function setContribution(\AppBundle\Entity\Contribution $contribution = null)
+    public function setReponse(\AppBundle\Entity\Reponse $reponse = null)
     {
-        $this->contribution = $contribution;
+        $this->reponse = $reponse;
 
         return $this;
     }
 
     /**
-     * Get contribution
+     * Get reponse
      *
-     * @return \AppBundle\Entity\Contribution
+     * @return \AppBundle\Entity\Reponse
      */
-    public function getContribution()
+    public function getReponse()
     {
-        return $this->contribution;
+        return $this->reponse;
     }
 
     /**

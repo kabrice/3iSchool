@@ -72,9 +72,9 @@ class Etudiant
     protected $commentaires;
 
     /**
-     * @ManyToMany(targetEntity="Contribution", inversedBy="etudiants")
+     * @ManyToMany(targetEntity="Reponse", inversedBy="etudiants")
      */
-    protected $contributions;
+    protected $reponses;
 
     /**
      * @ManyToMany(targetEntity="Question", inversedBy="etudiants")
@@ -112,7 +112,7 @@ class Etudiant
     {
         $this->dateCreation = new DateTime();
         $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contributions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->EtudiantContenus = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -272,37 +272,37 @@ class Etudiant
     }
 
     /**
-     * Add contribution
+     * Add reponse
      *
-     * @param \AppBundle\Entity\Contribution $contribution
+     * @param \AppBundle\Entity\Reponse $reponse
      *
      * @return Etudiant
      */
-    public function addContribution(\AppBundle\Entity\Contribution $contribution)
+    public function addReponse(\AppBundle\Entity\Reponse $reponse)
     {
-        $this->contributions[] = $contribution;
+        $this->reponses[] = $reponse;
 
         return $this;
     }
 
     /**
-     * Remove contribution
+     * Remove reponse
      *
-     * @param \AppBundle\Entity\Contribution $contribution
+     * @param \AppBundle\Entity\Reponse $reponse
      */
-    public function removeContribution(\AppBundle\Entity\Contribution $contribution)
+    public function removeReponse(\AppBundle\Entity\Reponse $reponse)
     {
-        $this->contributions->removeElement($contribution);
+        $this->reponses->removeElement($reponse);
     }
 
     /**
-     * Get contributions
+     * Get reponses
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getContributions()
+    public function getReponses()
     {
-        return $this->contributions;
+        return $this->reponses;
     }
 
     /**
