@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TypeRubrique
+ * GroupeRubrique
  *
- * @ORM\Table(name="type_rubrique")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TypeRubriqueRepository")
+ * @ORM\Table(name="groupe_rubrique")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GroupeRubriqueRepository")
  */
-class TypeRubrique
+class GroupeRubrique
 {
     /**
      * @var int
@@ -29,7 +29,7 @@ class TypeRubrique
     protected $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity="Rubrique", mappedBy="typeRubrique")
+     * @ORM\OneToMany(targetEntity="Rubrique", mappedBy="groupeRubrique")
      * @var Rubrique[]
      */
     protected $rubriques;
@@ -50,7 +50,7 @@ class TypeRubrique
      *
      * @param string $libelle
      *
-     * @return TypeRubrique
+     * @return GroupeRubrique
      */
     public function setLibelle($libelle)
     {
@@ -81,7 +81,7 @@ class TypeRubrique
      *
      * @param \AppBundle\Entity\Rubrique $rubrique
      *
-     * @return TypeRubrique
+     * @return GroupeRubrique
      */
     public function addRubrique(\AppBundle\Entity\Rubrique $rubrique)
     {

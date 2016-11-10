@@ -5,3 +5,7 @@ app:
 etudiants:
     type:     rest
     resource: AppBundle\Controller\EtudiantController
+
+lectureContenu:
+    type:     rest
+    resource: AppBundle\Controller\ContenuController

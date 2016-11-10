@@ -1,0 +1,134 @@
+AppBundle\Entity\Contenu:
+    attributes:
+        id:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        titre:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        information:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        datePublication:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        nombreLike:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        nombreVueTotal:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        contenuRoot:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        imageRoot:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        rubrique:
+            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+        questions:
+            groups: ['contenu']
+        enseignantContenus:
+            groups: ['contenu']
+        etudiantContenus:
+            groups: ['contenu']
+
+
+AppBundle\Entity\Question:
+    attributes:
+        id:
+            groups: ['contenu', 'question', 'reponse']
+        libelle:
+            groups: ['contenu', 'question', 'reponse']
+        description:
+            groups: ['contenu', 'question', 'reponse']
+        datePublication:
+            groups: ['contenu', 'question', 'reponse']
+        nombreLike:
+            groups: ['contenu', 'question', 'reponse']
+        nombreDislike:
+            groups: ['contenu', 'question', 'reponse']
+        page:
+            groups: ['contenu', 'question', 'reponse']
+        ligne:
+            groups: ['contenu', 'question', 'reponse']
+        imageRoot:
+            groups: ['contenu', 'question', 'reponse']
+        report:
+            groups: ['contenu', 'question', 'reponse']
+        typeQuestion:
+            groups: ['contenu', 'question', 'reponse']
+        enseignants:
+            groups: ['contenu', 'question']
+        etudiants:
+            groups: ['contenu', 'question']
+        reponses:
+            groups: ['contenu']
+
+
+
+
+AppBundle\Entity\EnseignantContenu:
+    attributes:
+        id:
+            groups: ['contenu', 'enseignantContenu']
+        nbreVue:
+            groups: ['contenu', 'enseignantContenu']
+        enseignant:
+            groups: ['contenu', 'enseignantContenu']
+        contenu:
+            groups: ['EnseignantContenu']
+
+
+AppBundle\Entity\EtudiantContenu:
+    attributes:
+        id:
+            groups: ['contenu', 'etudiantContenu']
+        nbreVue:
+            groups: ['contenu', 'etudiantContenu']
+        etudiant:
+            groups: ['contenu', 'etudiantContenu']
+        contenu:
+            groups: ['etudiantContenu']
+
+AppBundle\Entity\Reponse:
+    attributes:
+        id:
+            groups: ['reponse', 'commentaire']
+        libelle:
+            groups: ['reponse', 'commentaire']
+        type:
+            groups: ['reponse', 'commentaire']
+        datePublication:
+            groups: ['reponse', 'commentaire']
+        nombreLike:
+            groups: ['reponse', 'commentaire']
+        report:
+            groups: ['reponse', 'commentaire']
+        question:
+            groups: [ 'commentaire']
+        commentaires:
+            groups: ['reponse']
+        enseignants:
+            groups: ['reponse']
+        etudiants:
+            groups: ['reponse']
+
+AppBundle\Entity\Commentaire:
+    attributes:
+        id:
+            groups: ['reponse', 'commentaire']
+        libelle:
+            groups: ['reponse', 'commentaire']
+        parent_id:
+            groups: ['reponse', 'commentaire']
+        datePublication:
+            groups: ['reponse', 'commentaire']
+        depth:
+            groups: ['reponse', 'commentaire']
+        nombreLike:
+            groups: ['reponse', 'commentaire']
+        report:
+            groups: ['reponse', 'commentaire']
+        enseignants:
+            groups: ['reponse', 'commentaire']
+        etudiants:
+            groups: ['reponse', 'commentaire']
+        reponse:
+            groups: ['commentaire']
+
+
+
+            

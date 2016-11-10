@@ -93,7 +93,7 @@ class Contenu
 
     /**
      * @ORM\OneToMany(targetEntity="EtudiantContenu", mappedBy="contenu")
-     * @var EnseignantContenu[]
+     * @var EtudiantContenu[]
      */
     protected $etudiantContenus;
 

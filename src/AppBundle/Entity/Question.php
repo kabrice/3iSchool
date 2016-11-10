@@ -59,6 +59,19 @@ class Question
     protected $nombreDislike;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="page", type="integer")
+     */
+    protected $page;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ligne", type="integer")
+     */
+    protected $ligne;
+    /**
      * @var string
      *
      * @ORM\Column(name="image_root", type="string", length=255, nullable=false)
@@ -437,5 +450,53 @@ class Question
     public function getEtudiants()
     {
         return $this->etudiants;
+    }
+
+    /**
+     * Set page
+     *
+     * @param integer $page
+     *
+     * @return Question
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * Get page
+     *
+     * @return integer
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * Set ligne
+     *
+     * @param integer $ligne
+     *
+     * @return Question
+     */
+    public function setLigne($ligne)
+    {
+        $this->ligne = $ligne;
+
+        return $this;
+    }
+
+    /**
+     * Get ligne
+     *
+     * @return integer
+     */
+    public function getLigne()
+    {
+        return $this->ligne;
     }
 }

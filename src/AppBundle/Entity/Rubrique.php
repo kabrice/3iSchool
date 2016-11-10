@@ -59,10 +59,10 @@ class Rubrique
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="TypeRubrique", inversedBy="rubriques")
-     * @var TypeRubrique
+     * @ORM\ManyToOne(targetEntity="GroupeRubrique", inversedBy="rubriques")
+     * @var GroupeRubrique
      */
-    protected $typeRubrique;
+    protected $groupeRubrique;
 
     /**
      * @ManyToMany(targetEntity="Groupe", inversedBy="rubriques")
@@ -224,27 +224,27 @@ class Rubrique
     }
 
     /**
-     * Set typeRubrique
+     * Set groupeRubrique
      *
-     * @param \AppBundle\Entity\TypeRubrique $typeRubrique
+     * @param \AppBundle\Entity\GroupeRubrique $groupeRubrique
      *
      * @return Rubrique
      */
-    public function setTypeRubrique(\AppBundle\Entity\TypeRubrique $typeRubrique = null)
+    public function setGroupeRubrique(\AppBundle\Entity\GroupeRubrique $groupeRubrique = null)
     {
-        $this->typeRubrique = $typeRubrique;
+        $this->groupeRubrique = $groupeRubrique;
 
         return $this;
     }
 
     /**
-     * Get typeRubrique
+     * Get groupeRubrique
      *
-     * @return \AppBundle\Entity\TypeRubrique
+     * @return \AppBundle\Entity\GroupeRubrique
      */
-    public function getTypeRubrique()
+    public function getGroupeRubrique()
     {
-        return $this->typeRubrique;
+        return $this->groupeRubrique;
     }
 
     /**
