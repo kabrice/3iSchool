@@ -29,27 +29,27 @@ AppBundle\Entity\Contenu:
 AppBundle\Entity\Question:
     attributes:
         id:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         libelle:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         description:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         datePublication:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         nombreLike:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         nombreDislike:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         page:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         ligne:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         imageRoot:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         report:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         typeQuestion:
-            groups: ['contenu', 'question', 'reponse']
+            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
         enseignants:
             groups: ['contenu', 'question']
         etudiants:
@@ -71,6 +71,19 @@ AppBundle\Entity\EnseignantContenu:
         contenu:
             groups: ['EnseignantContenu']
 
+AppBundle\Entity\Enseignant:
+    attributes:
+        id:
+            groups: ['contenu', 'enseignant']
+        email:
+            groups: ['contenu', 'enseignant']
+        nom:
+            groups: ['contenu', 'enseignant']
+        prenom:
+            groups: ['contenu', 'enseignant']
+        contenu:
+            groups: ['EnseignantContenu']
+
 
 AppBundle\Entity\EtudiantContenu:
     attributes:
@@ -86,17 +99,17 @@ AppBundle\Entity\EtudiantContenu:
 AppBundle\Entity\Reponse:
     attributes:
         id:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         libelle:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         type:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         datePublication:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         nombreLike:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         report:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         question:
             groups: [ 'commentaire']
         commentaires:
@@ -109,19 +122,19 @@ AppBundle\Entity\Reponse:
 AppBundle\Entity\Commentaire:
     attributes:
         id:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         libelle:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         parent_id:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         datePublication:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         depth:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         nombreLike:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         report:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
         enseignants:
             groups: ['reponse', 'commentaire']
         etudiants:
@@ -130,5 +143,44 @@ AppBundle\Entity\Commentaire:
             groups: ['commentaire']
 
 
+AppBundle\Entity\Enseignant:
+    attributes:
+        id:
+            groups: ['enseignant', 'commentaire', 'question', 'reponse']
+        email:
+            groups: ['enseignant', 'commentaire', 'question', 'reponse']
+        nom:
+            groups: ['enseignant', 'commentaire', 'question', 'reponse']
+        prenom:
+            groups: ['enseignant', 'commentaire', 'question', 'reponse']
+        dateCreation:
+            groups: ['enseignant', 'commentaire', 'question', 'reponse']
+        commentaires:
+            groups: ['enseignant']
+        reponses:
+            groups: [ 'enseignant']
+        questions:
+            groups: ['enseignant']
+
+AppBundle\Entity\Etudiant:
+    attributes:
+        id:
+            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+        email:
+            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+        nom:
+            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+        prenom:
+            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+        dateCreation:
+            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+        membreBDE:
+            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+        commentaires:
+            groups: ['etudiant']
+        reponses:
+            groups: [ 'etudiant']
+        questions:
+            groups: ['etudiant']
 
             

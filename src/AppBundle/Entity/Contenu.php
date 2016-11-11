@@ -72,7 +72,7 @@ class Contenu
     protected $imageRoot;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Rubrique", inversedBy="contenus")
+     * @ORM\ManyToOne(targetEntity="Rubrique", inversedBy="contenus", cascade={"persist", "merge"})
      * @var Rubrique
      */
     protected $rubrique;
@@ -80,19 +80,19 @@ class Contenu
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="contenu")
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="contenu", cascade={"persist", "remove", "merge"})
      * @var Question[]
      */
     protected $questions;
 
     /**
-     * @ORM\OneToMany(targetEntity="EnseignantContenu", mappedBy="contenu")
+     * @ORM\OneToMany(targetEntity="EnseignantContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
      * @var EnseignantContenu[]
      */
     protected $enseignantContenus;
 
     /**
-     * @ORM\OneToMany(targetEntity="EtudiantContenu", mappedBy="contenu")
+     * @ORM\OneToMany(targetEntity="EtudiantContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
      * @var EtudiantContenu[]
      */
     protected $etudiantContenus;
