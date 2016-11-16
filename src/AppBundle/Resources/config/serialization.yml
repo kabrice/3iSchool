@@ -1,58 +1,54 @@
 AppBundle\Entity\Contenu:
     attributes:
         id:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         titre:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         information:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         datePublication:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         nombreLike:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         nombreVueTotal:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         contenuRoot:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         imageRoot:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         rubrique:
-            groups: ['contenu', 'question', 'enseignantContenu', 'etudiantContenu']
+            groups: ['contenu', 'question',  'userContenu']
         questions:
             groups: ['contenu']
-        enseignantContenus:
-            groups: ['contenu']
-        etudiantContenus:
+        userContenus:
             groups: ['contenu']
 
 
 AppBundle\Entity\Question:
     attributes:
         id:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         libelle:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         description:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         datePublication:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         nombreLike:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         nombreDislike:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         page:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         ligne:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         imageRoot:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         report:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
+            groups: ['contenu', 'question', 'reponse',  'user']
         typeQuestion:
-            groups: ['contenu', 'question', 'reponse', 'enseignant', 'etudiant']
-        enseignants:
-            groups: ['contenu', 'question']
-        etudiants:
+            groups: ['contenu', 'question', 'reponse',  'user']
+        users:
             groups: ['contenu', 'question']
         reponses:
             groups: ['contenu']
@@ -60,127 +56,88 @@ AppBundle\Entity\Question:
 
 
 
-AppBundle\Entity\EnseignantContenu:
+
+
+
+
+
+AppBundle\Entity\UserContenu:
     attributes:
         id:
-            groups: ['contenu', 'enseignantContenu']
+            groups: ['contenu', 'userContenu']
         nbreVue:
-            groups: ['contenu', 'enseignantContenu']
-        enseignant:
-            groups: ['contenu', 'enseignantContenu']
+            groups: ['contenu', 'userContenu']
+        user:
+            groups: ['contenu', 'userContenu']
         contenu:
-            groups: ['EnseignantContenu']
-
-AppBundle\Entity\Enseignant:
-    attributes:
-        id:
-            groups: ['contenu', 'enseignant']
-        email:
-            groups: ['contenu', 'enseignant']
-        nom:
-            groups: ['contenu', 'enseignant']
-        prenom:
-            groups: ['contenu', 'enseignant']
-        contenu:
-            groups: ['EnseignantContenu']
-
-
-AppBundle\Entity\EtudiantContenu:
-    attributes:
-        id:
-            groups: ['contenu', 'etudiantContenu']
-        nbreVue:
-            groups: ['contenu', 'etudiantContenu']
-        etudiant:
-            groups: ['contenu', 'etudiantContenu']
-        contenu:
-            groups: ['etudiantContenu']
+            groups: ['userContenu']
 
 AppBundle\Entity\Reponse:
     attributes:
         id:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         libelle:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         type:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         datePublication:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         nombreLike:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         report:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         question:
             groups: [ 'commentaire']
         commentaires:
             groups: ['reponse']
-        enseignants:
-            groups: ['reponse']
-        etudiants:
+
+        users:
             groups: ['reponse']
 
 AppBundle\Entity\Commentaire:
     attributes:
         id:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         libelle:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         parent_id:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         datePublication:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         depth:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         nombreLike:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
+            groups: ['reponse', 'commentaire',  'user']
         report:
-            groups: ['reponse', 'commentaire', 'enseignant', 'etudiant']
-        enseignants:
-            groups: ['reponse', 'commentaire']
-        etudiants:
+            groups: ['reponse', 'commentaire',  'user']
+        users:
             groups: ['reponse', 'commentaire']
         reponse:
             groups: ['commentaire']
 
 
-AppBundle\Entity\Enseignant:
-    attributes:
-        id:
-            groups: ['enseignant', 'commentaire', 'question', 'reponse']
-        email:
-            groups: ['enseignant', 'commentaire', 'question', 'reponse']
-        nom:
-            groups: ['enseignant', 'commentaire', 'question', 'reponse']
-        prenom:
-            groups: ['enseignant', 'commentaire', 'question', 'reponse']
-        dateCreation:
-            groups: ['enseignant', 'commentaire', 'question', 'reponse']
-        commentaires:
-            groups: ['enseignant']
-        reponses:
-            groups: [ 'enseignant']
-        questions:
-            groups: ['enseignant']
 
-AppBundle\Entity\Etudiant:
+AppBundle\Entity\User:
     attributes:
         id:
-            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+            groups: ['user', 'commentaire', 'question', 'reponse']
         email:
-            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+            groups: ['user', 'commentaire', 'question', 'reponse']
         nom:
-            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+            groups: ['user', 'commentaire', 'question', 'reponse']
         prenom:
-            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+            groups: ['user', 'commentaire', 'question', 'reponse']
         dateCreation:
-            groups: ['etudiant', 'commentaire', 'question', 'reponse']
-        membreBDE:
-            groups: ['etudiant', 'commentaire', 'question', 'reponse']
+            groups: ['user', 'commentaire', 'question', 'reponse']
+        isBDE:
+            groups: ['user', 'commentaire', 'question', 'reponse']
+        isEnseignant:
+            groups: ['user', 'commentaire', 'question', 'reponse']
         commentaires:
-            groups: ['etudiant']
+            groups: ['user']
         reponses:
-            groups: [ 'etudiant']
+            groups: [ 'user']
         questions:
-            groups: ['etudiant']
+            groups: ['user']
 
             

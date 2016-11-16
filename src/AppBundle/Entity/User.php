@@ -2,17 +2,17 @@
 
 namespace AppBundle\Entity;
 
-use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
 
 /**
- * Enseignant
+ * User
  *
- * @ORM\Table(name="enseignant")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\EnseignantRepository")
+ * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class Enseignant
+class User
 {
     /**
      * @var int
@@ -22,7 +22,6 @@ class Enseignant
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
 
     /**
      * @var string
@@ -34,18 +33,16 @@ class Enseignant
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=255)
+     * @ORM\Column(name="nom", type="string")
      */
     protected $nom;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prenom", type="string", length=255)
+     * @ORM\Column(name="prenom", type="string")
      */
     protected $prenom;
-
-
 
     /**
      * @var \DateTime
@@ -53,57 +50,95 @@ class Enseignant
      * @ORM\Column(name="date_creation", type="datetimetz")
      */
     protected $dateCreation;
-    
-    
 
     /**
-     * @ManyToMany(targetEntity="Commentaire", inversedBy="enseignants")
+     * @var bool
+     *
+     * @ORM\Column(name="is_bde", type="boolean")
+     */
+    protected $isBDE;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_enseignant", type="boolean")
+     */
+    protected $isEnseignant;
+
+
+    /**
+     * @ManyToMany(targetEntity="Commentaire", inversedBy="users")
      */
     protected $commentaires;
 
     /**
-     * @ManyToMany(targetEntity="Reponse", inversedBy="enseignants")
+     * @ManyToMany(targetEntity="Reponse", inversedBy="users")
      */
     protected $reponses;
 
     /**
-     * @ManyToMany(targetEntity="Question", inversedBy="enseignants")
+     * @ManyToMany(targetEntity="Question", inversedBy="users")
      */
     protected $questions;
 
     /**
-     * @ORM\OneToMany(targetEntity="EnseignantContenu", mappedBy="enseignant")
-     * @var EnseignantContenu[]
+     * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="user")
+     * @var UserContenu[]
 
      */
-    protected $EnseignantContenus;
+    protected $userContenus;
 
-
+    /***Stop
 
     /**
-     * @ManyToMany(targetEntity="Groupe", mappedBy="enseignants")
+     * @ORM\OneToMany(targetEntity="UserGroupePromotion", mappedBy="user")
+     * @var UserGroupePromotion[]
      */
-    protected $groupes;
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    protected $userGroupePromotions;
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->dateCreation = new DateTime();
-        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->EnseignantContenus = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->commentaires = new ArrayCollection();
+        $this->reponses = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+        $this->userContenus = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     /**
@@ -111,7 +146,7 @@ class Enseignant
      *
      * @param string $nom
      *
-     * @return Enseignant
+     * @return User
      */
     public function setNom($nom)
     {
@@ -135,7 +170,7 @@ class Enseignant
      *
      * @param string $prenom
      *
-     * @return Enseignant
+     * @return User
      */
     public function setPrenom($prenom)
     {
@@ -159,7 +194,7 @@ class Enseignant
      *
      * @param \DateTime $dateCreation
      *
-     * @return Enseignant
+     * @return User
      */
     public function setDateCreation($dateCreation)
     {
@@ -179,11 +214,59 @@ class Enseignant
     }
 
     /**
+     * Set isBDE
+     *
+     * @param boolean $isBDE
+     *
+     * @return User
+     */
+    public function setIsBDE($isBDE)
+    {
+        $this->isBDE = $isBDE;
+
+        return $this;
+    }
+
+    /**
+     * Get isBDE
+     *
+     * @return boolean
+     */
+    public function getIsBDE()
+    {
+        return $this->isBDE;
+    }
+
+    /**
+     * Set isEnseignant
+     *
+     * @param boolean $isEnseignant
+     *
+     * @return User
+     */
+    public function setIsEnseignant($isEnseignant)
+    {
+        $this->isEnseignant = $isEnseignant;
+
+        return $this;
+    }
+
+    /**
+     * Get isEnseignant
+     *
+     * @return boolean
+     */
+    public function getIsEnseignant()
+    {
+        return $this->isEnseignant;
+    }
+
+    /**
      * Add commentaire
      *
      * @param \AppBundle\Entity\Commentaire $commentaire
      *
-     * @return Enseignant
+     * @return User
      */
     public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
     {
@@ -217,7 +300,7 @@ class Enseignant
      *
      * @param \AppBundle\Entity\Reponse $reponse
      *
-     * @return Enseignant
+     * @return User
      */
     public function addReponse(\AppBundle\Entity\Reponse $reponse)
     {
@@ -251,7 +334,7 @@ class Enseignant
      *
      * @param \AppBundle\Entity\Question $question
      *
-     * @return Enseignant
+     * @return User
      */
     public function addQuestion(\AppBundle\Entity\Question $question)
     {
@@ -281,94 +364,36 @@ class Enseignant
     }
 
     /**
-     * Add enseignantContenus
+     * Add userContenus
      *
-     * @param \AppBundle\Entity\EnseignantContenu $enseignantContenus
+     * @param \AppBundle\Entity\UserContenu $userContenus
      *
-     * @return Enseignant
+     * @return User
      */
-    public function addEnseignantContenus(\AppBundle\Entity\EnseignantContenu $enseignantContenus)
+    public function addUserContenus(\AppBundle\Entity\UserContenu $userContenus)
     {
-        $this->EnseignantContenus[] = $enseignantContenus;
+        $this->userContenus[] = $userContenus;
 
         return $this;
     }
 
     /**
-     * Remove enseignantContenus
+     * Remove userContenus
      *
-     * @param \AppBundle\Entity\EnseignantContenu $enseignantContenus
+     * @param \AppBundle\Entity\UserContenu $userContenus
      */
-    public function removeEnseignantContenus(\AppBundle\Entity\EnseignantContenu $enseignantContenus)
+    public function removeUserContenus(\AppBundle\Entity\UserContenu $userContenus)
     {
-        $this->EnseignantContenus->removeElement($enseignantContenus);
+        $this->userContenus->removeElement($userContenus);
     }
 
     /**
-     * Get enseignantContenus
+     * Get userContenus
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEnseignantContenus()
+    public function getUserContenus()
     {
-        return $this->EnseignantContenus;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Enseignant
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Add groupe
-     *
-     * @param \AppBundle\Entity\Groupe $groupe
-     *
-     * @return Enseignant
-     */
-    public function addGroupe(\AppBundle\Entity\Groupe $groupe)
-    {
-        $this->groupes[] = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * Remove groupe
-     *
-     * @param \AppBundle\Entity\Groupe $groupe
-     */
-    public function removeGroupe(\AppBundle\Entity\Groupe $groupe)
-    {
-        $this->groupes->removeElement($groupe);
-    }
-
-    /**
-     * Get groupes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGroupes()
-    {
-        return $this->groupes;
+        return $this->userContenus;
     }
 }

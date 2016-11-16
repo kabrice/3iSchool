@@ -29,16 +29,24 @@ class Promotion
     protected $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity="EtudiantGroupePromotion", mappedBy="promotion")
-     * @var EtudiantGroupePromotion[]
+     * @ORM\OneToMany(targetEntity="UserGroupePromotion", mappedBy="promotion")
+     * @var UserGroupePromotion[]
      */
-    protected $etudiantGroupePromotions;
+    protected $userGroupePromotions;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->userGroupePromotions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -68,45 +76,38 @@ class Promotion
     {
         return $this->libelle;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->etudiantGroupePromotions = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add etudiantGroupePromotion
+     * Add userGroupePromotion
      *
-     * @param \AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion
+     * @param \AppBundle\Entity\UserGroupePromotion $userGroupePromotion
      *
      * @return Promotion
      */
-    public function addEtudiantGroupePromotion(\AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion)
+    public function addUserGroupePromotion(\AppBundle\Entity\UserGroupePromotion $userGroupePromotion)
     {
-        $this->etudiantGroupePromotions[] = $etudiantGroupePromotion;
+        $this->userGroupePromotions[] = $userGroupePromotion;
 
         return $this;
     }
 
     /**
-     * Remove etudiantGroupePromotion
+     * Remove userGroupePromotion
      *
-     * @param \AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion
+     * @param \AppBundle\Entity\UserGroupePromotion $userGroupePromotion
      */
-    public function removeEtudiantGroupePromotion(\AppBundle\Entity\EtudiantGroupePromotion $etudiantGroupePromotion)
+    public function removeUserGroupePromotion(\AppBundle\Entity\UserGroupePromotion $userGroupePromotion)
     {
-        $this->etudiantGroupePromotions->removeElement($etudiantGroupePromotion);
+        $this->userGroupePromotions->removeElement($userGroupePromotion);
     }
 
     /**
-     * Get etudiantGroupePromotions
+     * Get userGroupePromotions
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEtudiantGroupePromotions()
+    public function getUserGroupePromotions()
     {
-        return $this->etudiantGroupePromotions;
+        return $this->userGroupePromotions;
     }
 }

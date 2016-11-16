@@ -15,28 +15,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EtudiantController extends Controller
+class UserController extends Controller
 {
 
     /**
      * @Rest\View()
-     * @Rest\Get("/etudiants/{id}")
+     * @Rest\Get("/users/{id}")
      */
     public function getEtudiantAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $etudiant = $em->getRepository('AppBundle:Etudiant')->find($request->get('id'));
+        $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
 
-        if (empty($etudiant)) {
-            return new JsonResponse(['message' => 'Etudiant introuvable'], Response::HTTP_NOT_FOUND);
+        if (empty($user)) {
+            return new JsonResponse(['message' => 'Utilisateur introuvable'], Response::HTTP_NOT_FOUND);
         }
 
         $users = [
-            'id' => $etudiant->getId(),
-            'nom' => $etudiant->getNom(),
-            'prenom' => $etudiant->getPrenom(),
-            'email' => $etudiant->getEmail(),
-            'dateCreation' => $etudiant->getDateCreation(),
+            'id' => $user->getId(),
+            'nom' => $user->getNom(),
+            'prenom' => $user->getPrenom(),
+            'email' => $user->getEmail(),
+            'dateCreation' => $user->getDateCreation(),
         ];
 
 

@@ -29,16 +29,23 @@ class Niveau
     protected $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity="Etudiant", mappedBy="niveau")
-     * @var Etudiant[]
+     * @ORM\OneToMany(targetEntity="User", mappedBy="niveau")
+     * @var User[]
      */
-    protected $etudiants;
+    protected $users;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -68,45 +75,38 @@ class Niveau
     {
         return $this->libelle;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add etudiant
+     * Add user
      *
-     * @param \AppBundle\Entity\Etudiant $etudiant
+     * @param \AppBundle\Entity\User $user
      *
      * @return Niveau
      */
-    public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    public function addUser(\AppBundle\Entity\User $user)
     {
-        $this->etudiants[] = $etudiant;
+        $this->users[] = $user;
 
         return $this;
     }
 
     /**
-     * Remove etudiant
+     * Remove user
      *
-     * @param \AppBundle\Entity\Etudiant $etudiant
+     * @param \AppBundle\Entity\User $user
      */
-    public function removeEtudiant(\AppBundle\Entity\Etudiant $etudiant)
+    public function removeUser(\AppBundle\Entity\User $user)
     {
-        $this->etudiants->removeElement($etudiant);
+        $this->users->removeElement($user);
     }
 
     /**
-     * Get etudiants
+     * Get users
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEtudiants()
+    public function getUsers()
     {
-        return $this->etudiants;
+        return $this->users;
     }
 }

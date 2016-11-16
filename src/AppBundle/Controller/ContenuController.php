@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ContenuController extends Controller
 {
     /**
-     * @Rest\View(serializerGroups={"contenu", "reponse" })
+     * @Rest\View(serializerGroups={"contenu", "reponse"})
      * @Rest\Get("/lectureContenu/{id}")
      */
     public function getContenuLectureAction($id, Request $request)

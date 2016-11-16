@@ -80,22 +80,18 @@ class Contenu
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="contenu", cascade={"persist",  "merge"})
      * @var Question[]
      */
     protected $questions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="EnseignantContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
-     * @var EnseignantContenu[]
-     */
-    protected $enseignantContenus;
+
 
     /**
-     * @ORM\OneToMany(targetEntity="EtudiantContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
-     * @var EtudiantContenu[]
+     * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="contenu", cascade={"persist", "merge"})
+     * @var UserContenu[]
      */
-    protected $etudiantContenus;
+    protected $userContenus;
 
 
 
@@ -104,10 +100,8 @@ class Contenu
      */
     public function __construct()
     {
-        $this->datePublication = new DateTime();
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->enseignantContenus = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->etudiantContenus = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userContenus = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -347,70 +341,36 @@ class Contenu
     }
 
     /**
-     * Add enseignantContenus
+     * Add userContenus
      *
-     * @param \AppBundle\Entity\EnseignantContenu $enseignantContenus
+     * @param \AppBundle\Entity\UserContenu $userContenus
      *
      * @return Contenu
      */
-    public function addEnseignantContenus(\AppBundle\Entity\EnseignantContenu $enseignantContenus)
+    public function addUserContenus(\AppBundle\Entity\UserContenu $userContenus)
     {
-        $this->enseignantContenus[] = $enseignantContenus;
+        $this->userContenus[] = $userContenus;
 
         return $this;
     }
 
     /**
-     * Remove enseignantContenus
+     * Remove userContenus
      *
-     * @param \AppBundle\Entity\EnseignantContenu $enseignantContenus
+     * @param \AppBundle\Entity\UserContenu $userContenus
      */
-    public function removeEnseignantContenus(\AppBundle\Entity\EnseignantContenu $enseignantContenus)
+    public function removeUserContenus(\AppBundle\Entity\UserContenu $userContenus)
     {
-        $this->enseignantContenus->removeElement($enseignantContenus);
+        $this->userContenus->removeElement($userContenus);
     }
 
     /**
-     * Get enseignantContenus
+     * Get userContenus
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEnseignantContenus()
+    public function getUserContenus()
     {
-        return $this->enseignantContenus;
-    }
-
-    /**
-     * Add etudiantContenus
-     *
-     * @param \AppBundle\Entity\EtudiantContenu $etudiantContenus
-     *
-     * @return Contenu
-     */
-    public function addEtudiantContenus(\AppBundle\Entity\EtudiantContenu $etudiantContenus)
-    {
-        $this->etudiantContenus[] = $etudiantContenus;
-
-        return $this;
-    }
-
-    /**
-     * Remove etudiantContenus
-     *
-     * @param \AppBundle\Entity\EtudiantContenu $etudiantContenus
-     */
-    public function removeEtudiantContenus(\AppBundle\Entity\EtudiantContenu $etudiantContenus)
-    {
-        $this->etudiantContenus->removeElement($etudiantContenus);
-    }
-
-    /**
-     * Get etudiantContenus
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEtudiantContenus()
-    {
-        return $this->etudiantContenus;
+        return $this->userContenus;
     }
 }

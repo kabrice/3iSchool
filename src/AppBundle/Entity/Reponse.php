@@ -70,21 +70,26 @@ class Reponse
      */
     protected $commentaires;
 
-    /**
-     * @ManyToMany(targetEntity="Enseignant", mappedBy="reponses")
-     */
-    protected $enseignants;
 
     /**
-     * @ManyToMany(targetEntity="Etudiant", mappedBy="reponses")
+     * @ManyToMany(targetEntity="User", mappedBy="reponses")
      */
-    protected $etudiants;
+    protected $users;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -180,7 +185,7 @@ class Reponse
     /**
      * Get nombreLike
      *
-     * @return int
+     * @return integer
      */
     public function getNombreLike()
     {
@@ -204,21 +209,11 @@ class Reponse
     /**
      * Get report
      *
-     * @return bool
+     * @return boolean
      */
     public function getReport()
     {
         return $this->report;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->datePublication = new DateTime();
-        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->enseignants = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -280,70 +275,36 @@ class Reponse
     }
 
     /**
-     * Add enseignant
+     * Add user
      *
-     * @param \AppBundle\Entity\Enseignant $enseignant
+     * @param \AppBundle\Entity\User $user
      *
      * @return Reponse
      */
-    public function addEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    public function addUser(\AppBundle\Entity\User $user)
     {
-        $this->enseignants[] = $enseignant;
+        $this->users[] = $user;
 
         return $this;
     }
 
     /**
-     * Remove enseignant
+     * Remove user
      *
-     * @param \AppBundle\Entity\Enseignant $enseignant
+     * @param \AppBundle\Entity\User $user
      */
-    public function removeEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    public function removeUser(\AppBundle\Entity\User $user)
     {
-        $this->enseignants->removeElement($enseignant);
+        $this->users->removeElement($user);
     }
 
     /**
-     * Get enseignants
+     * Get users
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEnseignants()
+    public function getUsers()
     {
-        return $this->enseignants;
-    }
-
-    /**
-     * Add etudiant
-     *
-     * @param \AppBundle\Entity\Etudiant $etudiant
-     *
-     * @return Reponse
-     */
-    public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
-    {
-        $this->etudiants[] = $etudiant;
-
-        return $this;
-    }
-
-    /**
-     * Remove etudiant
-     *
-     * @param \AppBundle\Entity\Etudiant $etudiant
-     */
-    public function removeEtudiant(\AppBundle\Entity\Etudiant $etudiant)
-    {
-        $this->etudiants->removeElement($etudiant);
-    }
-
-    /**
-     * Get etudiants
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEtudiants()
-    {
-        return $this->etudiants;
+        return $this->users;
     }
 }

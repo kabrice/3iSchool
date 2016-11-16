@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EtudiantGroupePromotion
+ * UserGroupePromotion
  *
- * @ORM\Table(name="etudiant_groupe_promotion")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\EtudiantGroupePromotionRepository")
+ * @ORM\Table(name="user_groupe_promotion")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserGroupePromotionRepository")
  */
-class EtudiantGroupePromotion
+class UserGroupePromotion
 {
     /**
      * @var int
@@ -22,29 +22,40 @@ class EtudiantGroupePromotion
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Promotion", inversedBy="enseignantGroupePromotion")
+     * @ORM\ManyToOne(targetEntity="Promotion", inversedBy="userGroupePromotion")
      * @var Promotion
      */
     protected $promotion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="enseignantGroupePromotion")
+     * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="userGroupePromotion")
      * @var Groupe
      */
     protected $groupe;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Etudiant", inversedBy="enseignantGroupePromotion")
-     * @var Etudiant
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userGroupePromotion")
+     * @var User
      */
-    protected $etudiant;
+    protected $user;
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set promotion
      *
      * @param \AppBundle\Entity\Promotion $promotion
      *
-     * @return EtudiantGroupePromotion
+     * @return UserGroupePromotion
      */
     public function setPromotion(\AppBundle\Entity\Promotion $promotion = null)
     {
@@ -68,7 +79,7 @@ class EtudiantGroupePromotion
      *
      * @param \AppBundle\Entity\Groupe $groupe
      *
-     * @return EtudiantGroupePromotion
+     * @return UserGroupePromotion
      */
     public function setGroupe(\AppBundle\Entity\Groupe $groupe = null)
     {
@@ -88,36 +99,26 @@ class EtudiantGroupePromotion
     }
 
     /**
-     * Set etudiant
+     * Set user
      *
-     * @param \AppBundle\Entity\Etudiant $etudiant
+     * @param \AppBundle\Entity\User $user
      *
-     * @return EtudiantGroupePromotion
+     * @return UserGroupePromotion
      */
-    public function setEtudiant(\AppBundle\Entity\Etudiant $etudiant = null)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
-        $this->etudiant = $etudiant;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get etudiant
+     * Get user
      *
-     * @return \AppBundle\Entity\Etudiant
+     * @return \AppBundle\Entity\User
      */
-    public function getEtudiant()
+    public function getUser()
     {
-        return $this->etudiant;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
+        return $this->user;
     }
 }

@@ -36,36 +36,24 @@ class UserService
     public function getAllUser(Request $request)
     {
 
-        $users = [];
 
-        $etudiants = $this->entityManager
-                        ->getRepository('AppBundle:Etudiant')
-                        ->findAll();
-        $enseignants = $this->entityManager
-            ->getRepository('AppBundle:Enseignant')
-            ->findAll();
+        $allUser =[];
+        $users = $this->entityManager
+                        ->getRepository('AppBundle:User');
 
 
 
-        foreach ($etudiants as $etudiant) {
-            $users[] = [
-                'id' => $etudiant->getId(),
-                'nom' => $etudiant->getNom(),
-                'prenom' => $etudiant->getPrenom(),
-                'email' => $etudiant->getEmail(),
-                'dateCreation' => $etudiant->getDateCreation(),
+
+        foreach ($users as $user) {
+            $allUser[] = [
+                'id' => $user->getId(),
+                'nom' => $user->getNom(),
+                'prenom' => $user->getPrenom(),
+                'email' => $user->getEmail(),
+                'dateCreation' => $user->getDateCreation(),
             ];
         }
 
-        foreach ($enseignants as $enseignant) {
-            $users[] = [
-                'id' => $enseignant->getId(),
-                'nom' => $enseignant->getNom(),
-                'prenom' => $enseignant->getPrenom(),
-                'email' => $enseignant->getEmail(),
-                'dateCreation' => $enseignant->getDateCreation(),
-            ];
-        }
 
 
 

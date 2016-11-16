@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EtudiantContenu
+ * UserContenu
  *
- * @ORM\Table(name="etudiant_contenu")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\EtudiantContenuRepository")
+ * @ORM\Table(name="user_contenu")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserContenuRepository")
  */
-class EtudiantContenu
+class UserContenu
 {
     /**
      * @var int
@@ -19,32 +19,33 @@ class EtudiantContenu
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nbre_vue", type="integer", nullable=false)
      */
-    private $nbreVue;
+    protected $nbreVue;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Etudiant", inversedBy="EtudiantContenus")
-     * @var Etudiant
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userContenus")
+     * @var User
      */
-    protected $etudiant;
+    protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="EtudiantContenus")
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="userContenus")
      * @var Contenu
      */
     protected $contenu;
 
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -56,7 +57,7 @@ class EtudiantContenu
      *
      * @param integer $nbreVue
      *
-     * @return EtudiantContenu
+     * @return UserContenu
      */
     public function setNbreVue($nbreVue)
     {
@@ -68,7 +69,7 @@ class EtudiantContenu
     /**
      * Get nbreVue
      *
-     * @return int
+     * @return integer
      */
     public function getNbreVue()
     {
@@ -76,27 +77,27 @@ class EtudiantContenu
     }
 
     /**
-     * Set etudiant
+     * Set user
      *
-     * @param \AppBundle\Entity\Etudiant $etudiant
+     * @param \AppBundle\Entity\User $user
      *
-     * @return EtudiantContenu
+     * @return UserContenu
      */
-    public function setEtudiant(\AppBundle\Entity\Etudiant $etudiant = null)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
-        $this->etudiant = $etudiant;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get etudiant
+     * Get user
      *
-     * @return \AppBundle\Entity\Etudiant
+     * @return \AppBundle\Entity\User
      */
-    public function getEtudiant()
+    public function getUser()
     {
-        return $this->etudiant;
+        return $this->user;
     }
 
     /**
@@ -104,7 +105,7 @@ class EtudiantContenu
      *
      * @param \AppBundle\Entity\Contenu $contenu
      *
-     * @return EtudiantContenu
+     * @return UserContenu
      */
     public function setContenu(\AppBundle\Entity\Contenu $contenu = null)
     {

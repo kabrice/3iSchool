@@ -74,10 +74,21 @@ class Rubrique
      */
     protected $sousRubriques;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sousRubriques = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -178,15 +189,6 @@ class Rubrique
     public function getImportance()
     {
         return $this->importance;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sousRubriques = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

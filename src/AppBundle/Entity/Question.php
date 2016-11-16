@@ -103,21 +103,27 @@ class Question
      */
     protected $reponses;
 
-    /**
-     * @ManyToMany(targetEntity="Enseignant", mappedBy="questions")
-     */
-    protected $enseignants;
+
 
     /**
-     * @ManyToMany(targetEntity="Etudiant", mappedBy="questions")
+     * @ManyToMany(targetEntity="User", mappedBy="questions")
      */
-    protected $etudiants;
+    protected $users;
 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -213,7 +219,7 @@ class Question
     /**
      * Get nombreLike
      *
-     * @return int
+     * @return integer
      */
     public function getNombreLike()
     {
@@ -237,11 +243,59 @@ class Question
     /**
      * Get nombreDislike
      *
-     * @return int
+     * @return integer
      */
     public function getNombreDislike()
     {
         return $this->nombreDislike;
+    }
+
+    /**
+     * Set page
+     *
+     * @param integer $page
+     *
+     * @return Question
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+
+        return $this;
+    }
+
+    /**
+     * Get page
+     *
+     * @return integer
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * Set ligne
+     *
+     * @param integer $ligne
+     *
+     * @return Question
+     */
+    public function setLigne($ligne)
+    {
+        $this->ligne = $ligne;
+
+        return $this;
+    }
+
+    /**
+     * Get ligne
+     *
+     * @return integer
+     */
+    public function getLigne()
+    {
+        return $this->ligne;
     }
 
     /**
@@ -285,21 +339,11 @@ class Question
     /**
      * Get report
      *
-     * @return bool
+     * @return boolean
      */
     public function getReport()
     {
         return $this->report;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->datePublication = new DateTime();
-        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->enseignants = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->etudiants = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -385,118 +429,36 @@ class Question
     }
 
     /**
-     * Add enseignant
+     * Add user
      *
-     * @param \AppBundle\Entity\Enseignant $enseignant
+     * @param \AppBundle\Entity\User $user
      *
      * @return Question
      */
-    public function addEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    public function addUser(\AppBundle\Entity\User $user)
     {
-        $this->enseignants[] = $enseignant;
+        $this->users[] = $user;
 
         return $this;
     }
 
     /**
-     * Remove enseignant
+     * Remove user
      *
-     * @param \AppBundle\Entity\Enseignant $enseignant
+     * @param \AppBundle\Entity\User $user
      */
-    public function removeEnseignant(\AppBundle\Entity\Enseignant $enseignant)
+    public function removeUser(\AppBundle\Entity\User $user)
     {
-        $this->enseignants->removeElement($enseignant);
+        $this->users->removeElement($user);
     }
 
     /**
-     * Get enseignants
+     * Get users
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEnseignants()
+    public function getUsers()
     {
-        return $this->enseignants;
-    }
-
-    /**
-     * Add etudiant
-     *
-     * @param \AppBundle\Entity\Etudiant $etudiant
-     *
-     * @return Question
-     */
-    public function addEtudiant(\AppBundle\Entity\Etudiant $etudiant)
-    {
-        $this->etudiants[] = $etudiant;
-
-        return $this;
-    }
-
-    /**
-     * Remove etudiant
-     *
-     * @param \AppBundle\Entity\Etudiant $etudiant
-     */
-    public function removeEtudiant(\AppBundle\Entity\Etudiant $etudiant)
-    {
-        $this->etudiants->removeElement($etudiant);
-    }
-
-    /**
-     * Get etudiants
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEtudiants()
-    {
-        return $this->etudiants;
-    }
-
-    /**
-     * Set page
-     *
-     * @param integer $page
-     *
-     * @return Question
-     */
-    public function setPage($page)
-    {
-        $this->page = $page;
-
-        return $this;
-    }
-
-    /**
-     * Get page
-     *
-     * @return integer
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
-     * Set ligne
-     *
-     * @param integer $ligne
-     *
-     * @return Question
-     */
-    public function setLigne($ligne)
-    {
-        $this->ligne = $ligne;
-
-        return $this;
-    }
-
-    /**
-     * Get ligne
-     *
-     * @return integer
-     */
-    public function getLigne()
-    {
-        return $this->ligne;
+        return $this->users;
     }
 }
