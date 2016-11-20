@@ -30,12 +30,6 @@ class Reponse
      */
     protected $libelle;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255, nullable=false, unique=true)
-     */
-    protected $type;
 
     /**
      * @var \DateTime
@@ -49,14 +43,14 @@ class Reponse
      *
      * @ORM\Column(name="nombre_like", type="integer")
      */
-    protected $nombreLike;
+    protected $nombreLike=0;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="report", type="boolean")
+     * @ORM\Column(name="report", type="integer")
      */
-    protected $report;
+    protected $report=0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="reponses")
@@ -65,7 +59,7 @@ class Reponse
     protected $question;
 
     /**
-     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="reponse")
+     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="reponse", cascade={"persist", "remove", "merge"})
      * @var Commentaire[]
      */
     protected $commentaires;
@@ -82,6 +76,7 @@ class Reponse
      */
     public function __construct()
     {
+        $this->datePublication = new DateTime();
         $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -120,29 +115,6 @@ class Reponse
         return $this->libelle;
     }
 
-    /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return Reponse
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
 
     /**
      * Set datePublication

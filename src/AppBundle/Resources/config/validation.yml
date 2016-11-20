@@ -1,0 +1,51 @@
+AppBundle\Entity\Question:
+    properties:
+        libelle:
+            - NotBlank: ~
+            - Type: string
+        description:
+            - NotBlank: ~
+            - Type: string
+        imageRoot:
+            - Type: string
+        page:
+            - Type: integer
+            - GreaterThan:
+                value: 0
+            - LessThanOrEqual:
+                value: 1000
+        ligne:
+            - Type: integer
+            - GreaterThan:
+                value: 0
+            - LessThanOrEqual:
+                value: 1000
+
+AppBundle\Entity\Reponse:
+    properties:
+        libelle:
+            - NotBlank: ~
+            - Type: string
+
+AppBundle\Entity\Commentaire:
+    properties:
+        libelle:
+            - NotBlank: ~
+            - Type: string
+
+AppBundle\Entity\User:
+        plainPassword:
+            - NotBlank: { groups: [New, FullUpdate] }
+            - Type: string
+            - Length:
+                min: 6
+                max: 50
+
+AppBundle\Entity\Credentials:
+    properties:
+          login:
+              - NotBlank: ~
+              - Type: string
+          password:
+              - NotBlank: ~
+              - Type: string

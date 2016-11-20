@@ -49,41 +49,41 @@ class Question
      *
      * @ORM\Column(name="nombre_like", type="integer")
      */
-    protected $nombreLike;
+    protected $nombreLike=0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nombre_dislike", type="integer")
      */
-    protected $nombreDislike;
+    protected $nombreDislike=0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="page", type="integer")
+     * @ORM\Column(name="page", type="integer", nullable=true)
      */
-    protected $page;
+    protected $page=0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="ligne", type="integer")
+     * @ORM\Column(name="ligne", type="integer", nullable=true)
      */
-    protected $ligne;
+    protected $ligne=0;
     /**
      * @var string
      *
      * @ORM\Column(name="image_root", type="string", length=255, nullable=false)
      */
-    protected $imageRoot;
+    protected $imageRoot="";
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="report", type="boolean")
+     * @ORM\Column(name="report", type="integer")
      */
-    protected $report;
+    protected $report=0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="questions")
@@ -98,7 +98,7 @@ class Question
     protected $typeQuestion;
 
     /**
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="question", cascade={"persist", "remove", "merge"})
      * @var Reponse[]
      */
     protected $reponses;
@@ -116,6 +116,7 @@ class Question
      */
     public function __construct()
     {
+        $this->datePublication = new DateTime();
         $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }

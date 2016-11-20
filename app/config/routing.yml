@@ -9,3 +9,7 @@ users:
 lectureContenu:
     type:     rest
     resource: AppBundle\Controller\ContenuController
+
+auth-tokens:
+    type:     rest
+    resource: AppBundle\Controller\AuthTokenController

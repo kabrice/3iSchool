@@ -64,15 +64,12 @@ class Rubrique
      */
     protected $groupeRubrique;
 
-    /**
-     * @ManyToMany(targetEntity="Groupe", inversedBy="rubriques")
-     */
-    protected $groupes;
 
     /**
      * @ManyToMany(targetEntity="SousRubrique", mappedBy="rubriques")
      */
     protected $sousRubriques;
+
 
 
     /**
@@ -81,7 +78,6 @@ class Rubrique
     public function __construct()
     {
         $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sousRubriques = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -247,40 +243,6 @@ class Rubrique
     public function getGroupeRubrique()
     {
         return $this->groupeRubrique;
-    }
-
-    /**
-     * Add groupe
-     *
-     * @param \AppBundle\Entity\Groupe $groupe
-     *
-     * @return Rubrique
-     */
-    public function addGroupe(\AppBundle\Entity\Groupe $groupe)
-    {
-        $this->groupes[] = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * Remove groupe
-     *
-     * @param \AppBundle\Entity\Groupe $groupe
-     */
-    public function removeGroupe(\AppBundle\Entity\Groupe $groupe)
-    {
-        $this->groupes->removeElement($groupe);
-    }
-
-    /**
-     * Get groupes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGroupes()
-    {
-        return $this->groupes;
     }
 
     /**

@@ -29,17 +29,18 @@ class Niveau
     protected $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="niveau")
-     * @var User[]
+     * @ORM\OneToMany(targetEntity="Conteneur", mappedBy="niveau")
+     * @var Conteneur[]
      */
-    protected $users;
+    protected $conteneurs;
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->conteneurs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -77,36 +78,36 @@ class Niveau
     }
 
     /**
-     * Add user
+     * Add conteneur
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\Conteneur $conteneur
      *
      * @return Niveau
      */
-    public function addUser(\AppBundle\Entity\User $user)
+    public function addConteneur(\AppBundle\Entity\Conteneur $conteneur)
     {
-        $this->users[] = $user;
+        $this->conteneurs[] = $conteneur;
 
         return $this;
     }
 
     /**
-     * Remove user
+     * Remove conteneur
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\Conteneur $conteneur
      */
-    public function removeUser(\AppBundle\Entity\User $user)
+    public function removeConteneur(\AppBundle\Entity\Conteneur $conteneur)
     {
-        $this->users->removeElement($user);
+        $this->conteneurs->removeElement($conteneur);
     }
 
     /**
-     * Get users
+     * Get conteneurs
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
+    public function getConteneurs()
     {
-        return $this->users;
+        return $this->conteneurs;
     }
 }

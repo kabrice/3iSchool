@@ -29,6 +29,13 @@ class UserContenu
     protected $nbreVue;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="a_publie", type="boolean")
+     */
+    protected $aPublie;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userContenus")
      * @var User
      */
@@ -122,5 +129,29 @@ class UserContenu
     public function getContenu()
     {
         return $this->contenu;
+    }
+
+    /**
+     * Set aPublie
+     *
+     * @param boolean $aPublie
+     *
+     * @return UserContenu
+     */
+    public function setAPublie($aPublie)
+    {
+        $this->aPublie = $aPublie;
+
+        return $this;
+    }
+
+    /**
+     * Get aPublie
+     *
+     * @return boolean
+     */
+    public function getAPublie()
+    {
+        return $this->aPublie;
     }
 }

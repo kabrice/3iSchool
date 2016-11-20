@@ -55,14 +55,14 @@ class Commentaire
      *
      * @ORM\Column(name="nombre_like", type="integer")
      */
-    protected $nombreLike;
+    protected $nombreLike=0;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="report", type="boolean")
+     * @ORM\Column(name="report", type="integer")
      */
-    protected $report;
+    protected $report=0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Reponse", inversedBy="commentaires")
@@ -83,6 +83,7 @@ class Commentaire
      */
     public function __construct()
     {
+        $this->datePublication = new \DateTime();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

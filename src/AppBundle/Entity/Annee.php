@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Promotion
+ * Annee
  *
- * @ORM\Table(name="promotion")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PromotionRepository")
+ * @ORM\Table(name="annee")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\AnneeRepository")
  */
-class Promotion
+class Annee
 {
     /**
      * @var int
@@ -29,10 +29,11 @@ class Promotion
     protected $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity="UserGroupePromotion", mappedBy="promotion")
-     * @var UserGroupePromotion[]
+     * @ORM\OneToMany(targetEntity="Conteneur", mappedBy="annee")
+     * @var Conteneur[]
      */
-    protected $userGroupePromotions;
+    protected $conteneurs;
+
 
 
     /**
@@ -40,7 +41,7 @@ class Promotion
      */
     public function __construct()
     {
-        $this->userGroupePromotions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->conteneurs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -58,7 +59,7 @@ class Promotion
      *
      * @param string $libelle
      *
-     * @return Promotion
+     * @return Annee
      */
     public function setLibelle($libelle)
     {
@@ -78,36 +79,36 @@ class Promotion
     }
 
     /**
-     * Add userGroupePromotion
+     * Add conteneur
      *
-     * @param \AppBundle\Entity\UserGroupePromotion $userGroupePromotion
+     * @param \AppBundle\Entity\Conteneur $conteneur
      *
-     * @return Promotion
+     * @return Annee
      */
-    public function addUserGroupePromotion(\AppBundle\Entity\UserGroupePromotion $userGroupePromotion)
+    public function addConteneur(\AppBundle\Entity\Conteneur $conteneur)
     {
-        $this->userGroupePromotions[] = $userGroupePromotion;
+        $this->conteneurs[] = $conteneur;
 
         return $this;
     }
 
     /**
-     * Remove userGroupePromotion
+     * Remove conteneur
      *
-     * @param \AppBundle\Entity\UserGroupePromotion $userGroupePromotion
+     * @param \AppBundle\Entity\Conteneur $conteneur
      */
-    public function removeUserGroupePromotion(\AppBundle\Entity\UserGroupePromotion $userGroupePromotion)
+    public function removeConteneur(\AppBundle\Entity\Conteneur $conteneur)
     {
-        $this->userGroupePromotions->removeElement($userGroupePromotion);
+        $this->conteneurs->removeElement($conteneur);
     }
 
     /**
-     * Get userGroupePromotions
+     * Get conteneurs
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUserGroupePromotions()
+    public function getConteneurs()
     {
-        return $this->userGroupePromotions;
+        return $this->conteneurs;
     }
 }

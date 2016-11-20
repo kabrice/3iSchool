@@ -49,6 +49,16 @@ class Vote
      */
     protected $dateVote;
 
+    /**
+     * Vote constructor.
+     * @param \DateTime $dateVote
+     */
+    public function __construct()
+    {
+
+        $this->dateVote = new \DateTime();
+    }
+
 
     /**
      * Get id

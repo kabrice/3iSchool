@@ -32,25 +32,18 @@ class Groupe
 
 
     /**
-     * @ManyToMany(targetEntity="Rubrique", mappedBy="groupes")
+     * @ORM\OneToMany(targetEntity="Conteneur", mappedBy="groupe")
+     * @var Conteneur[]
      */
-    protected $rubriques;
+    protected $conteneurs;
 
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="UserGroupePromotion", mappedBy="groupe")
-     * @var UserGroupePromotion[]
-     */
-    protected $userGroupePromotions;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->rubriques = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->userGroupePromotions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->conteneurs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -88,70 +81,36 @@ class Groupe
     }
 
     /**
-     * Add rubrique
+     * Add conteneur
      *
-     * @param \AppBundle\Entity\Rubrique $rubrique
+     * @param \AppBundle\Entity\Conteneur $conteneur
      *
      * @return Groupe
      */
-    public function addRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    public function addConteneur(\AppBundle\Entity\Conteneur $conteneur)
     {
-        $this->rubriques[] = $rubrique;
+        $this->conteneurs[] = $conteneur;
 
         return $this;
     }
 
     /**
-     * Remove rubrique
+     * Remove conteneur
      *
-     * @param \AppBundle\Entity\Rubrique $rubrique
+     * @param \AppBundle\Entity\Conteneur $conteneur
      */
-    public function removeRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    public function removeConteneur(\AppBundle\Entity\Conteneur $conteneur)
     {
-        $this->rubriques->removeElement($rubrique);
+        $this->conteneurs->removeElement($conteneur);
     }
 
     /**
-     * Get rubriques
+     * Get conteneurs
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRubriques()
+    public function getConteneurs()
     {
-        return $this->rubriques;
-    }
-
-    /**
-     * Add userGroupePromotion
-     *
-     * @param \AppBundle\Entity\UserGroupePromotion $userGroupePromotion
-     *
-     * @return Groupe
-     */
-    public function addUserGroupePromotion(\AppBundle\Entity\UserGroupePromotion $userGroupePromotion)
-    {
-        $this->userGroupePromotions[] = $userGroupePromotion;
-
-        return $this;
-    }
-
-    /**
-     * Remove userGroupePromotion
-     *
-     * @param \AppBundle\Entity\UserGroupePromotion $userGroupePromotion
-     */
-    public function removeUserGroupePromotion(\AppBundle\Entity\UserGroupePromotion $userGroupePromotion)
-    {
-        $this->userGroupePromotions->removeElement($userGroupePromotion);
-    }
-
-    /**
-     * Get userGroupePromotions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserGroupePromotions()
-    {
-        return $this->userGroupePromotions;
+        return $this->conteneurs;
     }
 }

@@ -80,7 +80,7 @@ class Contenu
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="contenu", cascade={"persist",  "merge"})
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="contenu", cascade={"persist", "remove", "merge"})
      * @var Question[]
      */
     protected $questions;
@@ -88,10 +88,16 @@ class Contenu
 
 
     /**
-     * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="contenu", cascade={"persist", "merge"})
+     * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
      * @var UserContenu[]
      */
     protected $userContenus;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Conteneur", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @var Conteneur[]
+     */
+    protected $conteneurs;
 
 
 
@@ -100,8 +106,10 @@ class Contenu
      */
     public function __construct()
     {
+        $this->datePublication = new DateTime();
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userContenus = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->conteneurs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -372,5 +380,39 @@ class Contenu
     public function getUserContenus()
     {
         return $this->userContenus;
+    }
+
+    /**
+     * Add conteneur
+     *
+     * @param \AppBundle\Entity\Conteneur $conteneur
+     *
+     * @return Contenu
+     */
+    public function addConteneur(\AppBundle\Entity\Conteneur $conteneur)
+    {
+        $this->conteneurs[] = $conteneur;
+
+        return $this;
+    }
+
+    /**
+     * Remove conteneur
+     *
+     * @param \AppBundle\Entity\Conteneur $conteneur
+     */
+    public function removeConteneur(\AppBundle\Entity\Conteneur $conteneur)
+    {
+        $this->conteneurs->removeElement($conteneur);
+    }
+
+    /**
+     * Get conteneurs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConteneurs()
+    {
+        return $this->conteneurs;
     }
 }

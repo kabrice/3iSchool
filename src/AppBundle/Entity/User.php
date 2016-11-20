@@ -5,14 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="users_email_unique",columns={"email"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -61,9 +62,16 @@ class User
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_enseignant", type="boolean")
+     * @ORM\Column(name="is_personnel", type="boolean")
      */
-    protected $isEnseignant;
+    protected $isPersonnel;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $password;
+
+    protected $plainPassword;
 
 
     /**
@@ -84,27 +92,18 @@ class User
     /**
      * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="user")
      * @var UserContenu[]
-
      */
     protected $userContenus;
 
-    /***Stop
-
-    /**
-     * @ORM\OneToMany(targetEntity="UserGroupePromotion", mappedBy="user")
-     * @var UserGroupePromotion[]
-     */
-    protected $userGroupePromotions;
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->commentaires = new ArrayCollection();
-        $this->reponses = new ArrayCollection();
-        $this->questions = new ArrayCollection();
-        $this->userContenus = new ArrayCollection();
+        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userContenus = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -237,29 +236,8 @@ class User
         return $this->isBDE;
     }
 
-    /**
-     * Set isEnseignant
-     *
-     * @param boolean $isEnseignant
-     *
-     * @return User
-     */
-    public function setIsEnseignant($isEnseignant)
-    {
-        $this->isEnseignant = $isEnseignant;
 
-        return $this;
-    }
 
-    /**
-     * Get isEnseignant
-     *
-     * @return boolean
-     */
-    public function getIsEnseignant()
-    {
-        return $this->isEnseignant;
-    }
 
     /**
      * Add commentaire
@@ -395,5 +373,124 @@ class User
     public function getUserContenus()
     {
         return $this->userContenus;
+    }
+
+    /**
+     * Set isPersonnel
+     *
+     * @param boolean $isPersonnel
+     *
+     * @return User
+     */
+    public function setIsPersonnel($isPersonnel)
+    {
+        $this->isPersonnel = $isPersonnel;
+
+        return $this;
+    }
+
+    /**
+     * Get isPersonnel
+     *
+     * @return boolean
+     */
+    public function getIsPersonnel()
+    {
+        return $this->isPersonnel;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     * <code>
+     * public function getRoles()
+     * {
+     *     return array('ROLE_USER');
+     * }
+     * </code>
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }

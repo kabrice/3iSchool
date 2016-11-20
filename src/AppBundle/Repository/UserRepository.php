@@ -10,4 +10,17 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    /**
+     * @return array
+     */
+    public function findUserOnlyWithCredentials($id)
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u.id', 'u.nom', 'u.prenom', 'u.email','u.isBDE' , 'u.isPersonnel');
+        $qb->where('u.id=:id');
+        $qb->setParameter('id', $id);
+        return $qb->getQuery()->getResult();
+    }
+
 }
