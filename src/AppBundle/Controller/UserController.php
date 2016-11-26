@@ -54,6 +54,8 @@ class UserController extends Controller
         $niveau = $em->getRepository("AppBundle:Niveau")->find($request->get('niveau_id'));
         $user = $em->getRepository("AppBundle:User")->find($request->get('user_id'));
 
+
+
         if (empty($annee) || empty($groupe) | empty($niveau)) {
             return new JsonResponse(['message' => 'Conteneur introuvable'], Response::HTTP_NOT_FOUND);
         }
