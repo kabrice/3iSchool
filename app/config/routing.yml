@@ -5,11 +5,12 @@ app:
 users:
     type:     rest
     resource: AppBundle\Controller\UserController
-
+    prefix: /api
 lectureContenu:
     type:     rest
     resource: AppBundle\Controller\ContenuController
-
+    prefix: /api
 auth-tokens:
     type:     rest
     resource: AppBundle\Controller\AuthTokenController
+    prefix: /api

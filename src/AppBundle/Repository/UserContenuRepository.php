@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * UserContenuRepository
@@ -10,4 +11,27 @@ namespace AppBundle\Repository;
  */
 class UserContenuRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findContenusIDFavoris(User $user)
+    {
+        $qb = $this->createQueryBuilder('uc');
+        $qb->select('contenu.id');
+        $qb->join('uc.contenu', 'contenu');
+        $qb->orderBy('uc.nbreVue','DESC');
+        $qb->where('uc.user=:user');
+        $qb->setParameter('user', $user);
+        $qb->setMaxResults(10);
+        return $qb->getQuery()->getResult();
+    }
+
+//    public function findContenusFavorisWithEnseignant($contenuFavoriIDs)
+//    {
+//        $qb = $this->createQueryBuilder('uc');
+//        $qb->select(array('uc', 'contenu', 'user.nom', 'user.prenom'));
+//        $qb->join('uc.contenu', 'contenu');
+//        $qb->join('uc.user', 'user');
+//        $qb->orderBy('uc.nbreVue','DESC');
+//        $qb->where('contenu.id IN (:contenuFavoriIDs)');
+//        $qb->setParameter('contenuFavoriIDs', $contenuFavoriIDs);
+//        return $qb->getQuery()->getResult();
+//    }
 }

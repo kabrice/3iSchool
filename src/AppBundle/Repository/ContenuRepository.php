@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * ContenuRepository
@@ -10,4 +11,14 @@ namespace AppBundle\Repository;
  */
 class ContenuRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getContenusFavoris(User $user)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('c',  'userContenus');
+        $qb->join('c.userContenus', 'userContenus');
+        $qb->orderBy('userContenus.nbreVue', "DESC");
+        $qb->setParameter('user', $user);
+        $qb->setMaxResults(10);
+        return $qb->getQuery()->getResult();
+    }
 }

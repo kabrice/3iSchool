@@ -48,14 +48,14 @@ class Contenu
      *
      * @ORM\Column(name="nombre_like", type="integer")
      */
-    protected $nombreLike;
+    protected $nombreLike=0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="nombre_vue_total", type="integer")
      */
-    protected $nombreVueTotal;
+    protected $nombreVueTotal=0;
 
     /**
      * @var string

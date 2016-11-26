@@ -14,7 +14,7 @@ security:
             security: false
 
         main:
-            pattern: ^/
+            pattern: ^/api
             stateless: true
             simple_preauth:
                 authenticator: auth_token_authenticator

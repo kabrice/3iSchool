@@ -8,6 +8,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Conteneur;
+use AppBundle\Entity\Contenu;
+use AppBundle\Entity\Rubrique;
+use AppBundle\Entity\UserContenu;
 use AppBundle\Form\Type\UserType;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -39,7 +43,7 @@ class UserController extends Controller
 
     /**
      * @Rest\View(serializerGroups={"conteneur", "rubrique", "contenu", "user"})
-     * @Rest\Get("/{annee_id}/{groupe_id}/{niveau_id}")
+     * @Rest\Get("/users/{user_id}/{annee_id}/{groupe_id}/{niveau_id}")
      */
     public function getConteneurAction(Request $request)
     {
@@ -48,17 +52,29 @@ class UserController extends Controller
         $annee = $em->getRepository("AppBundle:Annee")->find($request->get('annee_id'));
         $groupe = $em->getRepository("AppBundle:Groupe")->find($request->get('groupe_id'));
         $niveau = $em->getRepository("AppBundle:Niveau")->find($request->get('niveau_id'));
+        $user = $em->getRepository("AppBundle:User")->find($request->get('user_id'));
 
         if (empty($annee) || empty($groupe) | empty($niveau)) {
             return new JsonResponse(['message' => 'Conteneur introuvable'], Response::HTTP_NOT_FOUND);
         }
+
+
+       $contenusIDFavorisFromUserContenus= $em->getRepository("AppBundle:UserContenu")
+                            ->findContenusIDFavoris($user);
+        $contenuIDFavoris =[];
+        foreach ($contenusIDFavorisFromUserContenus as $contenusIDFavorisFromUserContenu)
+        {
+            $contenuIDFavoris[]=$contenusIDFavorisFromUserContenu["id"];
+        }
+       $contenus = $em->getRepository("AppBundle:Contenu")->findById($contenuIDFavoris);
 
         $conteneur = $em->getRepository('AppBundle:Conteneur')
             ->findBy(array('annee'=>$annee,
                            'groupe'=>$groupe,
                            'niveau'=>$niveau));
 
-        return $conteneur;
+        return $contenus;
+        //return array("FAVORIS"=>$conteneurs);
     }
 
     /**
