@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Conteneur;
 use AppBundle\Entity\Contenu;
+use AppBundle\Entity\ContenusGroupes;
 use AppBundle\Entity\Rubrique;
 use AppBundle\Entity\UserContenu;
 use AppBundle\Form\Type\UserType;
@@ -42,7 +43,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Rest\View(serializerGroups={"conteneur", "rubrique", "contenu", "user"})
+     * @Rest\View(serializerGroups={"conteneur", "rubrique", "contenu", "user", "typeQuestion", "reponse"})
      * @Rest\Get("/users/{user_id}/{annee_id}/{groupe_id}/{niveau_id}")
      */
     public function getConteneurAction(Request $request)
@@ -68,15 +69,24 @@ class UserController extends Controller
         {
             $contenuIDFavoris[]=$contenusIDFavorisFromUserContenu["id"];
         }
-       $contenus = $em->getRepository("AppBundle:Contenu")->findById($contenuIDFavoris);
-
-        $conteneur = $em->getRepository('AppBundle:Conteneur')
-            ->findBy(array('annee'=>$annee,
+       $contenuFavoris = $em->getRepository("AppBundle:Contenu")->findById($contenuIDFavoris);
+       $contenuRecents = $em->getRepository("AppBundle:Contenu")->findContenusRecents();
+       $contenuAussiConsultes = $em->getRepository('AppBundle:Conteneur')
+            ->findContenusAussiConsultes(array('annee'=>$annee,
                            'groupe'=>$groupe,
                            'niveau'=>$niveau));
+        $tousLesContenusPromotion = $em->getRepository('AppBundle:Conteneur')
+            ->findBy(array('annee'=>$annee,
+                'groupe'=>$groupe,
+                'niveau'=>$niveau));;
 
-        return $contenus;
-        //return array("FAVORIS"=>$conteneurs);
+        //return array("FAVORIS"=>$contenuFavoris);
+
+        $contenusGroupes = new ContenusGroupes($contenuFavoris, $contenuRecents, $contenuAussiConsultes, $tousLesContenusPromotion);
+
+        return array("FAVORIS"=>$contenuFavoris, "RECENTS"=>$contenuRecents,
+                    "AUSSICONSULTES"=>$contenuAussiConsultes, "CONTENEUR"=>$tousLesContenusPromotion);
+
     }
 
     /**

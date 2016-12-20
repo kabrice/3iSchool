@@ -8,5 +8,11 @@
     <orderEntry type="library" name="angular" level="application" />
     <orderEntry type="library" name="angular-locale_fr-fr" level="application" />
     <orderEntry type="library" name="angular-resource" level="application" />
+    <orderEntry type="library" name="angular-agility-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="angular-environment-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="angular-material-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="angular-sanitize" level="application" />
+    <orderEntry type="library" name="angularjs-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="angular-ui" level="application" />
   </component>
 </module>

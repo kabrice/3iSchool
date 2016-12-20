@@ -1,74 +1,306 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<body class="jumbotron" ng-app="3ischool" ng-controller="3ischoolCtrl"> 
-<header style="margin-top: -70px;">
-    <div >
-        <nav class="navbar navbar-inverse navbar-fix navbar-default ">
-            <div class="container">
-                <div class="navbar-header" >
-                    <div>
-                        <ul class="nav navbar-nav">
-                            <li><a class="navbar-brand" href="?controller=apropos&action=apropos"><img src="/img/3ischool_logo.png" height="40" width="130" style="margin-top: 3px; margin-right: -20px; margin-left: -60px;"></a></li>
+<div class="jumbotron"> 
 
-                            <li><a>
-                                    <form id="custom-search-input" style="display: inline-block; max-width: 750px">
-                                        <div class="input-group col-md-12">
-                                            <input type="text" class="  search-query form-control" placeholder="Recherche un cours, un TD, un TP et plus" />
-                                <span class="input-group-btn">
+    <div id="wrapper" >
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid" >
+                <div class="navbar-header">
+                    <button style="background-color: red" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div  class="navbar-brand">
+                        <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle" style="color: red">
+
+                        </a>
+                        <a href="#"><img ng-src="img/3ischool_logo.png" height="30" width="130" style="margin-top: -4px">   </a>
+                    </div>
+                </div>
+
+                <div id="navbar" class="collapse navbar-collapse" style="border-top: none">
+                    <ul class="nav navbar-nav navbar-justified"><li class=""><form class="navbar-form" hidden>
+                                <div class="form-group" style="display:inline;">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                                    </div>
+                                </div>
+                            </form>
+                            <form id="custom-search-input" role="search">
+                                <div class="input-group col-md-12">
+                                    <input type="text" class="  search-query form-control" placeholder="Recherche un cours, un TD, un TP et plus" />
+                                    <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" >
                                         <span class=" glyphicon glyphicon-search"></span>
                                     </button>
                                 </span>
+                                </div>
+                            </form>
+                        </li></ul>
+                    <ul class="nav navbar-nav navbar-right" style="margin-top: -6px">
+
+                        <li id="notification_li" >
+                            <span id="notification_count" hidden></span>
+                            <a href='?controller=utilisateur&action=posterpensee' class="header-text" id="notificationLink"><i class="material-icons">notifications</i></a>
+                            <div id="notificationContainer">
+                                <div id="notificationTitle">Notifications</div>
+                                <div id="notificationsBody" class="notifications scroll">
+                                    <ul class="nav" id="notifications-ul">
+
+                                    </ul>
+                                </div>
+                                <div id="notificationFooter"><a href="#" class="notif-link-footer"><i class="material-icons">sentiment_satisfied</i></a></div>
+                            </div>
+                        </li>
+                        <li >
+                            <a href='?controller=utilisateur&action=posterpensee' class="header-text">Accueil</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px; color:dimgrey;" onmouseover="this.style.color='#1e90fe';this.style.color='#1e90fe';" onmouseout="this.style.background='';this.style.color='dimgrey';">
+                                edgar@3il.fr <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href='?controller=profil&action=suggestion'>Profil</a></li>
+                                <li><a href='?controller=profil&action=suggestion'>Tableau de Bord</a></li>
+                                <li><a href="?controller=utilisateur&action=deconnecter">Se Déconnecter</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <div class="left" >
+                <ul class="courses " style="margin-top: 15px !important; ">
+                    <div class="side-menu-head"> Promotion</div>
+                    <div class="caption-item-content" >
+                        <div class="sel1" style="width: 50%; margin: 10px">
+                            <select class="form-control "  >
+                                <option value="1">3iL-Prepa1</option>
+                                <option value="2">3iL-Prepa2</option>
+                                <option value="3">3iL-I1</option>
+                                <option value="4">3iL-I2</option>
+                                <option value="5">3iL-I3</option>
+                                <option value="6">3iL-I3+</option>
+                                <option value="7">CS2I-Bachelor1</option>
+                                <option value="8">CS2I-Master1</option>
+                                <option value="9">CS2I-Master2</option>
+                                <option value="10">CS2I-Master2+</option>
+                            </select>
+                        </div>
+                        <div class="sel1" style="width: 50%; margin: 10px" >
+                            <select class="form-control ">
+                                <option>2013</option>
+                                <option>2016</option>
+                                <option>2017</option>
+                            </select>
+                        </div>
+                    </div>
+                </ul>
+
+                <ul class="courses " style="margin-top: 15px !important;">
+                    <div class="side-menu-head">Matières</div>
+                    <li><a  ng-class="{active: rubriqueCourante=='Tous'}" ng-click="selectionRubrique('Tous')" href="#home"><img ng-src="{{asset('img/All.png')}}" class="side-menu-image">Tous</a></li>
+                    <li ng-repeat="unConteneur in contenusGroupes.CONTENEUR">
+                        <a  ng-if="unConteneur.contenu.rubrique.groupeRubrique.libelle =='Matière'"
+                            ng-class="{active: unConteneur.contenu.rubrique.libelle == rubriqueCourante}"
+                            ng-click="selectionRubrique(unConteneur.contenu.rubrique.libelle)"><img ng-src="{{ asset('{[{unConteneur.contenu.rubrique.imageRoot}]}') }}" class="side-menu-image">
+                            {[{unConteneur.contenu.rubrique.libelle | limitTo:25}]}
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="courses">
+                    <div class="side-menu-head">Profs</div>
+                    <li><a href="#home"><img ng-src="img/baillargeat.png" class="prof-image">Baillargeat</a></li>
+                    <li><a href="#news"><img ng-src="img/belabdelhi.png" class="prof-image">Belabdelhi</a></li>
+                    <li><a href="#about"><img ng-src="img/duvalet.png" class="prof-image">Duvalet</a></li>
+                    <li><a href="#about"><img ng-src="img/frigui.png" class="prof-image">Frigui</a></li>
+                    <li><a href="#about"><img ng-src="img/granet.png" class="prof-image">Granet</a></li>
+                    <li><a href="#about"><img ng-src="img/mifdal.png" class="prof-image">Mifdal</a></li>
+                    <li><a href="#about"><img ng-src="img/ruchaud.png" class="prof-image">Ruchaud</a></li>
+                </ul>
+
+                <ul class="courses">
+                    <div class="side-menu-head">Administration</div>
+                    <li><a href="#home"><img ng-src="img/important.png" class="side-menu-image">Annonces Importantes</a></li>
+                    <li><a href="#news"><img ng-src="img/international.png" class="side-menu-image">International</a></li>
+                    <li><a href="#contact"><img ng-src="img/internship.png" class="side-menu-image">Infos Stage</a></li>
+                    <li><a href="#about"><img ng-src="img/entreprise.png" class="side-menu-image">Entreprises</a></li>
+                </ul>
+
+                <ul class="courses" style="margin-bottom: 90px">
+                    <div class="side-menu-head">Divers</div>
+                    <li><a href="#home"><img ng-src="img/bde.png" class="side-menu-image">BDE</a></li>
+                    <li><a href="#news"><img ng-src="img/question.png" class="side-menu-image">Questions Importantes</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+            <div class="page-content">
+                <div class="container-fluid">
+                    {#A modifier avec ng-model#}
+                    <div class="alert alert-info">La rubrique contient {[{conteneurs.length}]} </div>
+                    <div class="row">
+
+                        <div class="span12">
+                            {#Début Affichage de contenus courant concernant une rubrique cliquée#}
+                            <div>
+                                <div ng-repeat="unConteneur in conteneurs | orderBy:'-datePublication'"
+                                     class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12"
+                                     ng-if="unConteneur.contenu.rubrique.libelle==rubriqueCourante">
+                                    <div class="panel panel-default course-pointer">
+                                        <a href="/lectureContenu/{[{unConteneur.id}]}">
+                                        <div class="panel-heading">
+                                            <img ng-src="{{ asset('{[{unConteneur.contenu.imageRoot}]}') }}" class="img-wrapper " />
                                         </div>
-                                    </form></a>
-                            </li>
-                        </ul>
+                                        </a>
+                                        <div class="caption-wrapper">
+                                            <div class="title-course">{[{unConteneur.contenu.titre | limitTo:40}]}
+                                                <span ng-if="unConteneur.contenu.titre.length > 40">&hellip;</span>
+                                            </div>
+                                            <div class="course">{[{unConteneur.contenu.rubrique.libelle | limitTo:25}]}
+                                                <span ng-if="unConteneur.contenu.rubrique.libelle.length > 25">&hellip;</span>
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="color: orangered;" >
+                                                    <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
+                                                </div>
+                                                <div style="margin-left: 18px; color: orangered;">
+                                                    {[{unConteneur.contenu.nombreLike}]} j'aime
+                                                </div>
+                                            </div>
+                                            <div class="caption-item-content">
+                                                <div class="course-view">{[{unConteneur.contenu.nombreVueTotal}]} vues</div>
+                                                <div class="course-date">{[{unConteneur.contenu.datePublication | date:'dd MMMM yyyy'}]}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {#Fin Affichage de contenus concernant une rubrique#}
+
+                            {#Début Affichage de tous les éléments#}
+                            <div ng-show="rubriqueCourante=='Tous'">
+                            <div class="aside-menu-head">Favoris</div>
+
+                            <div id="owl-favoris" class="owl-carousel owl-theme">
+                                <div  ng-repeat="unFavoris in contenusGroupes.FAVORIS | orderBy:'-userContenus[1].nbreVue'" class="item">
+                                    <div class="panel panel-default course-pointer">
+                                        <a href="/lectureContenu/{[{unFavoris.id}]}">
+                                        <div class="panel-heading">
+                                            <img ng-src="{{ asset('{[{unFavoris.imageRoot}]}') }}" class="img-wrapper " />
+                                        </div>
+                                        </a>
+                                        <div class="caption-wrapper">
+                                            <div class="title-course">{[{unFavoris.titre | limitTo:25}]}
+                                                <span ng-if="unFavoris.titre.length > 25">&hellip;</span>
+                                            </div>
+                                            <div class="course">{[{unFavoris.rubrique.libelle | limitTo:25}]}
+                                                <span ng-if="unFavoris.rubrique.libelle.length > 25">&hellip;</span>
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="color: orangered;" >
+                                                    <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
+                                                </div>
+                                                <div style="margin-left: 18px; color: orangered;">
+                                                    {[{unFavoris.nombreLike}]} j'aime
+                                                </div>
+                                            </div>
+                                            <div class="caption-item-content">
+                                                <div hidden>{[{unFavoris.userContenus[1].nbreVue}]} vues</div>
+                                                <div class="course-view">{[{unFavoris.nombreVueTotal}]} vues</div>
+                                                <div class="course-date">{[{unFavoris.datePublication | date:'dd MMMM yyyy'}]}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="aside-menu-head">Récents</div>
+                            <div id="owl-recents" class="owl-carousel owl-theme">
+                                <div ng-repeat="unRecent in contenusGroupes.RECENTS | orderBy:'datePublication'" class="item">
+                                    <div class="panel panel-default course-pointer">
+                                        <a href="/lectureContenu/{[{unRecent.id}]}">
+                                        <div class="panel-heading">
+                                            <img ng-src="{{ asset('{[{unRecent.imageRoot}]}') }}" class="img-wrapper " />
+                                        </div>
+                                        </a>
+                                        <div class="caption-wrapper">
+                                            <div class="title-course">{[{unRecent.titre}]}
+                                                <span ng-if="unRecent.titre.length > 25">&hellip;</span>
+                                            </div>
+                                            <div class="course">{[{unRecent.rubrique.libelle | limitTo:25}]}
+                                                <span ng-if="unRecent.rubrique.libelle.length > 25">&hellip;</span>
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="color: orangered;" >
+                                                    <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
+                                                </div>
+                                                <div style="margin-left: 18px; color: orangered;">
+                                                    {[{unRecent.nombreLike}]} j'aime
+                                                </div>
+                                            </div>
+                                            <div class="caption-item-content">
+                                                <div class="course-view">{[{unRecent.nombreVueTotal}]} vues</div>
+                                                <div class="course-date">{[{unRecent.datePublication | date:'dd MMMM yyyy hh : mm'}]}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aside-menu-head">Tes camarades ont aussi consultés</div>
+                            <div id="owl-aussiConsultes" class="owl-carousel owl-theme">
+                                <div ng-repeat="aussiConsulte in contenusGroupes.AUSSICONSULTES | orderBy:'-nombreVueTotal'" class="item">
+                                    <div class="panel panel-default course-pointer">
+                                        <a href="/lectureContenu/{[{aussiConsulte.id}]}">
+                                        <div class="panel-heading">
+                                            <img ng-src="{{ asset('{[{aussiConsulte.contenu.imageRoot}]}') }}" class="img-wrapper " />
+                                        </div>
+                                            </a>
+                                        <div class="caption-wrapper">
+                                            <div class="title-course">{[{aussiConsulte.contenu.titre | limitTo:25}]}
+                                                <span ng-if="aussiConsulte.contenu.titre.length > 25">&hellip;</span>
+                                            </div>
+                                            <div class="course">{[{aussiConsulte.contenu.rubrique.libelle | limitTo:25}]}
+                                                <span ng-if="aussiConsulte.contenu.rubrique.libelle.length > 25">&hellip;</span>
+                                            </div>
+                                            <div style="display: flex">
+                                                <div style="color: orangered;" >
+                                                    <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
+                                                </div>
+                                                <div style="margin-left: 18px; color: orangered;">
+                                                    {[{aussiConsulte.contenu.nombreLike}]} j'aime
+                                                </div>
+                                            </div>
+                                            <div class="caption-item-content">
+                                                <div class="course-view">{[{aussiConsulte.contenu.nombreVueTotal}]} vues</div>
+                                                <div class="course-date">{[{aussiConsulte.contenu.datePublication | date:'dd MMMM yyyy'}]}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                            {#Fin Affichage de tous les éléments#}
+                        </div>
                     </div>
 
                 </div>
-
-
-
-
-                <ul class="nav navbar-nav navbar-right" >
-                    <li id="notification_li">
-                        <span id="notification_count" hidden></span>
-                        <a href='?controller=utilisateur&action=posterpensee' class="header-text" id="notificationLink"><i class="material-icons">notifications</i></a>
-                        <div id="notificationContainer">
-                            <div id="notificationTitle">Notifications</div>
-                            <div id="notificationsBody" class="notifications scroll">
-                                <ul class="nav" id="notifications-ul">
-
-                                </ul>
-                            </div>
-                            <div id="notificationFooter"><a href="#" class="notif-link-footer"><i class="material-icons">sentiment_satisfied</i></a></div>
-                        </div>
-                    </li>
-                    <li>
-                        <a href='?controller=utilisateur&action=posterpensee' class="header-text">Accueil</a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px; color:dimgrey;" onmouseover="this.style.color='#1e90fe';this.style.color='#1e90fe';" onmouseout="this.style.background='';this.style.color='dimgrey';">
-                            Edgar<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href='?controller=profil&action=suggestion'>Profil</a></li>
-                            <li><a href="?controller=utilisateur&action=deconnecter">Se Déconnecter</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-
-</header>
-    <div id="wrapper">
-        <div id="container">
-            <div id="welcome">
-                <div class="alert alert-info">Le conteneur contient {[{ nbreDeContenu}]} contenus</div>
-
             </div>
         </div>
     </div>
+</div>
+
+
+</main>
+</div>
 {% endblock %}
 

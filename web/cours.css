@@ -1,0 +1,125 @@
+html, body, .container-table {
+    height: 100%;
+}
+.container-table {
+    display: table;
+}
+.vertical-center-row {
+
+    display: table-cell;
+    vertical-align: middle;
+    border: 1px solid grey;
+}
+
+#image-cours{
+    width: 500px;
+    height: 500px;
+}
+
+#cours-titre{
+
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 20pt;
+    color: #262c31;
+    font-weight: 100;
+
+}
+
+#cours-presentation{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+    color: #2a3136;
+}
+
+.note{
+    margin-bottom: -13px;
+}
+
+#delimiter{
+    margin-top: 10px;
+    border: 1px solid #a0a0a0;
+    border-bottom: none;
+    width: 500px;
+    height: 90px;
+    line-height: 90px;
+
+}
+
+#hcours{
+    width: 500px;
+}
+
+body{
+    background-color: #fbfbfb !important;
+}
+
+.pPresentation ul,
+.pPresentation p{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+    color: #2a3136;
+
+}
+.pPresentation ul {
+    font-weight: 200;
+ }
+
+.comment-pres{
+    padding: 15px;
+    background-color: white;
+    margin-top : 20px;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    width: 500px;
+}
+
+.user-img{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 8pt;
+    color: #2a3136;
+    text-align: center;
+}
+
+
+
+.delimiter{
+    border: 1px solid #d5d5d5;
+    border-top: none;
+    clear: both;
+    width: 430px;
+}
+
+.question-page{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    color: #5a6974;
+    width: 150px;
+
+}
+.question-title{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    color: #414c54;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.question-explication{
+    font-family:"Helvetica Neue ", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    color: #414c54;
+}
+td img{
+    width: 50px;
+    height: 50px;
+}
+
+
+
+td{
+    padding: 10px;
+    padding-left: 0px;
+    cursor: pointer;
+}
+

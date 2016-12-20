@@ -52,6 +52,13 @@ AppBundle\Entity\Question:
         reponses:
             groups: ['contenu']
 
+AppBundle\Entity\TypeQuestion:
+    attributes:
+        id:
+            groups: ['typeQuestion', 'question']
+        libelle:
+            groups: ['typeQuestion', 'question']
+
 
 AppBundle\Entity\UserContenu:
     attributes:
@@ -72,19 +79,21 @@ AppBundle\Entity\Reponse:
             groups: ['reponse', 'commentaire',  'user']
         libelle:
             groups: ['reponse', 'commentaire',  'user']
+        typeReponse:
+            groups: ['reponse', 'commentaire',  'user']
         datePublication:
             groups: ['reponse', 'commentaire',  'user']
         nombreLike:
             groups: ['reponse', 'commentaire',  'user']
         report:
             groups: ['reponse', 'commentaire',  'user']
+        users:
+            groups: ['reponse']
         question:
             groups: [ 'commentaire']
         commentaires:
             groups: ['reponse']
 
-        users:
-            groups: ['reponse']
 
 AppBundle\Entity\Commentaire:
     attributes:
@@ -119,12 +128,15 @@ AppBundle\Entity\User:
             groups: ['user', 'commentaire', 'question', 'reponse', 'auth-token']
         prenom:
             groups: ['user', 'commentaire', 'question', 'reponse', 'auth-token']
+        userProfilRoot:
+            groups: ['user', 'commentaire', 'question', 'reponse', 'auth-token']
         dateCreation:
             groups: ['user', 'commentaire', 'question', 'reponse', 'auth-token']
         isBDE:
             groups: ['user', 'commentaire', 'question', 'reponse', 'auth-token']
         isPersonnel:
             groups: ['user', 'commentaire', 'question', 'reponse', 'auth-token']
+
 
             
 #Serialisation for user homepage

@@ -11,14 +11,15 @@ use AppBundle\Entity\User;
  */
 class ConteneurRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getContenusFavoris( $Contenus)
+    // Les contenus aussi consultés sont classés par ceux qui ont le plus grand nombre de vue totale
+    public function findContenusAussiConsultes($criteres)
     {
         $qb = $this->createQueryBuilder('c');
         $qb->select('c');
         $qb->join('c.contenu', 'contenu');
-        //$qb->orderBy('c.nbreVue','DESC');
-        $qb->where('c.contenu IN(:contenus)');
-        $qb->setParameter('contenus', $Contenus);
+        $qb->where('c.annee=:critereAnnee');
+        $qb->setParameter('critereAnnee', $criteres["annee"]);
+        $qb->orderBy('contenu.nombreVueTotal', "DESC");
         $qb->setMaxResults(10);
         return $qb->getQuery()->getResult();
     }

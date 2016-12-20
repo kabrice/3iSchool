@@ -1,0 +1,270 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container-fluid"  ng-init="getConteneurByID({{ idConteneur }})">
+
+        <div id="titleHead">{[{conteneurCourant.contenu.titre | limitTo:70}]}
+            <span ng-if="conteneurCourant.contenu.titre.length > 70">&hellip;</span>
+        </div>
+        <div class="row rowLectureContenu">
+            <div class="col-sm-12 col-md-7 col-lg-7 " style="padding: 0 !important; border: 1px solid lightgrey" hidden>
+                <iframe ng-src="{[{contenuURL}]}" style="border: none;"></iframe>
+
+            </div>
+            <div  style=" padding:0; border: 1px solid lightgrey; height: 100%">
+                <div class="panel panel-default noborder" style="height: 100%!important; width: 100%!important " >
+                    <div class="panel-heading noborder" hidden>QUESTIONS</div>
+                    <div class="panel-heading noborder">DETAILS DE LA QUESTION</div>
+                    <div class="panel-body noborder" style="box-shadow: none !important;" hidden>
+                        <div>
+                            <a style="">
+                                <form style="display: inline-block; width: 100%">
+                                    <div class="input-group col-md-12">
+                                        <input type="text" class="  search-query form-control"
+                                               placeholder="Recherche une question sur ce contenu"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <span class=" glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                                    </div>
+                                </form>
+                            </a>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-question">Poser une nouvelle question</button>
+                            <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;">
+                                <tr ng-repeat="uneQuestion in conteneurCourant.contenu.questions | orderBy:'-datePublication'">
+                                    <td class="m-img-profil"><img ng-src="{{asset('{[{uneQuestion.users[0].userProfilRoot}]}')}}" ></td>
+                                    <td>
+                                        <div class="date-publication">{[{uneQuestion.datePublication | date:'dd MMMM yyyy hh:mm'}]}</div>
+                                        <div class="question-page"
+                                             ng-if="uneQuestion.page != null && uneQuestion.ligne!=null">page {[{uneQuestion.page}]} - à partir de la ligne {[{uneQuestion.ligne}]}</div>
+                                        <div class="question-title" >
+                                            {[{uneQuestion.libelle | limitTo:calcLimit()}]}
+                                            <span ng-if="uneQuestion.libelle.length > calcLimit()">&hellip;</span>
+                                        </div>
+                                        <div class="question-explication">
+                                            {[{uneQuestion.description | limitTo:150}]}
+                                            <span ng-if="uneQuestion.description.length >150">&hellip;</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    {# Start dupes#}
+                    <div class="panel-body noborder" style="box-shadow: none !important; display: table;
+  margin-right: auto;
+  margin-left: auto; height: 97% " >
+                        <table class="table" cellspacing="pixels" style=" overflow-y: auto;">
+                            <thead >
+                            <tr>
+                                <th colspan="2">
+
+
+                                    <div class="date-publication"><img src="{{ asset('img/edgar_avec_patrick.png') }}"><a
+                                                href="/2/profil" class="href"> Edgar KAMDEM</a>, le 16 novembre 2016 à 11:52</div>
+                                    <div class="question-page">Page 10 - à partir de la ligne 22</div>
+                                    <div class="question-title" >
+                                        Est- ce qu'on peut ouvrir un fichier avec un chemin relatif qu'on peut ouvrir un fichier avec un chemin relatif?
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="votecell" style="vertical-align: top; ">
+
+
+                                    <div class="vote" style="margin-right: -30px">
+
+                                        <div  class="check-btn-contribution">
+                                            <div class="check-vote" title="Cette question montre l'effort de recherche. Elle est utile et clair."><i class="fa fa-check-circle fa-2x" style="font-size: 30pt" aria-hidden="true"></i></div>
+                                            <div id="check-count">123
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+                                <td class="postcell">
+                                    <div>
+                                        <div class="post-text" itemprop="text">
+
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; " colspan="2">
+                                    <div style="float: right; ">
+
+                                        <a title="Cette question ne montre aucun effort de recherche, elle n'est pas claire ou n'est pas utile">
+                                            Question inutile <i class="fa fa-flag" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: none"></td>
+                                <td style="border: none; " colspan="2">
+                                    <div style="float: left;
+                                                font-size: 13pt;
+                                                font-weight: 400">
+
+                                        32 réponses
+                                    </div>
+                                </td>
+                            </tr>
+{#Debut reponse#}
+                            <tr>
+                                <th colspan="2" style="background-color: rgba(23,170,28,0.1)">
+
+
+                                    <div class="date-publication"><img src="{{ asset('img/edgar_avec_patrick.png') }}"><a
+                                                href="/2/profil" class="href"> Edgar KAMDEM</a>, le 16 novembre 2016 à 11:52
+
+                                    </div>
+                                    <div style="color: #17aa1c; font-size: 13pt">Réponse enseignant</div>
+
+                                </th>
+                            </tr>
+                            <tr style="background-color: rgba(23,170,28,0.1)">
+                                <td class="votecell" style="vertical-align: top; border: none">
+
+
+                                    <div class="vote" style="margin-right: -30px">
+
+                                        <div  class="check-btn-contribution">
+                                            <div class="check-vote" title="Cette question montre l'effort de recherche. Elle est utile et clair."><i class="fa fa-check-circle fa-2x" style="font-size: 30pt" aria-hidden="true"></i></div>
+                                            <div id="check-count">123
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+                                <td class="postcell" style="border: none">
+                                    <div>
+                                        <div class="post-text" itemprop="text">
+
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                        </div>
+
+                                    </div>
+                                    <div>
+                                        <a href="#" class="-Ed2">Commentaires (2)</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+{#Fin reponse#}
+                            {#Debut reponse#}
+                            <tr>
+                                <th colspan="2" >
+
+
+                                    <div class="date-publication"><img src="{{ asset('img/edgar_avec_patrick.png') }}"><a
+                                                href="/2/profil" class="href"> Edgar KAMDEM</a>, le 16 novembre 2016 à 11:52
+
+                                    </div>
+                                    {#<div style="color: #17aa1c; font-size: 13pt">Réponse enseignant</div>#}
+
+                                </th>
+                            </tr>
+                            <tr >
+                                <td class="votecell" style="vertical-align: top; border: none">
+
+
+                                    <div class="vote" style="margin-right: -30px">
+
+                                        <div  class="check-btn-contribution">
+                                            <div class="check-vote" title="Cette question montre l'effort de recherche. Elle est utile et clair."><i class="fa fa-check-circle fa-2x" style="font-size: 30pt" aria-hidden="true"></i></div>
+                                            <div id="check-count">123
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+                                <td class="postcell" style="border: none">
+                                    <div>
+                                        <div class="post-text" itemprop="text">
+
+                                            <p>En effet, durant tout le cours, vous n'avez qu'utilisé les chemins absolus, </p>
+
+                                            <p> est-ce qu'on ne pourrait pas utilisé des chemins relatifs plutôt !</p>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; " ></td>
+                                <td style="border: none; " >
+                                    <div style="float: left">
+                                        <a href="#" class="-Ed2">Commentaires (2)</a>
+                                    </div>
+                                    <div style="float: right; ">
+
+                                        <a title="Cette réponse ne montre aucun effort de recherche, elle n'est pas claire ou n'est pas utile">
+                                            Reponse inutile <i class="fa fa-flag" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {#Fin reponse#}
+                            <tr>
+                                <td class="votecell"></td>
+                                <td>
+
+                                    <form>
+                                        <input type="text" class="form-control"  placeholder="Ajouter une réponse">
+                                    </form>
+
+                                </td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    {# End dupes #}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+

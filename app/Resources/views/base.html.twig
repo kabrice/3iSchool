@@ -2,43 +2,90 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}3iSchool{% endblock %}</title>
         {% block stylesheets %}
-            <!-- Latest compiled and minified CSS -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-
+            <meta charset="UTF-8">  
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
             <link rel="stylesheet" href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}">
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/posterPensee.css') }}" />
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/mgSuggestion.css') }}" /> 
-    </head>
+            <link rel="stylesheet" type="text/css"  href="{{ asset('css/pdfviewer.css') }}" /> 
+            <link rel="stylesheet" type="text/css"  href="{{ asset('css/sidebar.css') }}" /> 
+            <!-- Important Owl stylesheet -->
+            <link rel="stylesheet" type="text/css"  href="{{ asset('owl-carousel/owl.carousel.css') }}" /> 
+            <!-- Default Theme -->
+            <link rel="stylesheet" type="text/css"  href="{{ asset('owl-carousel/owl.theme.css') }}" /> 
+        <style>
+            iframe {
+                height: 100% !important;
+                width: 100% !important;
+                overflow: hidden;
+
+            }
+
+        </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-
+    </head>
+    <body ng-app="3ischool" ng-controller="3ischoolCtrl">
         {% block body %}
 
         {% endblock %}
         {% block javascripts %}
-
-            <script src="{{ asset('library/jquery/jquery-2.1.4.min.js') }}" type="text/javascript"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-            <script src="{{ asset('js/ajax-upload.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/votePensee.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/posterPensee.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/contribution.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/countLimit.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/commentaire.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/showmore.js') }}" type="text/javascript"></script>
-            <script type="text/javascript" src="{{ asset('js/notification.js') }}"></script>
-            <script src="{{ asset('library/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
-            <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-            <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-            <script type="text/javascript"
-                    src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/1.3.4/jquery.fancybox-1.3.4.pack.min.js"></script>
             <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-            <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
+            <script src="https://code.angularjs.org/1.5.8/i18n/angular-locale_fr-fr.js"></script>
+            <script type="text/javascript" src="{{ asset('js/app.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('library/jquery/jquery-2.1.4.min.js') }}"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+            <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="{{ asset('js/ajax-upload.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/votePensee.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/posterPensee.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/contribution.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/countLimit.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/commentaire.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/showmore.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/notification.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('owl-carousel/owl.carousel.min.js') }}"></script>
+            <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+            <script>
+                $(document).ready(function() {
+
+                    var owlFavoris = $("#owl-favoris");
+                    var owlRecents = $("#owl-recents");
+                    var owlAussiConsultes= $("#owl-aussiConsultes");
+
+                    myOwlCarousel(owlFavoris);
+                    myOwlCarousel(owlRecents);
+                    myOwlCarousel(owlAussiConsultes);
+
+                    function myOwlCarousel(owl) {
+
+                        owl.owlCarousel({
+
+                            items: 5,
+                            itemsCustom: false,
+                            itemsDesktop: [1399, 4],
+                            itemsDesktopSmall: [1100, 3],
+                            itemsTablet: [930, 2],
+                            itemsTabletSmall: false,
+                            itemsMobile: [479, 1],
+                            singleItem: false,
+                            itemsScaleUp: false,
+                            slideSpeed: 200,
+                            paginationSpeed: 800,
+                            rewindSpeed: 1000,
+                            autoPlay: true,
+                            autoWeight: false,
+                            autoHeight: false
+                        })
+                    }
+                });
+            </script>
+
         {% endblock %}
     </body>
 </html>
