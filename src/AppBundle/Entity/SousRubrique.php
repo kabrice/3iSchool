@@ -30,9 +30,11 @@ class SousRubrique
     protected $libelle;
 
     /**
-     * @ManyToMany(targetEntity="Rubrique", inversedBy="sousRubriques")
+     * @ORM\OneToMany(targetEntity="Contenu", mappedBy="rubrique")
+     * @ORM\OneToMany(targetEntity="Contenu", mappedBy="sousRubrique")
+     * @var Contenu
      */
-    protected $rubriques;
+    protected $contenus;
 
 
     /**
@@ -68,45 +70,47 @@ class SousRubrique
     {
         return $this->libelle;
     }
+
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->rubriques = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add rubrique
+     * Add contenus
      *
-     * @param \AppBundle\Entity\Rubrique $rubrique
+     * @param \AppBundle\Entity\Contenu $contenus
      *
      * @return SousRubrique
      */
-    public function addRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    public function addContenus(\AppBundle\Entity\Contenu $contenus)
     {
-        $this->rubriques[] = $rubrique;
+        $this->contenus[] = $contenus;
 
         return $this;
     }
 
     /**
-     * Remove rubrique
+     * Remove contenus
      *
-     * @param \AppBundle\Entity\Rubrique $rubrique
+     * @param \AppBundle\Entity\Contenu $contenus
      */
-    public function removeRubrique(\AppBundle\Entity\Rubrique $rubrique)
+    public function removeContenus(\AppBundle\Entity\Contenu $contenus)
     {
-        $this->rubriques->removeElement($rubrique);
+        $this->contenus->removeElement($contenus);
     }
 
     /**
-     * Get rubriques
+     * Get contenus
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRubriques()
+    public function getContenus()
     {
-        return $this->rubriques;
+        return $this->contenus;
     }
 }

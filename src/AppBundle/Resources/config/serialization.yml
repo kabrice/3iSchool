@@ -18,6 +18,8 @@ AppBundle\Entity\Contenu:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
         rubrique:
             groups: ['contenu', 'question',  'userContenu']
+        sousRubrique:
+            groups: ['contenu', 'question',  'userContenu']
         questions:
             groups: ['contenu']
         userContenus:
@@ -40,8 +42,6 @@ AppBundle\Entity\Question:
         page:
             groups: ['contenu', 'question', 'reponse',  'user']
         ligne:
-            groups: ['contenu', 'question', 'reponse',  'user']
-        imageRoot:
             groups: ['contenu', 'question', 'reponse',  'user']
         report:
             groups: ['contenu', 'question', 'reponse',  'user']
@@ -195,8 +195,7 @@ AppBundle\Entity\Rubrique:
             groups: ['rubrique', 'groupeRubrique', 'sousRubrique', 'contenu']
         groupeRubrique:
             groups: ['rubrique']
-        sousRubriques:
-            groups: ['rubrique']
+
 
 AppBundle\Entity\GroupeRubrique:
     attributes:
@@ -213,8 +212,7 @@ AppBundle\Entity\SousRubrique:
             groups: ['sousRubrique', 'rubrique']
         libelle:
             groups: ['sousRubrique', 'rubrique']
-        rubriques:
-            groups: ['sousRubrique']
+
 
 AppBundle\Entity\AuthToken:
     attributes:

@@ -22,7 +22,7 @@
 
             // text displayed in a link instead of the hidden part of the element.
             // clicking this will expand/show the hidden/collapsed text
-            expandText: 'Lire plus',
+            expandText: 'Lire',
             expandPrefix: '&hellip; ',
 
             expandAfterSummary: false,
@@ -366,7 +366,7 @@
 
         function buildMoreLabel(o) {
             var ret = '<span class="' + o.moreClass + '">' + o.expandPrefix;
-            ret += '<a href="#" class="' + o.moreLinkClass + '">' + o.expandText + '</a></span>';
+            // ret += '<a href="#" class="' + o.moreLinkClass + '">' + o.expandText + '</a></span>';
             return ret;
         }
 

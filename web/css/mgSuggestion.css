@@ -28,7 +28,7 @@
     position:relative;
     padding:0px;
 }
-.btn-primary {
+/*.btn-primary {
     background-color: #337ab7;
     border-color: #2e6da4;
     border-radius: 0;
@@ -43,7 +43,7 @@
 .btn-primary {
     background-color: #ff7700;
     border-color: #fff;
-}
+}*/
 .panel-default{
     -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.38);
     -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.38);

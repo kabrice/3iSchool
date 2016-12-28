@@ -25,6 +25,7 @@
 
             }
 
+
         </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -33,14 +34,21 @@
         {% block body %}
 
         {% endblock %}
+
         {% block javascripts %}
-            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-            <script src="https://code.angularjs.org/1.5.8/i18n/angular-locale_fr-fr.js"></script>
-            <script type="text/javascript" src="{{ asset('js/app.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('bower/tinymce/tinymce.js') }}"></script>
             <script type="text/javascript" src="{{ asset('library/jquery/jquery-2.1.4.min.js') }}"></script>
             <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
             <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-            <script type="text/javascript" src="{{ asset('js/ajax-upload.js') }}" ></script>
+
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.1/angular-sanitize.min.js"></script>
+            <script src="https://code.angularjs.org/1.5.8/i18n/angular-locale_fr-fr.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.14/angular-filter.js" ></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-ui-tinymce/src/tinymce.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/app.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/contenusGroupesServiceMock.js') }}" ></script>
+
             <script type="text/javascript" src="{{ asset('js/votePensee.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/posterPensee.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/contribution.js') }}"></script>
@@ -83,8 +91,11 @@
                             autoHeight: false
                         })
                     }
+
+
                 });
             </script>
+
 
         {% endblock %}
     </body>

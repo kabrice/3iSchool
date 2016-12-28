@@ -1,27 +1,42 @@
- $('#text-Ed').keyup(function(){
+$(document).ready(function()
+{
 
-     var textCounter=$('#text-Ed').val().length;
-     var pensee = $('#text-Ed').val();
 
-     var debutPensee = 'Pensez vous aussi que';
+    $('.expandDiv').find('br').remove();
+    $(".expandDiv > p").each(function () {
+        $(this).replaceWith($(this).text() + ". ");
+    });
 
-     if(pensee.match(/^Pensez vous aussi qu(.)*/)==null)
-     {
+    function limitCharacter(number){
+        $('div.expandDiv').expander({
+            slicePoint: number, //It is the number of characters at which the contents will be sliced into two parts.
+            expandSpeed: 0, // It is the time in second to show and hide the content.
+            userCollapseText: 'Lire moins' // Specify your desired word default is Less.
+        });
 
-         $('#text-Ed').val(debutPensee.substring(0,debutPensee.length));
-     }
+        $('div.expandDiv').expander();
 
-     $("#count-char").html(160-textCounter);
 
-     if(textCounter>160)
-     {
-         var textLimit = $('#text-Ed').val();
-         $('#text-Ed').val(textLimit.substring(0,textLimit.length - 1 ));
-         $('#btn-Ed2').prop('disabled', true);
-     }
-     if(textCounter<=160)
-     {
-         $('#btn-Ed2').prop('disabled', false);
-     }
- })
+    }
 
+    jqUpdateSize();
+    function jqUpdateSize(){
+        // Get the dimensions of the viewport
+        var width = $(window).width();
+        var height = $(window).height();
+       // console.log(width);
+
+        if(width<576)
+         {
+             limitCharacter(80);
+         }else {
+            limitCharacter(80);
+         }
+
+
+    };
+
+    $(window).resize(jqUpdateSize);     // When the browser changes size
+
+
+});

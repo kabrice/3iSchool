@@ -77,6 +77,12 @@ class Contenu
      */
     protected $rubrique;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="SousRubrique", inversedBy="contenus", cascade={"persist", "merge"})
+     * @var SousRubrique
+     */
+    protected $sousRubrique;
+
 
 
     /**
@@ -414,5 +420,29 @@ class Contenu
     public function getConteneurs()
     {
         return $this->conteneurs;
+    }
+
+    /**
+     * Set sousRubrique
+     *
+     * @param \AppBundle\Entity\SousRubrique $sousRubrique
+     *
+     * @return Contenu
+     */
+    public function setSousRubrique(\AppBundle\Entity\SousRubrique $sousRubrique = null)
+    {
+        $this->sousRubrique = $sousRubrique;
+
+        return $this;
+    }
+
+    /**
+     * Get sousRubrique
+     *
+     * @return \AppBundle\Entity\SousRubrique
+     */
+    public function getSousRubrique()
+    {
+        return $this->sousRubrique;
     }
 }

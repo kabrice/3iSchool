@@ -14,5 +14,7 @@
     <orderEntry type="library" name="angular-sanitize" level="application" />
     <orderEntry type="library" name="angularjs-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="angular-ui" level="application" />
+    <orderEntry type="library" name="angular-filter" level="application" />
+    <orderEntry type="library" name="jquery.tinymce" level="application" />
   </component>
 </module>

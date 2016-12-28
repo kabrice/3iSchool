@@ -71,12 +71,7 @@ class Question
      * @ORM\Column(name="ligne", type="integer", nullable=true)
      */
     protected $ligne=0;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image_root", type="string", length=255, nullable=false)
-     */
-    protected $imageRoot="";
+
 
     /**
      * @var int
@@ -299,29 +294,6 @@ class Question
         return $this->ligne;
     }
 
-    /**
-     * Set imageRoot
-     *
-     * @param string $imageRoot
-     *
-     * @return Question
-     */
-    public function setImageRoot($imageRoot)
-    {
-        $this->imageRoot = $imageRoot;
-
-        return $this;
-    }
-
-    /**
-     * Get imageRoot
-     *
-     * @return string
-     */
-    public function getImageRoot()
-    {
-        return $this->imageRoot;
-    }
 
     /**
      * Set report

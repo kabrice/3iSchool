@@ -1,3 +1,19 @@
+@font-face {
+    font-family:Gotham Rounded;
+    src: url("fonts/Gotham-Rounded-Light.otf") format("opentype");
+}
+
+@font-face {
+    font-family:Gotham Rounded Book;
+    src: url("fonts/Gotham-Rounded-Book.otf") format("opentype");
+}
+
+@font-face {
+    font-family:Gotham Rounded;
+    font-weight: bold;
+    src: url("fonts/Gotham-Rounded-Bold.otf") format("opentype");
+}
+
 .rowLectureContenu .panel-heading,
 .rowLectureContenu .panel{
     border: 1px solid rgba(99, 99, 99, 0.21) ;
@@ -37,26 +53,37 @@
  text-decoration: none;
 }
 
-.noborder a:hover{
+.noborder a:hover:not(#back-left){
     color: #1e90fe;
     cursor: pointer;
 }
 
+.post-text{
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 11pt;
+    color: #414c54;
+    font-weight: 500;
+    line-height: 24px;
+}
 
 .question-title{
     font-size: 15pt;
     color: #3c464d;
     font-weight: bold;
+    font-family: Gotham Rounded, Helvetica, Verdana, Sans-Serif;
 
 }
+
+
 .question-explication{
     font-family:"Georgia", Helvetica, Arial, sans-serif;
     font-size: 9pt;
     color: #414c54;
 }
+
 td img{
 
-    height: 60px;
+    height: 30px;
     display:block;
     margin:auto;
 }
@@ -69,7 +96,7 @@ td{
     cursor: pointer;
 }
 .m-img-profil{
-    width: 40px;
+    width: 10px;
 }
 
 
@@ -88,6 +115,7 @@ td{
     color: darkgrey;
     font-size:10pt;
     font-style: italic;
+
 }
 
 
@@ -102,4 +130,160 @@ th{
     font-weight: normal;
 }
 
+.reponse-enseignant{
+    background-color: rgba(23,170,28,0.1)
+}
 
+
+.inutile{
+    color: #989898;
+}
+
+.reponse-light,
+.reponse:hover{
+    background-color: rgba(213, 213, 213, 0.74);;
+}
+
+.nopadding-textarea {
+    padding-right: 0;
+}
+
+.nopadding-button{
+padding-left: 0;
+}
+
+.question-panel{
+    box-shadow: none !important;
+    position: absolute;
+    transition: all linear 0.5s;
+    left: 0;
+    right: 0;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.scroll-smpanel{
+    top: 50px;
+    bottom: 0;
+
+}
+
+.scroll-smpanel tr{
+
+}
+
+.scroll-lgpanel{
+    top: 73px;
+    bottom: 34px;
+}
+
+.padding-smpanel{
+    padding: 20px;
+}
+
+.padding-question-search{
+    padding: 5px;
+}
+
+.zoom-panel{
+    height: inherit;
+    line-height: inherit;
+    padding-top: 3px;
+    float: right;
+    margin-right: 10px;
+    cursor: pointer
+}
+
+.arrow-back{
+    height: inherit;
+    line-height: inherit;
+    padding-top: 3px;
+    text-align: center;
+    float: left;
+    margin-left: 10px;
+    cursor: pointer
+}
+.question-click{
+    cursor: pointer;
+}
+
+
+
+.question-answer-footer .active,
+.like-footer .active,
+.comment-footer .active,
+.comment-footer:hover,
+.question-answer-footer:hover,
+.like-footer:hover{
+    color: #e84e0f;
+    cursor: pointer;
+}
+
+.question-answer-footer{
+    position:fixed;
+    bottom: 4px;
+    font-size: 13pt;
+    right: 5px
+}
+
+.like-footer {
+    position:absolute;
+    width:40px;
+    margin-bottom: 5px;
+    bottom:0px;
+    right:25%;
+    left:50%;
+    margin-left:-20px;
+    text-align: center;
+}
+
+.comment-footer{
+    position:fixed;
+    bottom: 4px;
+    font-size: 13pt;
+    left: 5px;
+}
+
+.label-champ-newQuestion{
+    width: 70px;
+
+}
+
+.contenu-newQuestion,
+.input-group{
+    width: 100%;
+
+}
+
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+        border:  solid red;
+    }
+
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+        border:  solid red;
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+        border:  solid red;
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+        border:  solid red;
+    }
+}
+
+.shake{
+
+
+    animation: shake 2s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
