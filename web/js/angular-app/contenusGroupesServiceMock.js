@@ -1,5 +1,5 @@
-angular.module("ContenusGroupesServiceMock", [])
-.factory("contenusGroupesService", function () {
+angular.module("ContenusGroupesServiceMock", ['angular.filter'])
+.factory("contenusGroupesService", ['$rootScope', '$filter', function ($rootScope, $filter) {
 
    var groupesContenus= {
         "FAVORIS": [
@@ -4163,9 +4163,20 @@ angular.module("ContenusGroupesServiceMock", [])
         getGroupesContenus: function () {
             return groupesContenus;
         },
-        postQuestion: function () {
+        getConteneur: function (groupeContenus, idConteneur) {
+            // l'array à filtrer est $scope.groupesContenus.CONTENEUR
+            // Le paramètre du filtre est la function qui suit
 
+            return $filter('filter')(groupeContenus, function (d) {
+                return d.id === idConteneur;
+            })[0];;
+        },
+        postQuestion: function (questions, question) {
+            var idDerniereQuestion = 5;
+            question.id = idDerniereQuestion;
+            questions.push(question);
+            idDerniereQuestion++;
         }
 
     }
-})
+}])

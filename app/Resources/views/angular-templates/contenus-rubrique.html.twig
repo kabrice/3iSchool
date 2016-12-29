@@ -1,0 +1,30 @@
+<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="panel panel-default course-pointer">
+        <a href="/lectureContenu/{[{conteneur.id}]}">
+            <div class="panel-heading">
+                <img ng-src="{{ asset('{[{conteneur.contenu.imageRoot}]}') }}" class="img-wrapper " />
+            </div>
+        </a>
+        <div class="caption-wrapper">
+            <div class="title-course" ng-bind-html="conteneur.contenu.titre | limitTo:40 | surbrillanceRecherche:rechercheContenu">
+                <span ng-if="conteneur.contenu.titre.length > 40">&hellip;</span>
+            </div>
+            <div class="course"><span ng-bind-html="conteneur.contenu.rubrique.libelle | limitTo:25 | surbrillanceRecherche:rechercheContenu"></span>
+                <span ng-if="conteneur.contenu.rubrique.libelle.length > 25">&hellip;</span>
+                <div style="float: right;display: inline-block" ng-bind-html="conteneur.contenu.sousRubrique.libelle | surbrillanceRecherche:rechercheContenu"></div>
+            </div>
+            <div style="display: flex">
+                <div style="color: orangered;" >
+                    <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
+                </div>
+                <div style="margin-left: 18px; color: orangered;">
+                    {[{conteneur.contenu.nombreLike}]} j'aime
+                </div>
+            </div>
+            <div class="caption-item-content">
+                <div class="course-view">{[{conteneur.contenu.nombreVueTotal}]} vues</div>
+                <div class="course-date">{[{conteneur.contenu.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
+            </div>
+        </div>
+    </div>
+</div>

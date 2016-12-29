@@ -1,0 +1,54 @@
+<div>
+    <div class="row">
+        <div class="col-sm-1 col-md-2 col-lg-3" ng-if="fullscreen"></div> {#Change made for fullscreen#}
+        <div ng-class="{'col-sm-10 col-md-8 col-lg-6': fullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
+            <div class="alert alert-danger" id="question-error" role="alert" ng-if="showError">
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="showError=false">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>Erreur ! Merci de vérifier que le titre de la question : </strong>
+                <ul>
+                    <li>Se termnine par un point d'interrogation (?).</li>
+                    <li>Ne dépasse pas 150 caractères.</li>
+                    <li>Et n'est pas vide.</li>
+                </ul>
+            </div>
+
+            <form id="formNewQuestion" name="formNewQuestion">
+                <div class="input-group" ng-class="{shake:showError}">
+                    <span class="input-group-addon label-champ-newQuestion">Titre</span>
+                    <input type="text"
+                           class="form-control question-title"
+                           style="font-size: 11pt"
+                           name="libelle"
+                           placeholder="Qu'est ce que vous n'avez pas compris sur ce {[{sousRubriqueLibelle}]} ? Soyez spécifique."
+                           ng-model="newQuestion.libelle" required/>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon label-champ-newQuestion">Page</span>
+                    <input type="number" class="form-control" name="page" min="1" max="1000" ng-model="newQuestion.page"/>
+                    <span class="input-group-addon label-champ-newQuestion">Ligne</span>
+                    <input type="number" class="form-control" name="ligne" min="1" max="1000" ng-model="newQuestion.ligne"/>
+                </div >
+                <div class="spacer ">
+                    <textarea ui-tinymce="optionTinyMCE" class="contenu-newQuestion form-control" name="description" rows="10" ng-model="newQuestion.description" required></textarea>
+                </div>
+
+                <div>
+                                    <pre>
+                                        {[{ newQuestion | json }]}
+                                    </pre>
+                </div>
+                <div class="padding-question-search" style="float: right">
+                    <button ng-click="clicPublierQuestion()" ng-disabled="formNewQuestion.$pristine" type="button" class="btn btn-primary">Publier ma question</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+    <div class="col-sm-1 col-md-2 col-lg-3" ng-if="fullscreen"></div> {#Change made for fullscreen#}
+</div>

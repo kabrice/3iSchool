@@ -17,10 +17,10 @@
         <div ng-class="{'hidden-sm hidden-xs col-md-4 col-lg-4  no-float': !questionFullscreen}" style=" padding:0; border: 1px solid lightgrey; height: 100%">{#change made here class="hidden-sm hidden-xs col-md-4 col-lg-4  no-float"#}
             <div class="panel panel-default noborder" style="height: 100%!important; width: 100%!important ">
                 <div class="panel-heading noborder">
-                    <span ng-if="questionDetailFullscreen == null && newQuestion==null">QUESTIONS</span>
+                    <span ng-if="questionDetailFullscreen == null && !afficherNewQuestion">QUESTIONS</span>
                     <span ng-if="questionDetailFullscreen != null">DETAILS DE LA QUESTION</span>
-                    <span ng-if="newQuestion!=null">MA QUESTION</span>
-                    <a href="#/back" id="back-left" style="text-decoration: none; color: inherit"><div class="arrow-back"  ng-if="questionDetailFullscreen != null || newQuestion!=null"><i class="material-icons">arrow_back</i></div></a>
+                    <span ng-if="afficherNewQuestion">MA QUESTION</span>
+                    <a href="#/back" id="back-left" style="text-decoration: none; color: inherit"><div class="arrow-back"  ng-if="questionDetailFullscreen != null || afficherNewQuestion"><i class="material-icons">arrow_back</i></div></a>
                     <div  class="zoom-panel" ng-click="zoom()" ng-if="!questionFullscreen"><i class="material-icons">zoom_in</i></div>
                     <div  class="zoom-panel" ng-click="zoom()" ng-if="questionFullscreen"><i class="material-icons">zoom_out</i></div>
                 </div>
@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
                         <div ng-class="{'col-sm-10 col-md-8 col-lg-6': questionFullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
-                            <div ng-show="newQuestion==null">
+                            <div ng-show="!afficherNewQuestion">
                                 <a style="">
                                     <form class="padding-question-search" style="display: inline-block; width: 100%">
                                         <div class="input-group col-md-12">
@@ -48,7 +48,7 @@
                                     </form>
                                 </a>
                             </div>
-                            <div ng-show="newQuestion==null">
+                            <div ng-show="!afficherNewQuestion">
 
                                 <a href="#/newQuestion">
                                 <div class="padding-question-search">
@@ -67,7 +67,7 @@
                                                 <div class="m-img-profil" style="display: inline-block; margin-right: 20px"><img style="margin-bottom: -5px" ng-src="{{ asset('{[{uneQuestion.users[0].userProfilRoot}]}') }}">
                                                 </div>
                                                 <div style="display: inline-block;">
-                                                    <div class="date-publication">le, {[{uneQuestion.datePublication | date:'dd MMMM yyyy à hh:mm'}]}
+                                                    <div class="date-publication">le {[{uneQuestion.datePublication | date:'dd MMM yyyy à HH : mm'}]}
                                                     </div>
                                                     <div class="question-page"
                                                          ng-if="uneQuestion.page != null && uneQuestion.ligne!=null">page
@@ -94,60 +94,14 @@
                     <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
                 </div>
                 {#Début Poser une question#}
-                <div ng-class="{'scroll-lgpanel': questionFullscreen, 'scroll-smpanel': !questionFullscreen}"
-                     class="container-fluid question-panel padding-smpanel"
-                     ng-show="newQuestion!=null">
-                    <div class="row">
-                        <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
-                        <div ng-class="{'col-sm-10 col-md-8 col-lg-6': questionFullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
-                            <div class="alert alert-danger" id="question-error" role="alert" ng-if="showQuestionError">
-
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="showQuestionError=false">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <strong>Erreur ! Merci de vérifier que le titre de la question : </strong>
-                                <ul>
-                                    <li>Se termnine par un point d'interrogation (?).</li>
-                                    <li>Ne dépasse pas 150 caractères.</li>
-                                    <li>Et n'est pas vide.</li>
-                                </ul>
-                            </div>
-
-                            <form id="formNewQuestion" name="formNewQuestion">
-                                <div class="input-group" ng-class="{shake:showQuestionError}">
-                                    <span class="input-group-addon label-champ-newQuestion">Titre</span>
-                                    <input type="text"
-                                           class="form-control question-title"
-                                           style="font-size: 11pt"
-                                           name="libelle"
-                                           placeholder="Qu'est ce que vous n'avez pas compris sur ce {[{sousRubriqueLibelle}]} ? Soyez spécifique."
-                                           ng-model="newQuestion.libelle" required/>
-                                </div>
-
-                                <div class="input-group">
-                                    <span class="input-group-addon label-champ-newQuestion">Page</span>
-                                    <input type="number" class="form-control" name="page" min="1" max="1000" ng-model="newQuestion.page"/>
-                                    <span class="input-group-addon label-champ-newQuestion">Ligne</span>
-                                    <input type="number" class="form-control" name="ligne" min="1" max="1000" ng-model="newQuestion.ligne"/>
-                                </div >
-                                <div class="spacer ">
-                                    <textarea ui-tinymce="optionTinyMCE" class="contenu-newQuestion form-control" name="description" rows="10" ng-model="newQuestion.description" required></textarea>
-                                </div>
-                                <div>
-                                    <pre>
-                                        {[{ newQuestion | json }]}
-                                    </pre>
-                                </div>
-                                <div class="padding-question-search" style="float: right">
-                                    <button ng-click="publierQuestion()" ng-disabled="formNewQuestion.$pristine" type="button" class="btn btn-primary">Publier ma question</button>
-                               </div>
-
-                            </form>
-
-                        </div>
-                    </div>
-                    <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
-                </div>
+                <new-question
+                        ng-class="{'scroll-lgpanel': questionFullscreen, 'scroll-smpanel': !questionFullscreen}"
+                        class="container-fluid question-panel padding-smpanel"
+                        ng-show="afficherNewQuestion"
+                        publier-question="publierQuestion(newQuestion)"
+                        fullscreen = "questionFullscreen"
+                        showError = "showQuestionError"
+                        ></new-question>
                 {#Fin Poser une question#}
                 {# Start dupes#}
                 <div
@@ -167,7 +121,7 @@
                                         <div class="date-publication"><img
                                                     ng-src="{{ asset('{[{questionSelectionnee.users[0].userProfilRoot}]}') }}"><a
                                                     href="/2/profil" class="href"> {[{questionSelectionnee.users[0].prenom}]} {[{questionSelectionnee.users[0].prenom}]}</a>
-                                            , le {[{questionSelectionnee.datePublication | date:'dd MMMM yyyy hh:mm'}]}
+                                            , le {[{questionSelectionnee.datePublication | date:'dd MMM yyyy à HH : mm'}]}
                                         </div>
                                         <div class="question-page"
                                              ng-if="questionSelectionnee.page != null && questionSelectionnee.ligne!=null">page
@@ -239,7 +193,7 @@
                                         <div class="date-publication"><img
                                                     ng-src="{{ asset('{[{uneReponse.users[0].userProfilRoot}]}')}}"> <a
                                                     href="/2/profil" class="href">{[{uneReponse.users[0].prenom}]} {[{uneReponse.users[0].nom}]}</a>,
-                                            le {[{uneReponse.datePublication | date:'dd MMMM yyyy hh:mm'}]}
+                                            le {[{uneReponse.datePublication | date:'dd MMM yyyy à HH : mm'}]}
                                         </div>
                                         <div style="color: #17aa1c; font-size: 13pt" ng-if="uneReponse.users[0].isPersonnel">Réponse enseignant</div>
 
@@ -306,7 +260,7 @@
                                             <div class="panel-body noborder">
                                                 <div class="date-publication"><a
                                                             href="/2/profil" class="href"> {[{unCommentaire.users[0].prenom}]} {[{unCommentaire.users[0].nom}]}</a>,
-                                                    le 16 {[{unCommentaire.datePublication | date:'dd MMMM yyyy hh:mm'}]}
+                                                    le {[{unCommentaire.datePublication | date:'dd MMM yyyy à HH : mm'}]}
                                                 </div>
                                                 <div style="display: flex;">
                                                     <div class="check-btn-commentaire"

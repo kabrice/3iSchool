@@ -14,3 +14,16 @@ auth-tokens:
     type:     rest
     resource: AppBundle\Controller\AuthTokenController
     prefix: /api
+
+app_bundle_contenus_rubriques:
+    path: /contenusRubrique
+    defaults:
+        _controller: AppBundle:Template:contenusRubrique
+        template:    'AppBundle:Static:contenus-rubrique.html.twig'
+app_bundle_new-question:
+    path: /newQuestion
+    defaults:
+        _controller: AppBundle:Template:newQuestion
+        template:    'AppBundle:Static:new-question.html.twig'
+        
+

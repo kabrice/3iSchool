@@ -114,6 +114,8 @@
                         </li>
                     </ul>
 
+
+
                     <ul class="courses">
                         <div class="side-menu-head">Profs</div>
                         <li><a href="#home"><img ng-src="img/baillargeat.png" class="prof-image">Baillargeat</a></li>
@@ -153,73 +155,22 @@
                             <div class="span12">
                                 {#Début Affichage de contenus courant concernant une rubrique cliquée#}
                                 <div>
-                                    <div ng-repeat="unConteneur in conteneurs | orderBy:'-datePublication'"
-                                         class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12"
-                                         ng-show="unConteneur.contenu.rubrique.libelle==rubriqueCourante && hideSearch"
-                                    >
-                                        <div class="panel panel-default course-pointer">
-                                            <a href="/lectureContenu/{[{unConteneur.id}]}">
-                                                <div class="panel-heading">
-                                                    <img ng-src="{{ asset('{[{unConteneur.contenu.imageRoot}]}') }}" class="img-wrapper " />
-                                                </div>
-                                            </a>
-                                            <div class="caption-wrapper">
-                                                <div class="title-course">{[{unConteneur.contenu.titre | limitTo:40}]}
-                                                    <span ng-if="unConteneur.contenu.titre.length > 40">&hellip;</span>
-                                                </div>
-                                                <div class="course">{[{unConteneur.contenu.rubrique.libelle | limitTo:25}]}
-                                                    <span ng-if="unConteneur.contenu.rubrique.libelle.length > 25">&hellip;</span>
-                                                    <div style="float: right;display: inline-block">{[{unConteneur.contenu.sousRubrique.libelle}]}</div>
-                                                </div>
-                                                <div style="display: flex">
-                                                    <div style="color: orangered;" >
-                                                        <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div style="margin-left: 18px; color: orangered;">
-                                                        {[{unConteneur.contenu.nombreLike}]} j'aime
-                                                    </div>
-                                                </div>
-                                                <div class="caption-item-content">
-                                                    <div class="course-view">{[{unConteneur.contenu.nombreVueTotal}]} vues</div>
-                                                    <div class="course-date">{[{unConteneur.contenu.datePublication | date:'dd MMMM yyyy'}]}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
+
+
+                    <contenus-rubrique
+                            ng-repeat="unConteneur in conteneurs | orderBy:'-datePublication'"
+                            ng-show="unConteneur.contenu.rubrique.libelle==rubriqueCourante && hideSearch"
+                            conteneur="unConteneur"></contenus-rubrique>
+
                                     {#Exclusivily for the search#}
-                                    <div ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: rechercheContenu) | orderBy:'-datePublication'"
-                                         class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12"
-                                         ng-if="!hideSearch">
-                                        <div class="panel panel-default course-pointer">
-                                            <a href="/lectureContenu/{[{unConteneur.id}]}">
-                                                <div class="panel-heading">
-                                                    <img ng-src="{{ asset('{[{unConteneur.contenu.imageRoot}]}') }}" class="img-wrapper " />
-                                                </div>
-                                            </a>
-                                            <div class="caption-wrapper">
-                                                <div class="title-course" ng-bind-html="unConteneur.contenu.titre | limitTo:40 | surbrillanceRecherche:rechercheContenu">
-                                                    <span ng-if="unConteneur.contenu.titre.length > 40">&hellip;</span>
-                                                </div>
-                                                <div class="course"><span ng-bind-html="unConteneur.contenu.rubrique.libelle | limitTo:25 | surbrillanceRecherche:rechercheContenu"></span>
-                                                    <span ng-if="unConteneur.contenu.rubrique.libelle.length > 25">&hellip;</span>
-                                                    <div style="float: right;display: inline-block" ng-bind-html="unConteneur.contenu.sousRubrique.libelle | surbrillanceRecherche:rechercheContenu"></div>
-                                                </div>
-                                                <div style="display: flex">
-                                                    <div style="color: orangered;" >
-                                                        <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div style="margin-left: 18px; color: orangered;">
-                                                        {[{unConteneur.contenu.nombreLike}]} j'aime
-                                                    </div>
-                                                </div>
-                                                <div class="caption-item-content">
-                                                    <div class="course-view">{[{unConteneur.contenu.nombreVueTotal}]} vues</div>
-                                                    <div class="course-date">{[{unConteneur.contenu.datePublication | date:'dd MMMM yyyy'}]}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <contenus-rubrique
+                            ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: rechercheContenu) | orderBy:'-datePublication'"
+                            ng-if="!hideSearch"
+                            conteneur="unConteneur"></contenus-rubrique>
                                     {#End of the search#}
+
                                 </div>
                                 {#Fin Affichage de contenus concernant une rubrique#}
 
@@ -229,6 +180,7 @@
                                     <div class="aside-menu-head">Favoris</div>
 
                                     <div id="owl-favoris" class="owl-carousel owl-theme">
+
                                         <div  ng-repeat="unFavoris in groupesContenus.FAVORIS | orderBy:'-userContenus[1].nbreVue'" class="item">
                                             <div class="panel panel-default course-pointer">
                                                 <a href="/lectureContenu/{[{unFavoris.id}]}">
@@ -255,7 +207,7 @@
                                                     <div class="caption-item-content">
                                                         <div hidden>{[{unFavoris.userContenus[1].nbreVue}]} vues</div>
                                                         <div class="course-view">{[{unFavoris.nombreVueTotal}]} vues</div>
-                                                        <div class="course-date">{[{unFavoris.datePublication | date:'dd MMMM yyyy'}]}</div>
+                                                        <div class="course-date">{[{unFavoris.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -264,7 +216,8 @@
 
                                     <div class="aside-menu-head">Récents</div>
                                     <div id="owl-recents" class="owl-carousel owl-theme">
-                                        <div ng-repeat="unRecent in groupesContenus.RECENTS | orderBy:'datePublication'" class="item">
+                                        {#La date a déjà été triée côté serveur#}
+                                        <div ng-repeat="unRecent in groupesContenus.RECENTS" class="item">
                                             <div class="panel panel-default course-pointer">
                                                 <a href="/lectureContenu/{[{unRecent.id}]}">
                                                     <div class="panel-heading">
@@ -289,7 +242,7 @@
                                                     </div>
                                                     <div class="caption-item-content">
                                                         <div class="course-view">{[{unRecent.nombreVueTotal}]} vues</div>
-                                                        <div class="course-date">{[{unRecent.datePublication | date:'dd MMMM yyyy hh : mm'}]}</div>
+                                                        <div class="course-date">{[{unRecent.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -322,7 +275,7 @@
                                                     </div>
                                                     <div class="caption-item-content">
                                                         <div class="course-view">{[{aussiConsulte.contenu.nombreVueTotal}]} vues</div>
-                                                        <div class="course-date">{[{aussiConsulte.contenu.datePublication | date:'dd MMMM yyyy'}]}</div>
+                                                        <div class="course-date">{[{aussiConsulte.contenu.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
                                                     </div>
                                                 </div>
                                             </div>

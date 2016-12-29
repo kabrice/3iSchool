@@ -1,4 +1,4 @@
-angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "ContenusGroupesServiceMock"])
+angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "ContenusGroupesServiceMock", "MesFiltres", "MesDirectives"])
     .config(function($interpolateProvider){
     $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 
@@ -6,11 +6,13 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
 
 
-    .controller("3ischoolCtrl",function ($filter, $window, $scope, $sce, $location, $interval, $anchorScroll, contenusGroupesService) {
+    .controller("3ischoolCtrl",function ($filter, $window, $scope, $sce, $location, $interval, contenusGroupesService) {
 
 
 
         //$scope.trustAsHtml = $sce.trustAsHtml;
+
+
 
         $scope.rubriqueCourante = 'Tous';
         $scope.conteneurs = null;
@@ -29,7 +31,6 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         $scope.hideSearch = true;
         $scope.rechercheContenu = null;
 
-        $scope.nextQuestion=5;
 
         $scope.selectionRubrique = function (rubriqueLibelle) {
             $scope.hideSearch = true;
@@ -46,21 +47,13 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         {
 
                 $scope.idConteneurSelectionne = id;
-
-                // l'array à filtrer est $scope.groupesContenus.CONTENEUR
-                // Le paramètre du filtre est la function qui suit
-                $scope.conteneurCourant = $filter('filter')($scope.groupesContenus.CONTENEUR, function (d) {
-                    return d.id === $scope.idConteneurSelectionne;
-                })[0];
+                $scope.conteneurCourant = contenusGroupesService.getConteneur($scope.groupesContenus.CONTENEUR, id);
                 $scope.contenuRoot = $scope.conteneurCourant.contenu.contenuRoot;
                 $scope.contenuURL = $sce.trustAsResourceUrl("https://docs.google.com/viewer?embedded=true&url=" + $scope.contenuRoot);
-
-            //Just test
-            //$scope.displayQuestionDetail(1);
                 $scope.sousRubriqueLibelle = $scope.conteneurCourant.contenu.sousRubrique.libelle;
-            //console.log($scope.conteneurCourant.contenu.sousRubrique.libelle);
-            //console.log($scope.groupesContenus.CONTENEUR);
+
         }
+
 
         $scope.displayQuestionDetail = function(id)
         {
@@ -93,7 +86,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         $scope.backToQuestion = function () {
             $scope.questionDetailFullscreen = null;
-            $scope.newQuestion=null;
+            $scope.afficherNewQuestion = false;
             $scope.getConteneurByID($scope.idConteneurSelectionne);
         }
 
@@ -136,50 +129,23 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
        // Création d'une question
 
-        $scope.newQuestion = null;
-        $scope.showQuestionError = false
+        $scope.afficherNewQuestion = false;
+        $scope.showQuestionError = false;
 
-        $scope.publierQuestion = function()
+        $scope.publierQuestion = function(newQuestion)
         {
-            var libelleQuestion = $scope.newQuestion.libelle;
-            if(!libelleQuestion || !(libelleQuestion.substr(-1) === "?") || libelleQuestion.length<=150 )
-            {
-                $scope.showQuestionError = !$scope.showQuestionError;
 
-                $location.hash('bottom');
-                $anchorScroll();
-                return;
-            }
-            if(!$scope.newQuestion.description)
-            {
-                if (!window.confirm("Confirmation\n\nÊtes-vous certain de vouloir publier une question sans description ?")) {
-                    return;
-                }
-            }
-
-            $scope.newQuestion.id = $scope.nextQuestion++;
             $scope.getConteneurByID($scope.idConteneurSelectionne);
-            //console.log($scope.conteneurCourant);
-            ($scope.conteneurCourant.contenu.questions).push($scope.newQuestion);
-
-            $scope.newQuestion = null;
+            contenusGroupesService.postQuestion($scope.conteneurCourant.contenu.questions, newQuestion);
+            $scope.afficherNewQuestion = false;
+            $location.path("/");
 
         }
 
 
-        $scope.optionTinyMCE = {
-            language: "fr_FR",
-            selector: "textarea",
-            statusbar: false,
-            menubar: false,
-            plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table contextmenu paste"
-            ],
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
 
-        };
+
+
 
 
         $scope.$watch(function(){
@@ -214,37 +180,9 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
                         $scope.backToQuestion();
                         break;
                     case "newQuestion":
-
+                        $scope.afficherNewQuestion = true;
+                        $scope.$broadcast("initNewQuestion");
                         $scope.conteneurCourant = null;
-
-                        //console.log("newQuestion");
-                        $scope.newQuestion = {
-                            "libelle": "How to get Webpack, Wordpress, and BrowserSync to work together?",
-                            "description": "<p class='qtext_para'>Subscibe to philosophy youtube channels, read books, watch good movies and art so you can intepret them.</p><p class='qtext_para'><b>But most important, become analytical.</b></p><p class='qtext_para'>Analyze your daily conversations and reactions with people,</p><p class='qtext_para'>¨Why did I say that¨</p><p class='qtext_para'>¨why did I do that¨</p><p class='qtext_para'>¨What are their motivations behind that action¨</p><p class='qtext_para'><b>At least this has worked for me.</b></p>",
-                            "datePublication": new Date(),
-                            "nombreLike": 5,
-                            "nombreDislike": 18,
-                            "page": 100,
-                            "ligne": 10,
-                            "report": 0,
-                            "typeQuestion": {
-                                "id": 1,
-                                "libelle": "Contenu"
-                            },
-                            "users": [
-                                {
-                                    "id": 9,
-                                    "email": "granet@3il.fr",
-                                    "nom": "Granet",
-                                    "prenom": "Catherine ",
-                                    "userProfilRoot": "img/granet.png",
-                                    "dateCreation": "2016-12-21T01:40:45+00:00",
-                                    "isBDE": false,
-                                    "isPersonnel": true
-                                }
-                            ],
-                            "reponses": []
-                        };
                         break;
                     default:
                     //console.log("WEIRD !")
@@ -256,13 +194,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         $scope.groupesContenus = contenusGroupesService.getGroupesContenus();
 
+
+
     })
 
-    .filter("surbrillanceRecherche", function(){
-        return function (input, recherche) {
-            if(recherche){
-                return input.replace(new RegExp("("+recherche+")", "gi"), "<span class='surbrillanceRecherche'>$1</span>");
-            }
-            return input;
-        }
-    });
