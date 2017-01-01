@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <div class="preloader" ng-show="chargementEnCours">
         <div class="msg-preloader">
             <img ng-src="{{ asset('img/preloader.gif') }}"/>
@@ -37,7 +38,7 @@
                         <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
                         <div ng-class="{'col-sm-10 col-md-8 col-lg-6': questionFullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
 
-                        <liste-questions ng-show="!afficherNewQuestion" questions= "conteneurQuestion"></liste-questions>
+                        <liste-questions  ng-show="!afficherNewQuestion" questions= "conteneurQuestion"></liste-questions>
 
                         </div>
                     </div>
@@ -47,11 +48,15 @@
                 <new-question
                         ng-class="{'scroll-lgpanel': questionFullscreen, 'scroll-smpanel': !questionFullscreen}"
                         class="container-fluid question-panel padding-smpanel"
+
                         ng-show="afficherNewQuestion"
                         publier-question="publierQuestion(newQuestion)"
                         fullscreen = "questionFullscreen"
-                        showError = "showQuestionError"></new-question>
+                        show-error = "showQuestionError"
+                        ss-rubrique-libelle="sousRubriqueLibelle"></new-question>
                 {#Fin Poser une question#}
+
+
 
                 {# Start dupes#}
                 <div

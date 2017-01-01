@@ -83,25 +83,24 @@
                     <ul class="courses " style="margin-top: 15px !important; ">
                         <div class="side-menu-head"> Promotion</div>
                         <div class="caption-item-content" >
-                            <div class="sel1" style="width: 50%; margin: 10px">
-                                <select class="form-control "  >
-                                    <option value="1">3iL-Prepa1</option>
-                                    <option value="2">3iL-Prepa2</option>
-                                    <option value="3">3iL-I1</option>
-                                    <option value="4">3iL-I2</option>
-                                    <option value="5">3iL-I3</option>
-                                    <option value="6">3iL-I3+</option>
-                                    <option value="7">CS2I-Bachelor1</option>
-                                    <option value="8">CS2I-Master1</option>
-                                    <option value="9">CS2I-Master2</option>
-                                    <option value="10">CS2I-Master2+</option>
+                            <div class="sel1" style="width: 70%; margin: 8px ">
+                                <select class="form-control"  >
+                                    <option value="{[{niveau.id}]}" ng-repeat="niveau in niveaux" >
+                                        {[{niveau.libelle}]}</option>
                                 </select>
                             </div>
-                            <div class="sel1" style="width: 50%; margin: 10px" >
+                            <div class="sel1" style="width: 40%; margin: 8px" >
                                 <select class="form-control ">
                                     <option>2013</option>
                                     <option>2016</option>
                                     <option>2017</option>
+                                </select>
+                            </div>
+                            <div class="sel1" style="width: 30%; margin: 8px" >
+                                <select class="form-control ">
+                                    <option>2</option>
+                                    <option>1</option>
+                                    <option>2</option>
                                 </select>
                             </div>
                         </div>

@@ -27,7 +27,7 @@
             <span ng-if="questionsTrouvees.length<2">question pour ce contenu</span>
             <span ng-if="questionsTrouvees.length>=2">questions pour ce contenu</span>
         </div>
-        <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;">
+        <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;" >
             <tr ng-repeat="uneQuestion in questionsTrouvees = questions | filter: rechercheQuestion| orderBy:'-datePublication'">
 
                 <td>

@@ -15,6 +15,9 @@ angular.module("ContenuServiceRest", ['ngResource'])
             {
                      "getConteneurs": {method: 'GET', isArray: false, url: "/api/users/:userid/:anneeid/:groupeid/:niveauid", headers: headers},
                       "getConteneur": {method: 'GET', isArray: false, url: "/api/lectureConteneur/:conteneurid", headers: headers},
+                          "getAnnee": {method: 'GET', isArray: true, url: "/api/promotion/annees", headers: headers},
+                         "getGroupe": {method: 'GET', isArray: true, url: "/api/promotion/groupes", headers: headers},
+                         "getNiveau": {method: 'GET', isArray: true, url: "/api/promotion/niveaux", headers: headers},
                       "postQuestion" : { method: "POST", url: "/api/lectureContenu/:contenuid/:userid/:typequestionid/Questions", headers: headers}
             });
 
@@ -25,9 +28,18 @@ angular.module("ContenuServiceRest", ['ngResource'])
             getConteneur: function (conteneur_id) {
                 return apiData.getConteneur({conteneurid: conteneur_id});
             },
+            getAnnee: function () {
+                return apiData.getAnnee();
+            },
+            getGroupe: function () {
+                return apiData.getGroupe();
+            },
+            getNiveau: function () {
+                return apiData.getNiveau();
+            },
             postQuestion: function(question, contenu_id, user_id, type_question_id) {
-                apiData.postQuestion(question, {contenuid: contenu_id, userid: user_id, typequestionid: type_question_id}, function(reponse) {
-                    console.log(reponse.data);
+                apiData.postQuestion({contenuid: contenu_id, userid: user_id, typequestionid: type_question_id}, question, function(reponse) {
+                    console.log("Sucsess !");
                 }, function(error) {
                     console.log("Error " + error.status + " when sending request : " + error.data);
                 });

@@ -10,6 +10,10 @@ lectureContenu:
     type:     rest
     resource: AppBundle\Controller\ContenuController
     prefix: /api
+promotion:
+    type:     rest
+    resource: AppBundle\Controller\PromotionController
+    prefix: /api
 auth-tokens:
     type:     rest
     resource: AppBundle\Controller\AuthTokenController

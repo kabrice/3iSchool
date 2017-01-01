@@ -160,8 +160,7 @@ AppBundle\Entity\Annee:
             groups: ['annee', 'conteneur']
         libelle:
             groups: ['annee', 'conteneur']
-        conteneurs:
-            groups: ['annee']
+
 
 AppBundle\Entity\Groupe:
     attributes:
@@ -169,8 +168,7 @@ AppBundle\Entity\Groupe:
             groups: ['groupe', 'conteneur']
         libelle:
             groups: ['groupe', 'conteneur']
-        conteneurs:
-            groups: ['groupe']
+
 
 AppBundle\Entity\Niveau:
     attributes:
@@ -178,8 +176,7 @@ AppBundle\Entity\Niveau:
             groups: ['niveau', 'conteneur']
         libelle:
             groups: ['niveau', 'conteneur']
-        conteneurs:
-            groups: ['niveau']
+
 
 AppBundle\Entity\Rubrique:
     attributes:

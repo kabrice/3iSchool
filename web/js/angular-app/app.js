@@ -174,8 +174,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         $scope.publierQuestion = function(newQuestion)
         {
 
-            $scope.getConteneurByID($scope.idConteneurSelectionne);
-            contenuService.postQuestion($scope.conteneurCourant.contenu.questions, newQuestion);
+            contenuService.postQuestion(newQuestion, 1, 1, 1);
             $scope.afficherNewQuestion = false;
             $location.path("/");
 
@@ -238,6 +237,10 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
 
          $scope.groupesContenus = contenuService.getGroupesContenus(1,3,2,3);
+         $scope.annees = contenuService.getAnnee();
+         $scope.groupes = contenuService.getGroupe();
+         $scope.niveaux = contenuService.getNiveau();
+
          //$scope.groupesContenus = contenuService.getGroupesContenus();
         //console.log($scope.conteneurCourant2.contenu);
 
