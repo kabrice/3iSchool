@@ -46,7 +46,7 @@ class UserController extends Controller
      * @Rest\View(serializerGroups={"conteneur", "rubrique", "contenu", "user", "typeQuestion", "reponse"})
      * @Rest\Get("/users/{user_id}/{annee_id}/{groupe_id}/{niveau_id}")
      */
-    public function getConteneurAction(Request $request)
+    public function getConteneursAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -69,6 +69,7 @@ class UserController extends Controller
         {
             $contenuIDFavoris[]=$contenusIDFavorisFromUserContenu["id"];
         }
+
        $contenuFavoris = $em->getRepository("AppBundle:Contenu")->findById($contenuIDFavoris);
        $contenuRecents = $em->getRepository("AppBundle:Contenu")->findContenusRecents();
        $contenuAussiConsultes = $em->getRepository('AppBundle:Conteneur')

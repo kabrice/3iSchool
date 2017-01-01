@@ -1,18 +1,39 @@
-angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "ContenusGroupesServiceMock", "MesFiltres", "MesDirectives"])
-    .config(function($interpolateProvider){
-    $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "ContenuServiceRest", "MesFiltres", "MesDirectives"])
+    .config(function($interpolateProvider, $httpProvider){
+         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+
+         $httpProvider.interceptors.push(function ($q, $rootScope) {
+             var nbreReqs = 0;
+             return {
+                 request: function (config) {
+                     nbreReqs++;
+                     $rootScope.chargementEnCours = true;
+                     return config;
+                 },
+                 /*requestError: function (motifRejet) {
+                     return $q.reject(motifRejet);
+                 },*/
+                 response: function (reponse) {
+                     if(--nbreReqs == 0){
+                         $rootScope.chargementEnCours = false;
+                     }
+                     return reponse;
+                 },
+                 responseError: function (motifRejet) {
+                     if(--nbreReqs == 0){
+                         $rootScope.chargementEnCours = false;
+                     }
+                     return $q.reject(motifRejet);
+                 }
+             }
+         })
 
     })
+    .controller("3ischoolCtrl",function ($filter,$http,$rootScope, $window, $scope, $sce, $location, $interval, contenuService) {
 
 
-
-    .controller("3ischoolCtrl",function ($filter, $window, $scope, $sce, $location, $interval, contenusGroupesService) {
-
-
-
-        //$scope.trustAsHtml = $sce.trustAsHtml;
-
-
+       //Chargement En cours
+        $rootScope.chargementEnCours =false;
 
         $scope.rubriqueCourante = 'Tous';
         $scope.conteneurs = null;
@@ -42,17 +63,29 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
             }
         };
 
+        $scope.isNullOrEmptyOrUndefined = function (value) {
+            return !value;
+        }
 
         $scope.getConteneurByID = function(id)
         {
 
                 $scope.idConteneurSelectionne = id;
-                $scope.conteneurCourant = contenusGroupesService.getConteneur($scope.groupesContenus.CONTENEUR, id);
-                $scope.contenuRoot = $scope.conteneurCourant.contenu.contenuRoot;
-                $scope.contenuURL = $sce.trustAsResourceUrl("https://docs.google.com/viewer?embedded=true&url=" + $scope.contenuRoot);
-                $scope.sousRubriqueLibelle = $scope.conteneurCourant.contenu.sousRubrique.libelle;
+
+
+                $scope.conteneurCourant = contenuService.getConteneur(id);
+
+                $scope.conteneurCourant.$promise.then(function(){
+                    $scope.contenuRoot = $scope.conteneurCourant.contenu.contenuRoot;
+                    $scope.contenuURL = $sce.trustAsResourceUrl("https://docs.google.com/viewer?embedded=true&url=" + $scope.contenuRoot);
+                    $scope.sousRubriqueLibelle = $scope.conteneurCourant.contenu.sousRubrique.libelle;
+                    $scope.conteneurQuestion = $scope.conteneurCourant.contenu.questions;
+                });
+
+
 
         }
+
 
 
         $scope.displayQuestionDetail = function(id)
@@ -66,9 +99,12 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         $scope.getQuestionByID = function(idQuestion)
         {
-            $scope.questionSelectionnee = $filter('filter')($scope.conteneurCourant.contenu.questions, function (d) {
-                return d.id === idQuestion;
-            })[0]; 
+            $scope.conteneurCourant.$promise.then(function(){
+                $scope.questionSelectionnee = $filter('filter')($scope.conteneurCourant.contenu.questions, function (d) {
+                    return d.id === idQuestion;
+                })[0];
+            });
+
             //console.log("getQuestionByID "+$scope.questionSelectionnee);
             return ($scope.questionSelectionnee!=undefined);
         }
@@ -87,12 +123,15 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         $scope.backToQuestion = function () {
             $scope.questionDetailFullscreen = null;
             $scope.afficherNewQuestion = false;
-            $scope.getConteneurByID($scope.idConteneurSelectionne);
+            //$scope.getConteneurByID($scope.idConteneurSelectionne);
         }
 
         $scope.displayQuestionOnMobile = function(){
             $scope.zoom();
         }
+
+
+
 
         // Recherche Contenu
 
@@ -136,7 +175,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         {
 
             $scope.getConteneurByID($scope.idConteneurSelectionne);
-            contenusGroupesService.postQuestion($scope.conteneurCourant.contenu.questions, newQuestion);
+            contenuService.postQuestion($scope.conteneurCourant.contenu.questions, newQuestion);
             $scope.afficherNewQuestion = false;
             $location.path("/");
 
@@ -161,11 +200,16 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
                 switch(categorie) {
                     case 'rubriques':
                         var rubrique = tabPath[2];
-                        $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
-                            if(unConteneur.contenu.rubrique.libelle==rubrique){
-                                $scope.selectionRubrique(rubrique);
-                            }
-                        })
+
+                        $scope.groupesContenus.$promise.then(function(){
+                            $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
+                                if(unConteneur.contenu.rubrique.libelle==rubrique){
+                                    $scope.selectionRubrique(rubrique);
+                                }
+                            })
+                        });
+
+
                         break;
                     case "questions":
                         var idQuestion = parseInt(tabPath[2]);
@@ -182,7 +226,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
                     case "newQuestion":
                         $scope.afficherNewQuestion = true;
                         $scope.$broadcast("initNewQuestion");
-                        $scope.conteneurCourant = null;
+                       // $scope.conteneurCourant = null;
                         break;
                     default:
                     //console.log("WEIRD !")
@@ -192,9 +236,58 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         });
 
-        $scope.groupesContenus = contenusGroupesService.getGroupesContenus();
 
-
+         $scope.groupesContenus = contenuService.getGroupesContenus(1,3,2,3);
+         //$scope.groupesContenus = contenuService.getGroupesContenus();
+        //console.log($scope.conteneurCourant2.contenu);
 
     })
 
+    .directive("owlCarousel", function() {
+        return {
+            restrict: 'E',
+            transclude: false,
+            link: function (scope) {
+                scope.initCarousel = function(element) {
+                    // provide any default options you want
+                    var defaultOptions =
+                    {
+                        items: 5,
+                        itemsCustom: false,
+                        itemsDesktop: [1399, 4],
+                        itemsDesktopSmall: [1100, 3],
+                        itemsTablet: [930, 2],
+                        itemsTabletSmall: false,
+                        itemsMobile: [479, 1],
+                        singleItem: false,
+                        itemsScaleUp: false,
+                        slideSpeed: 200,
+                        paginationSpeed: 800,
+                        rewindSpeed: 1000,
+                        autoPlay: true,
+                        autoWeight: false,
+                        autoHeight: false
+                    };
+                    var customOptions = scope.$eval($(element).attr('data-options'));
+                    // combine the two options objects
+                    for(var key in customOptions) {
+                        defaultOptions[key] = customOptions[key];
+                    }
+                    // init carousel
+                    $(element).owlCarousel(defaultOptions);
+                };
+            }
+        };
+    })
+    .directive('owlCarouselItem', [function() {
+        return {
+            restrict: 'A',
+            transclude: false,
+            link: function(scope, element) {
+                // wait for the last item in the ng-repeat then call init
+                if(scope.$last) {
+                    scope.initCarousel(element.parent());
+                }
+            }
+        };
+    }]);

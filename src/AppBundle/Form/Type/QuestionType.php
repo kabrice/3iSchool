@@ -21,7 +21,6 @@ class QuestionType extends AbstractType
 
         $builder->add('libelle');
         $builder->add('description');
-        $builder->add('imageRoot');
         $builder->add('page', IntegerType::class , array('required' => false));
         $builder->add('ligne', IntegerType::class , array('required' => false));
 

@@ -1,0 +1,69 @@
+<tr >
+    <td class="td-comment" colspan="2" >
+
+
+        <div class="panel panel-default noborder"
+             style="
+                                         background-color: #f9f9f9;
+                                          padding-top: 15px ;
+                                          padding-left: 15px ;
+                                          padding-right: 15px;
+                                            padding-bottom: 5px;border-radius: 5px;
+                                            margin-bottom: -10px;
+                                            margin-top:-9px;  ">
+            <div class="panel-body noborder">
+                <div class="date-publication"><a
+                            href="/2/profil" class="href"> {[{comment.users[0].prenom}]} {[{comment.users[0].nom}]}</a>,
+                    le {[{comment.datePublication | date:'dd MMM yyyy à HH : mm'}]}
+                </div>
+                <div style="display: flex;">
+                    <div class="check-btn-commentaire"
+                         title="Ce commentaire montre un effort de recherche. Il est utile et clair.">
+                        <div class="check-vote"><i class="fa fa-check-circle fa-lg"
+                                                   aria-hidden="true"></i></div>
+                        <div id="check-count">{[{comment.nombreLike}]}</div>
+                    </div>
+                    <div class="libelle-commentaire "
+                         ng-bind-html="comment.libelle"
+                         style="margin-top: 5px; margin-bottom: -10px; ">
+                    </div>
+
+                </div>
+                <div style="float: right;margin-top: 10px !important;">
+
+                    <a class="inutile" title="Ce commentaire ne montre aucun effort de recherche, n'est pas clair ou n'est pas utile"
+                       style="font-size: 10pt">
+                        Commentaire inutile <i class="fa fa-flag"
+                                               aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <form style="margin-top: 9px;" class="form-inline"
+              ng-if="comment.id == answer.commentaires[answer.commentaires.length-1].id">
+            <div class="row">
+                <div class="hidden-xs col-sm-9 col-md-9 col-lg-9 nopadding-textarea">
+                                                <textarea class="form-control"  rows="1"  style="width: 100%; min-height: 47px"
+                                                          Placeholder = "Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires."></textarea>
+                </div>
+                <div class="hidden-xs col-sm-3 col-md-3 col-lg-3 nopadding-button">
+                    <button style="width: 100%" type="submit" class="btn btn-question">
+                        Commenter
+                    </button>
+                </div>
+                <div class="col-xs-12 hidden-sm hidden-md hidden-lg " >
+                                                <textarea class="form-control"  rows="1"  style="width: 100%; min-height: 47px"
+                                                          Placeholder = "Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires."></textarea>
+                </div>
+                <div class="col-xs-12 hidden-sm hidden-md hidden-lg " >
+                    <button style="width: 100%" type="submit" class="btn btn-question">
+                        Commenter
+                    </button>
+                </div>
+            </div>
+        </form>
+
+
+    </td>
+</tr>

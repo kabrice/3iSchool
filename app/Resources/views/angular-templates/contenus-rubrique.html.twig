@@ -6,12 +6,12 @@
             </div>
         </a>
         <div class="caption-wrapper">
-            <div class="title-course" ng-bind-html="conteneur.contenu.titre | limitTo:40 | surbrillanceRecherche:rechercheContenu">
+            <div class="title-course" ng-bind-html="conteneur.contenu.titre | limitTo:40 | surbrillanceRecherche:recherche">
                 <span ng-if="conteneur.contenu.titre.length > 40">&hellip;</span>
             </div>
-            <div class="course"><span ng-bind-html="conteneur.contenu.rubrique.libelle | limitTo:25 | surbrillanceRecherche:rechercheContenu"></span>
+            <div class="course"><span ng-bind-html="conteneur.contenu.rubrique.libelle | limitTo:25 | surbrillanceRecherche:recherche"></span>
                 <span ng-if="conteneur.contenu.rubrique.libelle.length > 25">&hellip;</span>
-                <div style="float: right;display: inline-block" ng-bind-html="conteneur.contenu.sousRubrique.libelle | surbrillanceRecherche:rechercheContenu"></div>
+                <div style="float: right;display: inline-block" ng-bind-html="conteneur.contenu.sousRubrique.libelle | surbrillanceRecherche:recherche"></div>
             </div>
             <div style="display: flex">
                 <div style="color: orangered;" >

@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="jumbotron"> 
+    <div class="preloader" ng-show="chargementEnCours">
+        <div class="msg-preloader">
+            <img ng-src="{{ asset('img/preloader.gif') }}"/>
+        </div>
+    </div>
+    <div class="jumbotron" > 
 
         <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -17,7 +22,7 @@
                             <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle" style="color: red">
 
                             </a>
-                            <a href="{{'/'}}"><img ng-src="img/3ischool_logo.png" height="30" width="130" style="margin-top: -4px">   </a>
+                            <a ng-href="/"><img ng-src="img/3ischool_logo.png" height="30" width="130" style="margin-top: -4px">   </a>
                         </div>
                     </div>
 
@@ -73,7 +78,7 @@
                 </div>
             </nav>
             <!-- Sidebar -->
-            <div id="sidebar-wrapper">
+            <div id="sidebar-wrapper" ng-show="!chargementEnCours">
                 <div class="left" >
                     <ul class="courses " style="margin-top: 15px !important; ">
                         <div class="side-menu-head"> Promotion</div>
@@ -104,13 +109,14 @@
 
                     <ul class="courses " style="margin-top: 15px !important;">
                         <div class="side-menu-head">Matières</div>
-                        <li><a  ng-class="{active: rubriqueCourante=='Tous'}" ng-click="selectionRubrique('Tous')" href="#home"><img ng-src="{{asset('img/All.png')}}" class="side-menu-image">Tous</a></li>
-                        <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'contenu.rubrique.id'">
+                        <li ng-cloak><a  ng-class="{active: rubriqueCourante=='Tous'}" ng-click="selectionRubrique('Tous')" href="#home"><img ng-src="{{asset('img/All.png')}}" class="side-menu-image">Tous</a></li>
+                        <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'contenu.rubrique.id'" ng-cloak>
                             <a  ng-if="unConteneur.contenu.rubrique.groupeRubrique.libelle =='Matière'"
                                 ng-class="{active: unConteneur.contenu.rubrique.libelle == rubriqueCourante}"
-                                href="#/rubriques/{[{unConteneur.contenu.rubrique.libelle}]}"><img ng-src="{{ asset('{[{unConteneur.contenu.rubrique.imageRoot}]}') }}" class="side-menu-image">
+                                ng-href="#!/rubriques/{[{unConteneur.contenu.rubrique.libelle}]}"><img ng-src="{{ asset('{[{unConteneur.contenu.rubrique.imageRoot}]}') }}" class="side-menu-image">
                                 {[{unConteneur.contenu.rubrique.libelle | limitTo:25}]}
                             </a>
+
                         </li>
                     </ul>
 
@@ -143,7 +149,7 @@
                 </div>
             </div>
             <!-- Page content -->
-            <div id="page-content-wrapper">
+            <div id="page-content-wrapper" ng-show="!chargementEnCours" ng-cloak>
                 <div class="page-content">
                     <div class="container-fluid">
                         {#A modifier avec ng-model#}
@@ -168,119 +174,39 @@
                     <contenus-rubrique
                             ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: rechercheContenu) | orderBy:'-datePublication'"
                             ng-if="!hideSearch"
-                            conteneur="unConteneur"></contenus-rubrique>
+                            conteneur="unConteneur"
+                            recherche="rechercheContenu"></contenus-rubrique>
                                     {#End of the search#}
 
                                 </div>
                                 {#Fin Affichage de contenus concernant une rubrique#}
 
                                 {#Début Affichage de tous les éléments#}
-                                <div ng-show="rubriqueCourante=='Tous' && hideSearch">
+                                <data-owl-carousel ng-show="rubriqueCourante=='Tous' && hideSearch">
 
                                     <div class="aside-menu-head">Favoris</div>
 
-                                    <div id="owl-favoris" class="owl-carousel owl-theme">
+                                    <data-owl-carousel class="owl-carousel owl-theme" >
 
-                                        <div  ng-repeat="unFavoris in groupesContenus.FAVORIS | orderBy:'-userContenus[1].nbreVue'" class="item">
-                                            <div class="panel panel-default course-pointer">
-                                                <a href="/lectureContenu/{[{unFavoris.id}]}">
-                                                    <div class="panel-heading">
-                                                        <img ng-src="{{ asset('{[{unFavoris.imageRoot}]}') }}" class="img-wrapper " />
-                                                    </div>
-                                                </a>
-                                                <div class="caption-wrapper">
-                                                    <div class="title-course">{[{unFavoris.titre | limitTo:25}]}
-                                                        <span ng-if="unFavoris.titre.length > 25">&hellip;</span>
-                                                    </div>
-                                                    <div class="course">{[{unFavoris.rubrique.libelle | limitTo:25}]}
-                                                        <span ng-if="unFavoris.rubrique.libelle.length > 25">&hellip;</span>
-                                                        <div style="float: right;display: inline-block">{[{unFavoris.sousRubrique.libelle}]}</div>
-                                                    </div>
-                                                    <div style="display: flex">
-                                                        <div style="color: orangered;" >
-                                                            <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
-                                                        </div>
-                                                        <div style="margin-left: 18px; color: orangered;">
-                                                            {[{unFavoris.nombreLike}]} j'aime
-                                                        </div>
-                                                    </div>
-                                                    <div class="caption-item-content">
-                                                        <div hidden>{[{unFavoris.userContenus[1].nbreVue}]} vues</div>
-                                                        <div class="course-view">{[{unFavoris.nombreVueTotal}]} vues</div>
-                                                        <div class="course-date">{[{unFavoris.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <contenus-tries owl-carousel-item=""  ng-repeat="unFavoris in groupesContenus.FAVORIS | orderBy:'-userContenus[1].nbreVue'"
+                                              class="item" contenu="unFavoris">
+                                        </contenus-tries>
+                                    </data-owl-carousel>
 
                                     <div class="aside-menu-head">Récents</div>
-                                    <div id="owl-recents" class="owl-carousel owl-theme">
+                                    <data-owl-carousel class="owl-carousel owl-theme" >
                                         {#La date a déjà été triée côté serveur#}
-                                        <div ng-repeat="unRecent in groupesContenus.RECENTS" class="item">
-                                            <div class="panel panel-default course-pointer">
-                                                <a href="/lectureContenu/{[{unRecent.id}]}">
-                                                    <div class="panel-heading">
-                                                        <img ng-src="{{ asset('{[{unRecent.imageRoot}]}') }}" class="img-wrapper " />
-                                                    </div>
-                                                </a>
-                                                <div class="caption-wrapper">
-                                                    <div class="title-course">{[{unRecent.titre}]}
-                                                        <span ng-if="unRecent.titre.length > 25">&hellip;</span>
-                                                    </div>
-                                                    <div class="course">{[{unRecent.rubrique.libelle | limitTo:25}]}
-                                                        <span ng-if="unRecent.rubrique.libelle.length > 25">&hellip;</span>
-                                                        <div style="float: right;display: inline-block">{[{unRecent.sousRubrique.libelle}]}</div>
-                                                    </div>
-                                                    <div style="display: flex">
-                                                        <div style="color: orangered;" >
-                                                            <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
-                                                        </div>
-                                                        <div style="margin-left: 18px; color: orangered;">
-                                                            {[{unRecent.nombreLike}]} j'aime
-                                                        </div>
-                                                    </div>
-                                                    <div class="caption-item-content">
-                                                        <div class="course-view">{[{unRecent.nombreVueTotal}]} vues</div>
-                                                        <div class="course-date">{[{unRecent.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <contenus-tries owl-carousel-item="" ng-repeat="unRecent in groupesContenus.RECENTS"
+                                                        class="item" contenu="unRecent"></contenus-tries>
+
+                                    </data-owl-carousel >
                                     <div class="aside-menu-head">Tes camarades ont aussi consultés</div>
-                                    <div id="owl-aussiConsultes" class="owl-carousel owl-theme">
-                                        <div ng-repeat="aussiConsulte in groupesContenus.AUSSICONSULTES | orderBy:'-nombreVueTotal'" class="item">
-                                            <div class="panel panel-default course-pointer">
-                                                <a href="/lectureContenu/{[{aussiConsulte.id}]}">
-                                                    <div class="panel-heading">
-                                                        <img ng-src="{{ asset('{[{aussiConsulte.contenu.imageRoot}]}') }}" class="img-wrapper " />
-                                                    </div>
-                                                </a>
-                                                <div class="caption-wrapper">
-                                                    <div class="title-course">{[{aussiConsulte.contenu.titre | limitTo:25}]}
-                                                        <span ng-if="aussiConsulte.contenu.titre.length > 25">&hellip;</span>
-                                                    </div>
-                                                    <div class="course">{[{aussiConsulte.contenu.rubrique.libelle | limitTo:25}]}
-                                                        <span ng-if="aussiConsulte.contenu.rubrique.libelle.length > 25">&hellip;</span>
-                                                        <div style="float: right;display: inline-block">{[{aussiConsulte.contenu.sousRubrique.libelle}]}</div>
-                                                    </div>
-                                                    <div style="display: flex">
-                                                        <div style="color: orangered;" >
-                                                            <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
-                                                        </div>
-                                                        <div style="margin-left: 18px; color: orangered;">
-                                                            {[{aussiConsulte.contenu.nombreLike}]} j'aime
-                                                        </div>
-                                                    </div>
-                                                    <div class="caption-item-content">
-                                                        <div class="course-view">{[{aussiConsulte.contenu.nombreVueTotal}]} vues</div>
-                                                        <div class="course-date">{[{aussiConsulte.contenu.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                    <data-owl-carousel class="owl-carousel owl-theme" >
+                                        <contenus-tries owl-carousel-item=""  ng-repeat="aussiConsulte in groupesContenus.AUSSICONSULTES | orderBy:'-nombreVueTotal'"
+                                                        class="item" contenu="aussiConsulte.contenu"></contenus-tries>
+
+                                    </data-owl-carousel >
 
                                 </div>
                                 {#Fin Affichage de tous les éléments#}
@@ -291,10 +217,7 @@
                 </div>
             </div>
         </div>
-    </div>
 
 
-    </main>
-    </div>
 {% endblock %}
 

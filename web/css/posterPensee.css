@@ -915,3 +915,48 @@ body>.container-fluid,
 .surbrillanceRecherche{
     background-color: #e84e0f;
 }
+
+.preloader {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+
+
+    z-index: 999;
+}
+
+.msg-preloader {
+    position: absolute;
+    margin: auto;
+
+    width: 300px;
+    height: 191px;
+
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    color: white;
+}
+
+.msg-preloader h3 {
+    position: absolute;
+    left: 30px;
+    width: 240px;
+    text-align: center;
+}
+
+.msg-preloader img {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border: none !important;
+    left: 125px;
+    top: 95px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}

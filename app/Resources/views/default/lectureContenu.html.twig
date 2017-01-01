@@ -1,15 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-<div class="container-fluid" ng-init="getConteneurByID({{ idConteneur }})">
+    <div class="preloader" ng-show="chargementEnCours">
+        <div class="msg-preloader">
+            <img ng-src="{{ asset('img/preloader.gif') }}"/>
+        </div>
+    </div>
+  <div class="container-fluid" ng-init="getConteneurByID({{ idConteneur }})">
 
 
         <a id="titleHead" href="" >{[{conteneurCourant.contenu.titre | limitTo:150}]}
         <span ng-if="conteneurCourant.contenu.titre.length > 150">&hellip;</span>
         </a>
 
-    <div class="row rowLectureContenu">
+    <div class="row rowLectureContenu" ng-show="!chargementEnCours">
         <div class="col-sm-12 col-md-8 col-lg-8 no-float" style="padding: 0 !important; border: 1px solid lightgrey" ng-show="!questionFullscreen" >{#change made#}
             <iframe ng-src="{[{contenuURL}]}" style="border: none;"></iframe>
 
@@ -20,75 +24,21 @@
                     <span ng-if="questionDetailFullscreen == null && !afficherNewQuestion">QUESTIONS</span>
                     <span ng-if="questionDetailFullscreen != null">DETAILS DE LA QUESTION</span>
                     <span ng-if="afficherNewQuestion">MA QUESTION</span>
-                    <a href="#/back" id="back-left" style="text-decoration: none; color: inherit"><div class="arrow-back"  ng-if="questionDetailFullscreen != null || afficherNewQuestion"><i class="material-icons">arrow_back</i></div></a>
+                    <a href="#!/back" id="back-left" style="text-decoration: none; color: inherit"><div class="arrow-back"  ng-if="questionDetailFullscreen != null || afficherNewQuestion"><i class="material-icons">arrow_back</i></div></a>
                     <div  class="zoom-panel" ng-click="zoom()" ng-if="!questionFullscreen"><i class="material-icons">zoom_in</i></div>
                     <div  class="zoom-panel" ng-click="zoom()" ng-if="questionFullscreen"><i class="material-icons">zoom_out</i></div>
                 </div>
 
                 <div ng-class="{'scroll-lgpanel': questionFullscreen, 'scroll-smpanel': !questionFullscreen}"
                      class="container-fluid question-panel padding-smpanel"
-                     ng-show="questionDetailFullscreen == null"> {#Change made for hidden#}
+                     ng-show="questionDetailFullscreen == null">
+                    {#Change made for hidden#}
                     <div class="row">
                         <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
                         <div ng-class="{'col-sm-10 col-md-8 col-lg-6': questionFullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
-                            <div ng-show="!afficherNewQuestion">
-                                <a style="">
-                                    <form class="padding-question-search" style="display: inline-block; width: 100%">
-                                        <div class="input-group col-md-12">
-                                            <input type="search"
-                                                   class="  search-query form-control"
-                                                   ng-model="rechercheQuestion"
-                                                   placeholder="Recherche une question sur ce contenu"/>
-                                            <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <span class=" glyphicon glyphicon-search"></span>
-                                    </button>
-                                </span>
-                                        </div>
-                                    </form>
-                                </a>
-                            </div>
-                            <div ng-show="!afficherNewQuestion">
 
-                                <a href="#/newQuestion">
-                                <div class="padding-question-search">
-                                    <button type="button" class="btn btn-question">Poser une nouvelle question</button>
-                                </div>
-                                </a>
-                                <div class="question-page" style="margin-left: 8px; font-size: 10pt">{[{questionsTrouvees.length}]}
-                                    <span ng-if="questionsTrouvees.length<2">question pour ce contenu</span>
-                                    <span ng-if="questionsTrouvees.length>=2">questions pour ce contenu</span>
-                                </div>
-                                <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;">
-                                    <tr ng-repeat="uneQuestion in questionsTrouvees = (conteneurCourant.contenu.questions) | filter: rechercheQuestion| orderBy:'-datePublication'">
+                        <liste-questions ng-show="!afficherNewQuestion" questions= "conteneurQuestion"></liste-questions>
 
-                                        <td>
-                                            <div>
-                                                <div class="m-img-profil" style="display: inline-block; margin-right: 20px"><img style="margin-bottom: -5px" ng-src="{{ asset('{[{uneQuestion.users[0].userProfilRoot}]}') }}">
-                                                </div>
-                                                <div style="display: inline-block;">
-                                                    <div class="date-publication">le {[{uneQuestion.datePublication | date:'dd MMM yyyy à HH : mm'}]}
-                                                    </div>
-                                                    <div class="question-page"
-                                                         ng-if="uneQuestion.page != null && uneQuestion.ligne!=null">page
-                                                        {[{uneQuestion.page}]} - à partir de la ligne
-                                                        {[{uneQuestion.ligne}]}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="#/questions/{[{uneQuestion.id}]}">
-                                            <div  class="question-click">
-                                                <div class="question-title expandDiv" style="font-size: 10pt !important;" ng-bind-html="uneQuestion.libelle | surbrillanceRecherche:rechercheQuestion">
-                                                </div>
-                                                <div class="question-explication expandDiv"
-                                                     ng-bind-html="(uneQuestion.description | surbrillanceRecherche:rechercheQuestion)">
-                                                </div>
-                                            </div>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
                         </div>
                     </div>
                     <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
@@ -100,9 +50,9 @@
                         ng-show="afficherNewQuestion"
                         publier-question="publierQuestion(newQuestion)"
                         fullscreen = "questionFullscreen"
-                        showError = "showQuestionError"
-                        ></new-question>
+                        showError = "showQuestionError"></new-question>
                 {#Fin Poser une question#}
+
                 {# Start dupes#}
                 <div
                         ng-show="questionDetailFullscreen != null"
@@ -243,76 +193,12 @@
                                     </td>
                                 </tr>
                                 {#Début commentaire #}
-                                <tr ng-repeat="unCommentaire in uneReponse.commentaires"
-                                    ng-show="showDetails">
-                                    <td class="td-comment" colspan="2" >
 
-
-                                        <div class="panel panel-default noborder"
-                                             style="
-                                         background-color: #f9f9f9;
-                                          padding-top: 15px ;
-                                          padding-left: 15px ;
-                                          padding-right: 15px;
-                                            padding-bottom: 5px;border-radius: 5px;
-                                            margin-bottom: -10px;
-                                            margin-top:-9px;  ">
-                                            <div class="panel-body noborder">
-                                                <div class="date-publication"><a
-                                                            href="/2/profil" class="href"> {[{unCommentaire.users[0].prenom}]} {[{unCommentaire.users[0].nom}]}</a>,
-                                                    le {[{unCommentaire.datePublication | date:'dd MMM yyyy à HH : mm'}]}
-                                                </div>
-                                                <div style="display: flex;">
-                                                    <div class="check-btn-commentaire"
-                                                         title="Ce commentaire montre un effort de recherche. Il est utile et clair.">
-                                                        <div class="check-vote"><i class="fa fa-check-circle fa-lg"
-                                                                                   aria-hidden="true"></i></div>
-                                                        <div id="check-count">{[{unCommentaire.nombreLike}]}</div>
-                                                    </div>
-                                                    <div class="libelle-commentaire "
-                                                         ng-bind-html="unCommentaire.libelle"
-                                                         style="margin-top: 5px; margin-bottom: -10px; ">
-                                                    </div>
-
-                                                </div>
-                                                <div style="float: right;margin-top: 10px !important;">
-
-                                                    <a class="inutile" title="Ce commentaire ne montre aucun effort de recherche, n'est pas clair ou n'est pas utile"
-                                                       style="font-size: 10pt">
-                                                        Commentaire inutile <i class="fa fa-flag"
-                                                                               aria-hidden="true"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <form style="margin-top: 9px;" class="form-inline"
-                                              ng-if="unCommentaire.id == uneReponse.commentaires[uneReponse.commentaires.length-1].id">
-                                            <div class="row">
-                                                <div class="hidden-xs col-sm-9 col-md-9 col-lg-9 nopadding-textarea">
-                                                <textarea class="form-control"  rows="1"  style="width: 100%; min-height: 47px"
-                                                          Placeholder = "Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires."></textarea>
-                                                </div>
-                                                <div class="hidden-xs col-sm-3 col-md-3 col-lg-3 nopadding-button">
-                                                    <button style="width: 100%" type="submit" class="btn btn-question">
-                                                        Commenter
-                                                    </button>
-                                                </div>
-                                                <div class="col-xs-12 hidden-sm hidden-md hidden-lg " >
-                                                <textarea class="form-control"  rows="1"  style="width: 100%; min-height: 47px"
-                                                          Placeholder = "Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires."></textarea>
-                                                </div>
-                                                <div class="col-xs-12 hidden-sm hidden-md hidden-lg " >
-                                                    <button style="width: 100%" type="submit" class="btn btn-question">
-                                                        Commenter
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-
-
-                                    </td>
-                                </tr>
+                                <tr commentaires-reponse
+                                    ng-repeat="unCommentaire in uneReponse.commentaires"
+                                    ng-show="showDetails"
+                                    comment="unCommentaire"
+                                    answer="uneReponse"></tr>
                                 {#Fin commentaire #}
                                 {#Fin reponse#}
                                 <tr>
@@ -353,4 +239,5 @@
     <i class="material-icons question-answer-footer  hidden-md hidden-lg"
        title="Faire apparaître ou disparaître le panneau de questions"
        ng-click="displayQuestionOnMobile()">question_answer</i>
+  </div>
 {% endblock %}

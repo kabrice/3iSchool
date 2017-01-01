@@ -6,26 +6,23 @@
         {% block stylesheets %}
             <meta charset="UTF-8">  
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-            <link rel="stylesheet" href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/bootstrap/dist/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/components-font-awesome/css/font-awesome.min.css') }}">
+            <link rel="stylesheet" type="text/css"  href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/owl.carousel/dist/assets/owl.carousel.min.css') }}" /> 
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/owl.carousel/dist/assets/owl.theme.default.min.css') }}" /> 
+
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/posterPensee.css') }}" />
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/mgSuggestion.css') }}" /> 
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/pdfviewer.css') }}" /> 
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/sidebar.css') }}" /> 
-            <!-- Important Owl stylesheet -->
-            <link rel="stylesheet" type="text/css"  href="{{ asset('owl-carousel/owl.carousel.css') }}" /> 
-            <!-- Default Theme -->
-            <link rel="stylesheet" type="text/css"  href="{{ asset('owl-carousel/owl.theme.css') }}" /> 
         <style>
             iframe {
                 height: 100% !important;
                 width: 100% !important;
-                overflow: hidden;
-
+                overflow: hidden
             }
-
-
         </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -37,19 +34,21 @@
 
         {% block javascripts %}
             <script type="text/javascript" src="{{ asset('bower/tinymce/tinymce.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('library/jquery/jquery-2.1.4.min.js') }}"></script>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-            <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.1/angular-sanitize.min.js"></script>
-            <script src="https://code.angularjs.org/1.5.8/i18n/angular-locale_fr-fr.js"></script>
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.14/angular-filter.js" ></script>
+            <script type="text/javascript" src="{{ asset('bower/jquery/dist/jquery.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/jquery.cookie/jquery.cookie.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular/angular.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-sanitize/angular-sanitize.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-resource/angular-resource.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-filter/dist/angular-filter.js') }}" ></script>
             <script type="text/javascript" src="{{ asset('bower/angular-ui-tinymce/src/tinymce.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/owl.carousel/dist/owl.carousel.min.js') }}"></script>
 
             <script type="text/javascript" src="{{ asset('js/angular-app/app.js') }}" ></script>
             <script type="text/javascript" src="{{ asset('js/angular-app/MesDirectives.js') }}" ></script>
-            <script type="text/javascript" src="{{ asset('js/angular-app/contenusGroupesServiceMock.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceHttp.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceMock.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceRest.js') }}" ></script>
             <script type="text/javascript" src="{{ asset('js/angular-app/MesFiltres.js') }}" ></script>
 
 
@@ -61,44 +60,7 @@
             <script type="text/javascript" src="{{ asset('js/showmore.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/notification.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('owl-carousel/owl.carousel.min.js') }}"></script>
-            <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-            <script>
-                $(document).ready(function() {
 
-                    var owlFavoris = $("#owl-favoris");
-                    var owlRecents = $("#owl-recents");
-                    var owlAussiConsultes= $("#owl-aussiConsultes");
-
-                    myOwlCarousel(owlFavoris);
-                    myOwlCarousel(owlRecents);
-                    myOwlCarousel(owlAussiConsultes);
-
-                    function myOwlCarousel(owl) {
-
-                        owl.owlCarousel({
-
-                            items: 5,
-                            itemsCustom: false,
-                            itemsDesktop: [1399, 4],
-                            itemsDesktopSmall: [1100, 3],
-                            itemsTablet: [930, 2],
-                            itemsTabletSmall: false,
-                            itemsMobile: [479, 1],
-                            singleItem: false,
-                            itemsScaleUp: false,
-                            slideSpeed: 200,
-                            paginationSpeed: 800,
-                            rewindSpeed: 1000,
-                            autoPlay: true,
-                            autoWeight: false,
-                            autoHeight: false
-                        })
-                    }
-
-
-                });
-            </script>
 
 
         {% endblock %}

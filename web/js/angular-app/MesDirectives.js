@@ -1,15 +1,30 @@
 angular.module("MesDirectives", ['angular.filter', "MesFiltres"])
 .directive("contenusRubrique", function () {
+
     return {
         //A attribut
         //E element (balise)
         //C css classe
         //M Comment
+
         restrict: "E",
         templateUrl: '/contenusRubrique',
         replace: true,
         scope: {
-            conteneur: "="
+            conteneur: "=",
+            recherche: "="
+        }
+
+    }
+})
+.directive("contenusTries", function () {
+
+    return {
+        restrict: "E",
+        templateUrl: '/contenusTries',
+        replace: true,
+        scope: {
+            contenu: "="
         }
     }
 })
@@ -98,3 +113,33 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres"])
         }
     }
 })
+
+.directive("listeQuestions", function () {
+    return {
+        restrict: "E",
+        templateUrl: '/listeQuestions',
+        replace: true,
+        scope: {
+            questions: "="
+        }
+    }
+})
+
+
+
+.directive("commentairesReponse", function () {
+    return {
+        restrict: "A",
+        templateUrl: '/commentairesReponse',
+        replace: true,
+        scope: {
+            comment: "=",
+            answer: "="
+        }
+    }
+})
+
+
+
+
+
