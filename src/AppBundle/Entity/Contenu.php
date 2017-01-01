@@ -39,7 +39,7 @@ class Contenu
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_publication", type="datetimetz", nullable=false)
+     * @ORM\Column(name="date_publication", type="datetime", nullable=false)
      */
     protected $datePublication;
 
