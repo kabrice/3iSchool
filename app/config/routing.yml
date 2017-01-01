@@ -18,6 +18,10 @@ auth-tokens:
     type:     rest
     resource: AppBundle\Controller\AuthTokenController
     prefix: /api
+ecritureContenu:
+    type:     rest
+    resource: AppBundle\Controller\DashboardController
+    prefix: /api
 
 #Routes statics (pour angularjs)
 app_bundle_contenus_rubriques:

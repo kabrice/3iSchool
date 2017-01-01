@@ -47,3 +47,19 @@ AppBundle\Entity\Credentials:
           password:
               - NotBlank: ~
               - Type: string
+
+
+AppBundle\Entity\Contenu:
+    properties:
+          titre:
+              - NotBlank: ~
+              - Type: string
+          information:
+              - NotBlank: ~
+              - Type: string
+          imageRoot:
+              - NotBlank: ~
+              - Type: string
+          contenuRoot:
+              - NotBlank: ~
+              - Type: string
