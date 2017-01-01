@@ -11,14 +11,29 @@ use AppBundle\Entity\User;
  */
 class ContenuRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getContenusFavoris(User $user)
+    public function findContenusRecents()
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->select('c',  'userContenus');
-        $qb->join('c.userContenus', 'userContenus');
-        $qb->orderBy('userContenus.nbreVue', "DESC");
-        $qb->setParameter('user', $user);
+        $qb->select('c');
+        $qb->orderBy('c.datePublication', "DESC");
         $qb->setMaxResults(10);
         return $qb->getQuery()->getResult();
     }
+
+    public function findContenusAussiConsultes($criteres)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('c');
+        $qb->join('c.conteneurs', 'conteneurs');
+        $qb->where('c.conteneurs.annee=:critereAnnee');
+        $qb->andWhere('c.conteneurs.groupe=:critereGroupe');
+        $qb->andWhere('c.conteneurs.niveau=:critereNiveau');
+        $qb->setParameter('critereAnnee', $criteres["annee"]);
+        $qb->setParameter('critereAnnee', $criteres["groupe"]);
+        $qb->setParameter('critereAnnee', $criteres["niveau"]);
+        $qb->orderBy('c.nombreVueTotal', "DESC");
+        $qb->setMaxResults(10);
+        return $qb->getQuery()->getResult();
+    }
+
 }

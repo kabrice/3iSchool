@@ -26,34 +26,34 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class ContenuController extends Controller
 {
     /**
-     * @Rest\View(serializerGroups={"contenu", "reponse"})
-     * @Rest\Get("/lectureContenu/{id}")
+     * @Rest\View(serializerGroups={"conteneur", "contenu", "reponse"})
+     * @Rest\Get("/lectureConteneur/{id}")
      */
-    public function getContenuLectureAction($id, Request $request)
+    public function getConteneurAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('id'));
+        $conteneur = $em->getRepository('AppBundle:Conteneur')->find($request->get('id'));
 
-        if (empty($contenu)) {
-            return \FOS\RestBundle\View\View::create(['message' => 'Contenu introuvable'], Response::HTTP_NOT_FOUND);
+        if (empty($conteneur)) {
+            return \FOS\RestBundle\View\View::create(['message' => 'Conteneur introuvable'], Response::HTTP_NOT_FOUND);
         }
 
-        return $contenu;
+        return $conteneur;
     }
 
     /**
      * @Rest\View(serializerGroups={"contenu", "user"}, statusCode=Response::HTTP_CREATED)
-     * @Rest\Post("/lectureContenu/{id}/Questions")
+     * @Rest\Post("/lectureContenu/{contenu_id}/{user_id}/{type_question_id}/Questions")
      */
     public function postQuestionAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('id'));
-        $typeQuestion = $em->getRepository('AppBundle:TypeQuestion')->find(1);
+        $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
+        $typeQuestion = $em->getRepository('AppBundle:TypeQuestion')->find($request->get('type_question_id'));
 
-        // Todo Recuperer l'id session plutard avec les token ou les session
+        // Todo Recuperer l'id session plutard avec les token ou les session (1
 
-        $thisUser = $em->getRepository('AppBundle:User')->find(1);
+        $thisUser = $em->getRepository('AppBundle:User')->find($request->get('contenu_id'));
 
 
         if (empty($contenu)) {

@@ -11,6 +11,7 @@ use AppBundle\Entity\User;
  */
 class UserContenuRepository extends \Doctrine\ORM\EntityRepository
 {
+    // Les contenus aussi consultés sont classés par ceux qui ont le plus grand nombre de vue (et non de vue totale)
     public function findContenusIDFavoris(User $user)
     {
         $qb = $this->createQueryBuilder('uc');

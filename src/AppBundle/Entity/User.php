@@ -46,6 +46,13 @@ class User implements UserInterface
     protected $prenom;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="user_profil_root", type="string", nullable=true)
+     */
+    protected $userProfilRoot;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_creation", type="datetimetz")
@@ -492,5 +499,29 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * Set userProfilRoot
+     *
+     * @param string $userProfilRoot
+     *
+     * @return User
+     */
+    public function setUserProfilRoot($userProfilRoot)
+    {
+        $this->userProfilRoot = $userProfilRoot;
+
+        return $this;
+    }
+
+    /**
+     * Get userProfilRoot
+     *
+     * @return string
+     */
+    public function getUserProfilRoot()
+    {
+        return $this->userProfilRoot;
     }
 }

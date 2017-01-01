@@ -22,5 +22,13 @@ class DefaultController extends Controller
         ]);
     }
 
+    /**
+     * @Route("/lectureContenu/{idConteneur}", name="lectureContenu")
+     */
+    public function lectureContenuAction($idConteneur)
+    {
+        return $this->render('default/lectureContenu.html.twig', ['idConteneur' => $idConteneur]);
+    }
+
 
 }

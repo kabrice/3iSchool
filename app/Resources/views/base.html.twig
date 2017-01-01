@@ -2,43 +2,67 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}3iSchool{% endblock %}</title>
         {% block stylesheets %}
-            <!-- Latest compiled and minified CSS -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+            <meta charset="UTF-8">  
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/bootstrap/dist/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/components-font-awesome/css/font-awesome.min.css') }}">
+            <link rel="stylesheet" type="text/css"  href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/owl.carousel/dist/assets/owl.carousel.min.css') }}" /> 
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/owl.carousel/dist/assets/owl.theme.default.min.css') }}" /> 
 
-            <link rel="stylesheet" href="{{ asset('css/font-awesome/css/font-awesome.min.css') }}">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/posterPensee.css') }}" />
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/mgSuggestion.css') }}" /> 
-    </head>
+            <link rel="stylesheet" type="text/css"  href="{{ asset('css/pdfviewer.css') }}" /> 
+            <link rel="stylesheet" type="text/css"  href="{{ asset('css/sidebar.css') }}" /> 
+        <style>
+            iframe {
+                height: 100% !important;
+                width: 100% !important;
+                overflow: hidden
+            }
+        </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-
+    </head>
+    <body ng-app="3ischool" ng-controller="3ischoolCtrl">
         {% block body %}
 
         {% endblock %}
-        {% block javascripts %}
 
-            <script src="{{ asset('library/jquery/jquery-2.1.4.min.js') }}" type="text/javascript"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-            <script src="{{ asset('js/ajax-upload.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/votePensee.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/posterPensee.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/contribution.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/countLimit.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/commentaire.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('js/showmore.js') }}" type="text/javascript"></script>
+        {% block javascripts %}
+            <script type="text/javascript" src="{{ asset('bower/tinymce/tinymce.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/jquery/dist/jquery.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/jquery.cookie/jquery.cookie.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular/angular.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-sanitize/angular-sanitize.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-resource/angular-resource.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-filter/dist/angular-filter.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-ui-tinymce/src/tinymce.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+
+            <script type="text/javascript" src="{{ asset('js/angular-app/app.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/MesDirectives.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceHttp.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceMock.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceRest.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/MesFiltres.js') }}" ></script>
+
+
+            <script type="text/javascript" src="{{ asset('js/votePensee.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/posterPensee.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/contribution.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/countLimit.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/commentaire.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/showmore.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/notification.js') }}"></script>
-            <script src="{{ asset('library/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
-            <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-            <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-            <script type="text/javascript"
-                    src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/1.3.4/jquery.fancybox-1.3.4.pack.min.js"></script>
-            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-            <script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
+            <script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script>
+
+
+
         {% endblock %}
     </body>
 </html>

@@ -6,8 +6,6 @@ AppBundle\Entity\Question:
         description:
             - NotBlank: ~
             - Type: string
-        imageRoot:
-            - Type: string
         page:
             - Type: integer
             - GreaterThan:
@@ -47,5 +45,21 @@ AppBundle\Entity\Credentials:
               - NotBlank: ~
               - Type: string
           password:
+              - NotBlank: ~
+              - Type: string
+
+
+AppBundle\Entity\Contenu:
+    properties:
+          titre:
+              - NotBlank: ~
+              - Type: string
+          information:
+              - NotBlank: ~
+              - Type: string
+          imageRoot:
+              - NotBlank: ~
+              - Type: string
+          contenuRoot:
               - NotBlank: ~
               - Type: string

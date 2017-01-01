@@ -1,0 +1,60 @@
+<div>
+    <div >
+        <a style="">
+            <form class="padding-question-search" style="display: inline-block; width: 100%">
+                <div class="input-group col-md-12">
+                    <input type="search"
+                           class="  search-query form-control"
+                           ng-model="rechercheQuestion"
+                           placeholder="Recherche une question sur ce contenu"/>
+                    <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <span class=" glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                </div>
+            </form>
+        </a>
+    </div>
+    <div >
+
+        <a href="#!/newQuestion">
+            <div class="padding-question-search">
+                <button type="button" class="btn btn-question">Poser une nouvelle question</button>
+            </div>
+        </a>
+        <div class="question-page" style="margin-left: 8px; font-size: 10pt">{[{questionsTrouvees.length}]}
+            <span ng-if="questionsTrouvees.length<2">question pour ce contenu</span>
+            <span ng-if="questionsTrouvees.length>=2">questions pour ce contenu</span>
+        </div>
+        <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;">
+            <tr ng-repeat="uneQuestion in questionsTrouvees = questions | filter: rechercheQuestion| orderBy:'-datePublication'">
+
+                <td>
+                    <div>
+                        <div class="m-img-profil" style="display: inline-block; margin-right: 20px"><img style="margin-bottom: -5px" ng-src="{{ asset('{[{uneQuestion.users[0].userProfilRoot}]}') }}">
+                        </div>
+                        <div style="display: inline-block;">
+                            <div class="date-publication">le {[{uneQuestion.datePublication | date:'dd MMM yyyy à HH : mm'}]}
+                            </div>
+                            <div class="question-page"
+                                 ng-if="uneQuestion.page != null && uneQuestion.ligne!=null">page
+                                {[{uneQuestion.page}]} - à partir de la ligne
+                                {[{uneQuestion.ligne}]}
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#!/questions/{[{uneQuestion.id}]}">
+                        <div  class="question-click">
+                            <div class="question-title expandDiv" style="font-size: 10pt !important;" ng-bind-html="uneQuestion.libelle | surbrillanceRecherche:rechercheQuestion">
+                            </div>
+                            <div class="question-explication expandDiv"
+                                 ng-bind-html="(uneQuestion.description | surbrillanceRecherche:rechercheQuestion)">
+                            </div>
+                        </div>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

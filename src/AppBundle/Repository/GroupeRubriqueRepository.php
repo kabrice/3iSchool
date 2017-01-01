@@ -10,4 +10,15 @@ namespace AppBundle\Repository;
  */
 class GroupeRubriqueRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findGroupeMatiereByPromotion($criteres)
+    {
+        $qb = $this->createQueryBuilder('gr');
+        $qb->select('gr');
+        $qb->join('gr.rubriques', 'rubriques');
+        $qb->join('rubriques.contenus', 'contenus');
+        $qb->join('contenus.userContenus', 'userContenus');
+        $qb->join('userContenus.user', 'user');
+        $qb->join('contenus.conteneurs', 'conteneurs');
+        return $qb->getQuery()->getResult();
+    }
 }

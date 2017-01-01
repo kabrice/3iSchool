@@ -14,3 +14,39 @@ auth-tokens:
     type:     rest
     resource: AppBundle\Controller\AuthTokenController
     prefix: /api
+ecritureContenu:
+    type:     rest
+    resource: AppBundle\Controller\DashboardController
+    prefix: /api
+
+#Routes statics (pour angularjs)
+app_bundle_contenus_rubriques:
+    path: /contenusRubrique
+    defaults:
+        _controller: AppBundle:Template:contenusRubrique
+        template:    'AppBundle:Static:contenus-rubrique.html.twig'
+app_bundle_new_question:
+    path: /newQuestion
+    defaults:
+        _controller: AppBundle:Template:newQuestion
+        template:    'AppBundle:Static:new-question.html.twig'
+app_bundle_liste_questions:
+    path: /listeQuestions
+    defaults:
+        _controller: AppBundle:Template:listeQuestions
+        template:    'AppBundle:Static:liste-questions.html.twig'
+app_bundle_commentaires_reponse:
+    path: /commentairesReponse
+    defaults:
+        _controller: AppBundle:Template:commentairesReponse
+        template:    'AppBundle:Static:commentaires-reponse.html.twig'
+
+app_bundle_contenus_tries:
+    path: /contenusTries
+    defaults:
+        _controller: AppBundle:Template:contenusTries
+        template:    'AppBundle:Static:contenus-tries.html.twig'
+
+
+        
+

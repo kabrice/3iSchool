@@ -1,0 +1,243 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="preloader" ng-show="chargementEnCours">
+        <div class="msg-preloader">
+            <img ng-src="{{ asset('img/preloader.gif') }}"/>
+        </div>
+    </div>
+  <div class="container-fluid" ng-init="getConteneurByID({{ idConteneur }})">
+
+
+        <a id="titleHead" href="" >{[{conteneurCourant.contenu.titre | limitTo:150}]}
+        <span ng-if="conteneurCourant.contenu.titre.length > 150">&hellip;</span>
+        </a>
+
+    <div class="row rowLectureContenu" ng-show="!chargementEnCours">
+        <div class="col-sm-12 col-md-8 col-lg-8 no-float" style="padding: 0 !important; border: 1px solid lightgrey" ng-show="!questionFullscreen" >{#change made#}
+            <iframe ng-src="{[{contenuURL}]}" style="border: none;"></iframe>
+
+        </div>
+        <div ng-class="{'hidden-sm hidden-xs col-md-4 col-lg-4  no-float': !questionFullscreen}" style=" padding:0; border: 1px solid lightgrey; height: 100%">{#change made here class="hidden-sm hidden-xs col-md-4 col-lg-4  no-float"#}
+            <div class="panel panel-default noborder" style="height: 100%!important; width: 100%!important ">
+                <div class="panel-heading noborder">
+                    <span ng-if="questionDetailFullscreen == null && !afficherNewQuestion">QUESTIONS</span>
+                    <span ng-if="questionDetailFullscreen != null">DETAILS DE LA QUESTION</span>
+                    <span ng-if="afficherNewQuestion">MA QUESTION</span>
+                    <a href="#!/back" id="back-left" style="text-decoration: none; color: inherit"><div class="arrow-back"  ng-if="questionDetailFullscreen != null || afficherNewQuestion"><i class="material-icons">arrow_back</i></div></a>
+                    <div  class="zoom-panel" ng-click="zoom()" ng-if="!questionFullscreen"><i class="material-icons">zoom_in</i></div>
+                    <div  class="zoom-panel" ng-click="zoom()" ng-if="questionFullscreen"><i class="material-icons">zoom_out</i></div>
+                </div>
+
+                <div ng-class="{'scroll-lgpanel': questionFullscreen, 'scroll-smpanel': !questionFullscreen}"
+                     class="container-fluid question-panel padding-smpanel"
+                     ng-show="questionDetailFullscreen == null">
+                    {#Change made for hidden#}
+                    <div class="row">
+                        <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
+                        <div ng-class="{'col-sm-10 col-md-8 col-lg-6': questionFullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
+
+                        <liste-questions ng-show="!afficherNewQuestion" questions= "conteneurQuestion"></liste-questions>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
+                </div>
+                {#Début Poser une question#}
+                <new-question
+                        ng-class="{'scroll-lgpanel': questionFullscreen, 'scroll-smpanel': !questionFullscreen}"
+                        class="container-fluid question-panel padding-smpanel"
+                        ng-show="afficherNewQuestion"
+                        publier-question="publierQuestion(newQuestion)"
+                        fullscreen = "questionFullscreen"
+                        showError = "showQuestionError"></new-question>
+                {#Fin Poser une question#}
+
+                {# Start dupes#}
+                <div
+                        ng-show="questionDetailFullscreen != null"
+                        ng-class="{'scroll-lgpanel': questionDetailFullscreen, 'scroll-smpanel': !questionDetailFullscreen}"
+                        class="container-fluid question-panel padding-smpanel scroll-smpanel"  > {##}
+                    <div class="row">
+                        <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionDetailFullscreen"></div>{#hidden#}
+                        <div ng-class="{'col-sm-10 col-md-8 col-lg-6': questionDetailFullscreen}"
+                             class="panel-body noborder " style="box-shadow: none !important;">{##}
+                            <table class="table" cellspacing="pixels" style=" overflow-y: auto;">
+                                <thead>
+                                <tr>
+                                    <th colspan="2">
+
+
+                                        <div class="date-publication"><img
+                                                    ng-src="{{ asset('{[{questionSelectionnee.users[0].userProfilRoot}]}') }}"><a
+                                                    href="/2/profil" class="href"> {[{questionSelectionnee.users[0].prenom}]} {[{questionSelectionnee.users[0].prenom}]}</a>
+                                            , le {[{questionSelectionnee.datePublication | date:'dd MMM yyyy à HH : mm'}]}
+                                        </div>
+                                        <div class="question-page"
+                                             ng-if="questionSelectionnee.page != null && questionSelectionnee.ligne!=null">page
+                                            {[{questionSelectionnee.page}]} - à partir de la ligne {[{questionSelectionnee.ligne}]}
+                                        </div>
+                                        <div class="question-title">
+                                            {[{questionSelectionnee.libelle}]}
+                                        </div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="votecell" style="vertical-align: top; ">
+
+
+                                        <div class="vote" style="margin-right: -30px">
+
+                                            <div class="check-btn-contribution">
+                                                <div class="check-vote"
+                                                     title="Cette question montre l'effort de recherche. Elle est utile et claire.">
+                                                    <i class="fa fa-check-circle fa-2x" style="font-size: 30pt"
+                                                       aria-hidden="true"></i></div>
+                                                <div id="check-count">{[{questionSelectionnee.nombreDislike}]}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+                                    <td class="postcell">
+                                        <div>
+                                            <div class="post-text"
+                                                 ng-bind-html="questionSelectionnee.description">
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: none; " colspan="2">
+                                        <div style="float: right; ">
+
+                                            <a class="inutile" title="Cette question ne montre aucun effort de recherche, elle n'est pas claire ou n'est pas utile">
+                                                Question inutile <i class="fa fa-flag" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border: none"></td>
+                                    <td style="border: none; " colspan="2">
+                                        <div style="float: left;
+                                                font-size: 13pt;
+                                                font-weight: 400">
+
+                                            {[{questionSelectionnee.reponses.length }]} réponses
+                                        </div>
+                                    </td>
+                                </tr>
+                                {#Debut reponse#}
+                                <tbody ng-repeat="uneReponse in questionSelectionnee.reponses"
+                                       class="reponse"
+                                       ng-class="{'reponse-light': showDetails}">
+                                <tr>
+                                    <th colspan="2"  ng-class="{'reponse-enseignant': uneReponse.users[0].isPersonnel}">
+
+
+                                        <div class="date-publication"><img
+                                                    ng-src="{{ asset('{[{uneReponse.users[0].userProfilRoot}]}')}}"> <a
+                                                    href="/2/profil" class="href">{[{uneReponse.users[0].prenom}]} {[{uneReponse.users[0].nom}]}</a>,
+                                            le {[{uneReponse.datePublication | date:'dd MMM yyyy à HH : mm'}]}
+                                        </div>
+                                        <div style="color: #17aa1c; font-size: 13pt" ng-if="uneReponse.users[0].isPersonnel">Réponse enseignant</div>
+
+                                    </th>
+                                </tr>
+                                <tr ng-class="{'reponse-enseignant': uneReponse.users[0].isPersonnel}">
+                                    <td class="votecell" style="vertical-align: top; border: none">
+
+
+                                        <div class="vote" style="margin-right: -30px">
+
+                                            <div class="check-btn-contribution">
+                                                <div class="check-vote"
+                                                     title="Cette question montre l'effort de recherche. Elle est utile et claire.">
+                                                    <i class="fa fa-check-circle fa-2x" style="font-size: 30pt"
+                                                       aria-hidden="true"></i></div>
+                                                <div id="check-count">{[{uneReponse.nombreLike}]}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+                                    <td class="post-text"
+                                        ng-bind-html="uneReponse.libelle" style="border: none">
+                                    </td>
+                                </tr>
+                                <tr ng-class="{'reponse-enseignant': uneReponse.users[0].isPersonnel}">
+                                    <td style="border: none; "></td>
+                                    <td style="border: none; ">
+                                        <div style="float: left" ng-click="showDetails = !showDetails">
+                                            <a  class="-Ed2" ng-if="uneReponse.commentaires.length>1">
+                                                Commentaires ({[{uneReponse.commentaires.length}]})
+                                            </a>
+                                            <a  class="-Ed2" ng-if="uneReponse.commentaires.length<=1">
+                                                Commentaire ({[{uneReponse.commentaires.length}]})
+                                            </a>
+
+                                        </div>
+                                        <div style="float: right; "
+                                             ng-if="!uneReponse.users[0].isPersonnel">
+
+                                            <a class="inutile" title="Cette réponse ne montre aucun effort de recherche, elle n'est pas claire ou n'est pas utile">
+                                                Reponse inutile <i class="fa fa-flag" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {#Début commentaire #}
+
+                                <tr commentaires-reponse
+                                    ng-repeat="unCommentaire in uneReponse.commentaires"
+                                    ng-show="showDetails"
+                                    comment="unCommentaire"
+                                    answer="uneReponse"></tr>
+                                {#Fin commentaire #}
+                                {#Fin reponse#}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+
+                                <tr>
+
+                                    <td colspan="2">
+
+                                        <form>
+                                            <input type="text" class="form-control"
+                                                   placeholder="Ajouter une réponse">
+                                        </form>
+
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-sm-1 col-md-2 col-lg-3" ng-if="questionDetailFullscreen"></div>{#hidden#}
+                    </div>
+                </div>
+                {# End dupes #}
+
+            </div>
+
+        </div>
+    </div>
+    <i class="material-icons comment-footer"
+       title="Donnez un avis expliqué et constructif sur ce cours">comment</i>
+    <i class="fa fa-heart fa-1x like-footer " aria-hidden="true"
+       title="Les concepts de ce cours sont expliqués clairement"></i>
+    <i class="material-icons question-answer-footer  hidden-md hidden-lg"
+       title="Faire apparaître ou disparaître le panneau de questions"
+       ng-click="displayQuestionOnMobile()">question_answer</i>
+  </div>
+{% endblock %}

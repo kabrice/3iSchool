@@ -30,6 +30,12 @@ class Reponse
      */
     protected $libelle;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type_reponse", type="string", length=1, options={"fixed" = true})
+     */
+    protected $typeReponse='N';
 
     /**
      * @var \DateTime
@@ -278,5 +284,29 @@ class Reponse
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set typeReponse
+     *
+     * @param string $typeReponse
+     *
+     * @return Reponse
+     */
+    public function setTypeReponse($typeReponse)
+    {
+        $this->typeReponse = $typeReponse;
+
+        return $this;
+    }
+
+    /**
+     * Get typeReponse
+     *
+     * @return string
+     */
+    public function getTypeReponse()
+    {
+        return $this->typeReponse;
     }
 }
