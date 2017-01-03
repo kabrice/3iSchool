@@ -1,49 +1,64 @@
-header{
+.authentification{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: 999;
+    background-image: url('http://s32.postimg.org/i3mwrlz11/image_libre.jpg');
+    background-attachment: fixed;
+    background-size:100% auto;
+
+
+}
+
+.authentification header{
     font-family: Georgia;
     font-size: 110%;
     margin-left: 50px;
 }
 
-.jumbotron {
-    background-image: url('http://s32.postimg.org/i3mwrlz11/image_libre.jpg');
-    background-size:100% auto;
+.authentification .jumbotron {
+
+
     color : white;
-    min-height : 900px;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
     margin-top : 0px;
-    background-attachment: fixed;
 
     font-family: Georgia;
 
+
 }
 
-.jumbotron #titreBienvenue {
-    padding-top: 16%;
+.authentification .jumbotron #titreBienvenue {
+    text-align: center;
+
 }
-.jumbotron #titreBienvenue h1 strong{
+.authentification .jumbotron #titreBienvenue h1 strong{
     font-size: 80%;
-    margin-left: 40px;
+
 }
 
-.jumbotron #titreBienvenue #sstitreBienveue{
-    padding-top: 2%;
+
+.authentification .jumbotron #titreBienvenue #sstitreBienveue{
     padding-right: 0%;
-    font-size: 260%;
+    font-size: 12pt;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 
- header{
+.authentification  header{
     position: absolute;
     margin-top: 0px;
 }
 
- #logo{
+.authentification #logo{
      color: dodgerblue;
      font-size: 20pt;
  }
 
 
-.navbar-inverse  {
+.authentification .navbar-inverse  {
     border-width: 0px;
     -webkit-box-shadow: 0px 0px;
     box-shadow: 0px 0px;
@@ -55,39 +70,37 @@ header{
 
 /****************************  Authentification template  ****************************/
 
-.card-container.card {
-    max-width: 350px;
+.authentification .card-container.card {
+    max-width: 300px;
     padding:  10px;
     font-family: "Helvetica";
 
 }
-#inscription-cont{
-    margin-top:  -5px;
-}
 
-#inscription-pag{
+.authentification #inscription-pag{
     font-size: 13pt;
     color: whitesmoke;
 }
 
-.btn {
+.authentification .btn {
     font-weight: 700;
-    height: 36px;
+
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
-    cursor: default;
+
 }
 
 /*
  * Card component
  */
-.card {
+.authentification .card {
     background-color: rgba(59, 59, 59, 0.39);
     /* just in case there no content*/
     padding: 20px 25px 30px;
     margin: 0 auto 25px;
-    margin-top: 30px;
+
+
     /* shadows and rounded borders */
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
@@ -102,24 +115,25 @@ header{
 /*
  * Form styles
  */
-.profile-name-card {
+.authentification .profile-name-card {
     font-size: 16px;
     text-align: center;
     margin: 10px 0 0;
     min-height: 1em;
+
+
 }
 
-.form-signin #inputEmail,
-.form-signin #inputPassword,
-.form-signin #inputPassword2{
+.authentification .form-signin #inputEmail,
+.authentification .form-signin #inputPassword,
+.authentification .form-signin #inputPassword2{
     direction: ltr;
-    height: 44px;
+    height: 46px;
     font-size: 16px;
 }
 
-.form-signin input[type=email],
-.form-signin input[type=password],
-.form-signin input[type=text]{
+.authentification .form-signin input[type=email],
+.authentification .form-signin input[type=password]{
     width: 100%;
     display: block;
     margin-bottom: 10px;
@@ -130,19 +144,18 @@ header{
     box-sizing: border-box;
 
 
-
 }
-input::-webkit-input-placeholder { font-size: 11pt; color: #555; }
-input::-moz-placeholder { font-size: 11pt; color: #555; }
-input:-ms-input-placeholder { font-size: 11pt; color: #555; }
-input:-moz-placeholder { font-size: 11pt; color: #555; }
+.authentification input::-webkit-input-placeholder { font-size: 11pt; color: #969696; }
+.authentification input::-moz-placeholder { font-size: 11pt; color: #969696; }
+.authentification input:-ms-input-placeholder { font-size: 11pt; color: #969696; }
+.authentification input:-moz-placeholder { font-size: 11pt; color: #969696; }
 
 
 
-.form-signin button {
-    width: 39%;
-    height:40px;
-    margin-left: 60%;
+.authentification .form-signin button {
+
+    height:43px;
+
     margin-top: 10px;
     text-align: center;
     background-color: deepskyblue;
@@ -150,25 +163,12 @@ input:-moz-placeholder { font-size: 11pt; color: #555; }
 
 }
 
-.form-signin button:hover{
+.authentification .form-signin button:hover{
     background: dodgerblue;
     border-color:dodgerblue;
     color: whitesmoke;
 }
 
-#sign2{
-    width: 39%;
-    height:40px;
-    margin-left: 60%;
-    margin-top: 10px;
-    text-align: center;
-    background-color: forestgreen;
-    border-color:forestgreen;
-}
-#sign2:hover{
-    background: darkgreen;
-    border-color:darkgreen;
-    color: whitesmoke;
-}
+
 
 

@@ -9,55 +9,18 @@
 namespace AppBundle\Service;
 
 
-use AppBundle\AppBundle;
-use AppBundle\Entity\Enseignant;
-use AppBundle\Entity\Etudiant;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\User;
 
 class UserService
 {
 
-
-    /** @var  EntityManager */
-    protected $entityManager;
-
-
-    /**
-     * DataChecker constructor.
-     * @param EntityManager $entityManager
-     *
-     */
-    public function __construct($entityManager)
+    public function isPasswordEmpty(User $user)
     {
-        $this->entityManager= $entityManager;
-    }
-
-    public function getAllUser(Request $request)
-    {
-
-
-        $allUser =[];
-        $users = $this->entityManager
-                        ->getRepository('AppBundle:User');
-
-
-
-
-        foreach ($users as $user) {
-            $allUser[] = [
-                'id' => $user->getId(),
-                'nom' => $user->getNom(),
-                'prenom' => $user->getPrenom(),
-                'email' => $user->getEmail(),
-                'dateCreation' => $user->getDateCreation(),
-            ];
+        if(empty($user->getPassword()))
+        {
+            return true;
         }
-
-
-
-
-        return $users;
+            return false;
     }
 
 }

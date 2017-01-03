@@ -174,17 +174,40 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         $scope.publierQuestion = function(newQuestion)
         {
 
-            $scope.getConteneurByID($scope.idConteneurSelectionne);
-            contenuService.postQuestion($scope.conteneurCourant.contenu.questions, newQuestion);
+            contenuService.postQuestion(newQuestion, 1, 1, 1);
             $scope.afficherNewQuestion = false;
             $location.path("/");
 
         }
 
+                                                                            /*** *** *** *** *** AUTHENTIFICATION  *** *** *** *** ***/
 
+         $scope.showMAJPassword = false;
+         $scope.showEmailError = false;
+         $scope.showConnexion = false;
+         $scope.showEmailCard = true;
 
+        $scope.connexion = function(userEmail)
+        {
+            //console.log(contenuService.isPasswordEmpty(userEmail));
+           contenuService.isPasswordEmpty(userEmail).$promise.then(function() {
+               var isEmpty = contenuService.isPasswordEmpty(userEmail);
+                if(isEmpty){
+                    $scope.showMAJPassword = true;
+                    $scope.showEmailCard = true;
+                }else if(isEmpty=="incorrect") {
+                   $scope.showEmailError = true;
+                }else{
+                    $scope.showConnexion = true;
+                    $scope.showEmailCard = true;
+                }
+            });
+        }
 
+        $scope.majPassword = function(user)
+        {
 
+        }
 
 
         $scope.$watch(function(){
@@ -203,8 +226,21 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
                         $scope.groupesContenus.$promise.then(function(){
                             $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
-                                if(unConteneur.contenu.rubrique.libelle==rubrique){
+                                if(unConteneur.libelle_rubrique==rubrique){
                                     $scope.selectionRubrique(rubrique);
+                                }
+                            })
+                        });
+
+
+                        break;
+                    case 'enseignants':
+                        var enseignantNom = tabPath[2];
+
+                        $scope.groupesContenus.$promise.then(function(){
+                            $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
+                                if(unConteneur.nom==enseignantNom){
+                                    $scope.selectionRubrique(enseignantNom);
                                 }
                             })
                         });
@@ -238,6 +274,10 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
 
          $scope.groupesContenus = contenuService.getGroupesContenus(1,3,2,3);
+         $scope.annees = contenuService.getAnnee();
+         $scope.groupes = contenuService.getGroupe();
+         $scope.niveaux = contenuService.getNiveau();
+
          //$scope.groupesContenus = contenuService.getGroupesContenus();
         //console.log($scope.conteneurCourant2.contenu);
 

@@ -922,10 +922,10 @@ body>.container-fluid,
     left: 0px;
     bottom: 0px;
     right: 0px;
-
-
     z-index: 999;
 }
+
+
 
 .msg-preloader {
     position: absolute;

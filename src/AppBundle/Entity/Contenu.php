@@ -185,7 +185,7 @@ class Contenu
      */
     public function setDatePublication($datePublication)
     {
-        $this->datePublication = $datePublication;
+        $this->datePublication = new \DateTime($datePublication);
 
         return $this;
     }

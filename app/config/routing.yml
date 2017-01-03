@@ -10,6 +10,10 @@ lectureContenu:
     type:     rest
     resource: AppBundle\Controller\ContenuController
     prefix: /api
+promotion:
+    type:     rest
+    resource: AppBundle\Controller\PromotionController
+    prefix: /api
 auth-tokens:
     type:     rest
     resource: AppBundle\Controller\AuthTokenController
@@ -47,6 +51,11 @@ app_bundle_contenus_tries:
         _controller: AppBundle:Template:contenusTries
         template:    'AppBundle:Static:contenus-tries.html.twig'
 
+app_bundle_authentification:
+    path: /authentification
+    defaults:
+        _controller: AppBundle:Template:authentification
+        template:    'AppBundle:Static:authentification.html.twig'
 
         
 

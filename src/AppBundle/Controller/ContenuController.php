@@ -41,6 +41,8 @@ class ContenuController extends Controller
         return $conteneur;
     }
 
+
+
     /**
      * @Rest\View(serializerGroups={"contenu", "user"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/lectureContenu/{contenu_id}/{user_id}/{type_question_id}/Questions")

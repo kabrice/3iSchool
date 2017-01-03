@@ -73,9 +73,11 @@ class Commentaire
 
 
     /**
-     * @ManyToMany(targetEntity="User", mappedBy="commentaires")
+     * @ORM\OneToMany(targetEntity="UserCommentaire", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @var UserCommentaire[]
      */
-    protected $users;
+    protected $userCommentaires;
+
 
 
     /**
@@ -83,8 +85,7 @@ class Commentaire
      */
     public function __construct()
     {
-        $this->datePublication = new \DateTime();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userCommentaires = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -220,7 +221,7 @@ class Commentaire
     /**
      * Set report
      *
-     * @param boolean $report
+     * @param integer $report
      *
      * @return Commentaire
      */
@@ -234,7 +235,7 @@ class Commentaire
     /**
      * Get report
      *
-     * @return boolean
+     * @return integer
      */
     public function getReport()
     {
@@ -266,36 +267,36 @@ class Commentaire
     }
 
     /**
-     * Add user
+     * Add userCommentaire
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
      *
      * @return Commentaire
      */
-    public function addUser(\AppBundle\Entity\User $user)
+    public function addUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
     {
-        $this->users[] = $user;
+        $this->userCommentaires[] = $userCommentaire;
 
         return $this;
     }
 
     /**
-     * Remove user
+     * Remove userCommentaire
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
      */
-    public function removeUser(\AppBundle\Entity\User $user)
+    public function removeUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
     {
-        $this->users->removeElement($user);
+        $this->userCommentaires->removeElement($userCommentaire);
     }
 
     /**
-     * Get users
+     * Get userCommentaires
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
+    public function getUserCommentaires()
     {
-        return $this->users;
+        return $this->userCommentaires;
     }
 }

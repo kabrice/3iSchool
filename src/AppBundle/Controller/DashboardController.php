@@ -64,8 +64,13 @@ class DashboardController extends Controller
             ->setSousRubrique($sousRubrique);
 
         $userContenu->setUser($user)
+<<<<<<< HEAD
             ->setContenu($contenu)
             ->setAPublie(true)
+=======
+        ->setContenu($contenu)
+            ->setAPublie(1)
+>>>>>>> a653f9596e99e9ca3e398143cc12a366eee473bb
             ->setNbreVue(1);
 
         $form = $this->createForm(ContenuType::class, $contenu);

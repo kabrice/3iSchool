@@ -25,6 +25,7 @@ AppBundle\Entity\Contenu:
         userContenus:
             groups: ['contenu']
 
+
 AppBundle\Entity\Question:
     attributes:
         id:

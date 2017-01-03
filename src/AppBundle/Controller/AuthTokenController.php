@@ -42,6 +42,8 @@ class AuthTokenController extends Controller
             return $this->invalidCredentials();
         }
 
+
+
         $encoder = $this->get('security.password_encoder');
         $isPasswordValid = $encoder->isPasswordValid($user, $credentials->getPassword());
 

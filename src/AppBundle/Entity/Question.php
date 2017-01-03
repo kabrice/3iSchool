@@ -100,20 +100,19 @@ class Question
 
 
 
+
     /**
-     * @ManyToMany(targetEntity="User", mappedBy="questions")
+     * @ORM\OneToMany(targetEntity="UserQuestion", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @var UserQuestion[]
      */
-    protected $users;
-
-
+    protected $userQuestions;
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->datePublication = new DateTime();
         $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userQuestions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -294,11 +293,10 @@ class Question
         return $this->ligne;
     }
 
-
     /**
      * Set report
      *
-     * @param boolean $report
+     * @param integer $report
      *
      * @return Question
      */
@@ -312,7 +310,7 @@ class Question
     /**
      * Get report
      *
-     * @return boolean
+     * @return integer
      */
     public function getReport()
     {
@@ -402,36 +400,36 @@ class Question
     }
 
     /**
-     * Add user
+     * Add userQuestion
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\UserQuestion $userQuestion
      *
      * @return Question
      */
-    public function addUser(\AppBundle\Entity\User $user)
+    public function addUserQuestion(\AppBundle\Entity\UserQuestion $userQuestion)
     {
-        $this->users[] = $user;
+        $this->userQuestions[] = $userQuestion;
 
         return $this;
     }
 
     /**
-     * Remove user
+     * Remove userQuestion
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\UserQuestion $userQuestion
      */
-    public function removeUser(\AppBundle\Entity\User $user)
+    public function removeUserQuestion(\AppBundle\Entity\UserQuestion $userQuestion)
     {
-        $this->users->removeElement($user);
+        $this->userQuestions->removeElement($userQuestion);
     }
 
     /**
-     * Get users
+     * Get userQuestions
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
+    public function getUserQuestions()
     {
-        return $this->users;
+        return $this->userQuestions;
     }
 }
