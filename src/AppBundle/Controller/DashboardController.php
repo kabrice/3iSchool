@@ -18,6 +18,8 @@ use AppBundle\Entity\Question;
 use AppBundle\Entity\Reponse;
 use AppBundle\Entity\Rubrique;
 use AppBundle\Entity\SousRubrique;
+use AppBundle\Entity\TypeQuestion;
+use AppBundle\Entity\User;
 use AppBundle\Entity\UserContenu;
 use AppBundle\Form\Type\CommentaireType;
 use AppBundle\Form\Type\ContenuType;
@@ -34,10 +36,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class DashboardController extends Controller
 {
     /**
-     * @Rest\View(serializableGroup={"annee", "groupe", "niveau", "rubrique", "sous_rubrique", "user"}, statusCode=Response::HTTP_CREATED)
+     * @Rest\View(serializerGroups={"annee", "groupe", "niveau", "rubrique", "sousRubrique", "user"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/ecritureContenu/{annee_id}/{groupe_id}/{niveau_id}/{rubrique_id}/{sous_rubrique_id}/{user_id}/Contenu")
      */
-    private function postEcritureContenuAction(Request $request)
+    public function postEcritureContenuAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $annee      = $em->getRepository('AppBundle:Annee')->find($request->get('annee_id'));
@@ -61,8 +63,10 @@ class DashboardController extends Controller
         $contenu->setRubrique($rubrique)
             ->setSousRubrique($sousRubrique);
 
-        $userContenu->setUser($user);
-        $userContenu->setContenu($contenu);
+        $userContenu->setUser($user)
+            ->setContenu($contenu)
+            ->setAPublie(true)
+            ->setNbreVue(1);
 
         $form = $this->createForm(ContenuType::class, $contenu);
         $form->submit($request->request->all());
@@ -78,5 +82,44 @@ class DashboardController extends Controller
         else {
             return $form;
         }
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"libelle", "description", "nombreLike", "nombreDislike", "datePublication", "report", "page", "ligne"})
+     * @Rest\Get("/listerQuestion/Contenu")
+     */
+    public function listerQuestionAction()
+    {
+        $question       = new Question();
+        $typeQuestion   = new TypeQuestion();
+        $reponse        = new Reponse();
+        $user           = new User();
+        $contenu        = new Contenu();
+
+
+        $question->setContenu($contenu)
+            ->setTypeQuestion($typeQuestion);
+
+        $reponse->setQuestion($question);
+
+        $user->addQuestion($question);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($question);
+        $em->persist($reponse);
+        $em->persist($user);
+        $em->flush();
+
+        return $contenu;
+    }
+
+    public function listerContenuSignalerAction()
+    {
+
+    }
+
+    public function listerCoursEtMatiereAction()
+    {
+
     }
 }
