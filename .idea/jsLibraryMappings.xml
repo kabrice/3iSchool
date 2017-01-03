@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{angular, angular-agility-DefinitelyTyped, angular-environment-DefinitelyTyped, angular-filter, angular-locale_fr-fr, angular-material-DefinitelyTyped, angular-resource, angular-sanitize, angular-ui, angularjs-DefinitelyTyped, jquery.tinymce}" />
-  </component>
-</project>

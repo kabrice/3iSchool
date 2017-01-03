@@ -26,7 +26,7 @@ class UserContenu
      *
      * @ORM\Column(name="nbre_vue", type="integer", nullable=false)
      */
-    protected $nbreVue;
+    protected $nbreVue=0;
 
     /**
      * @var bool
@@ -39,7 +39,8 @@ class UserContenu
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userContenus")
      * @var User
      */
-    protected $user;
+    protected $user1;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="userContenus")

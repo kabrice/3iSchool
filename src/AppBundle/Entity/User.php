@@ -80,6 +80,17 @@ class User implements UserInterface
 
     protected $plainPassword;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $validationCode;
+
+    /**
+     * @ORM\Column(type="bool")
+     */
+    protected $active;
+
+
 
     /**
      * @ManyToMany(targetEntity="Commentaire", inversedBy="users")

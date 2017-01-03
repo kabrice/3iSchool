@@ -25,7 +25,7 @@ class TemplateController extends Controller
     /**
      * @Route("/contenusRubrique", name="contenusRubrique")
      */
-    public function contenusRubriqueAction(Request $request)
+    public function contenusRubriqueAction()
     {
         return $this->render('angular-templates/contenus-rubrique.html.twig', []);
     }
@@ -33,7 +33,7 @@ class TemplateController extends Controller
     /**
      * @Route("/newQuestion", name="newQuestion")
      */
-    public function newQuestionAction(Request $request)
+    public function newQuestionAction()
     {
         return $this->render('angular-templates/new-question.html.twig', []);
     }
@@ -41,7 +41,7 @@ class TemplateController extends Controller
     /**
      * @Route("/listeQuestions", name="listeQuestions")
      */
-    public function listeQuestionsAction(Request $request)
+    public function listeQuestionsAction()
     {
         return $this->render('angular-templates/liste-questions.html.twig', []);
     }
@@ -49,7 +49,7 @@ class TemplateController extends Controller
     /**
      * @Route("/questionSelectionnee", name="questionSelectionnee")
      */
-    public function questionSelectionneeAction(Request $request)
+    public function questionSelectionneeAction()
     {
         return $this->render('angular-templates/question-selectionnee.html.twig', []);
     }
@@ -57,7 +57,7 @@ class TemplateController extends Controller
     /**
      * @Route("/reponsesQuestion", name="reponsesQuestion")
      */
-    public function reponsesQuestionAction(Request $request)
+    public function reponsesQuestionAction()
     {
         return $this->render('angular-templates/reponses-question.html.twig', []);
     }
@@ -65,7 +65,7 @@ class TemplateController extends Controller
     /**
      * @Route("/commentairesReponse", name="commentairesReponse")
      */
-    public function commentairesReponseAction(Request $request)
+    public function commentairesReponseAction()
     {
         return $this->render('angular-templates/commentaires-reponse.html.twig', []);
     }
@@ -73,8 +73,16 @@ class TemplateController extends Controller
     /**
      * @Route("/contenusTries", name="contenusTries")
      */
-    public function contenusTriesAction(Request $request)
+    public function contenusTriesAction()
     {
         return $this->render('angular-templates/contenus-tries.html.twig', []);
+    }
+
+    /**
+     * @Route("/authentification", name="authentification")
+     */
+    public function authentificationAction()
+    {
+        return $this->render('angular-templates/authentification.html.twig', []);
     }
 }

@@ -1,0 +1,27 @@
+<div class="card card-container">
+
+
+    <!-- Form1 -->
+    <form  class="form-signin" id="formAuthentification" name="formAuthentification">
+        <div ng-if="!showEmailCard">
+            <input type="email" id="inputEmail" name="email" ng-model="user.email" class="form-control" autocomplete="off" placeholder="Email scolaire (exemple@ecole.fr)"  required >
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="clicConnexion()">Connexion</button>
+        </div>
+        <div ng-if="!showMAJPassword">
+        <div class="input-append" >
+            <input  type="email" id="inputPassword" name="email" class="form-control" value="user.email"  disabled>
+            <div class="alert alert-danger" id="question-error" role="alert" ng-if="showErrorShortPassword || showErrorLongPassword">
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span ng-if="showErrorShortPassword">Le mot de passe est trop court</span>
+                <span ng-if="showErrorLongPassword">Le mot de passe est trop long</span>
+            </div>
+            <input type="password" id="inputPassword" name="plainPassword" ng-model="user.plainPassword" class="form-control" placeholder="Nouveau mot de passe"  required>
+        </div>
+            <button class="btn btn-lg btn-primary btn-block btn-signin" ng-click="clicMAJPassword()" type="submit">Suivant</button>
+        </div>
+    </form>
+    <a class="forgot-password" hidden>Mot de passe oublié?</a>
+</div>

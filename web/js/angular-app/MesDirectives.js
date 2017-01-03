@@ -11,7 +11,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres"])
         templateUrl: '/contenusRubrique',
         replace: true,
         scope: {
-            conteneur: "=",
+            contenu: "=",
             recherche: "="
         }
 
@@ -95,6 +95,51 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres"])
         }
     }
 })
+
+    .directive("authentification", function () {
+        return {
+            restrict: "E",
+            templateUrl: '/authentification',
+            replace: true,
+            scope: {
+                showMAJPassword: '=',
+                 showEmailError: '=',
+                  showConnexion: '=',
+                  showEmailCard: '=',
+                      connexion: '&',
+                    majPassword: '&'
+            },
+            controller: function ($scope) {
+
+                $scope.showErrorLongPassword = false;
+                $scope.showErrorShortPassword = false;
+                $scope.user = {
+                    email: null
+                }
+                $scope.clicConnexion= function () {
+                    var regExpValidEmail = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", "gi");
+                    if($scope.user.email == null) return;
+                    if (!$scope.user.email || !$scope.user.email.match(regExpValidEmail)) {
+                        //console.log("ok");
+                        console.log("Erreur\n\nMerci de vérifier l'adresse e-mail saisie.");
+                        return;
+                    }
+
+                    $scope.suivant({userEmail : $scope.user.email});
+                }
+
+                $scope.clicMAJPassword = function(){
+                    if(user.plainPassword.length<8) {
+                        $scope.showErrorShortPassword = true;
+                    }else if(user.plainPassword.length>50) {
+                        $scope.showErrorLongPassword = true;
+                    }
+
+                }
+
+            }
+        }
+    })
 
 .directive("listeQuestions", function () {
     return {

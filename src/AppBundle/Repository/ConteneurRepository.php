@@ -12,14 +12,39 @@ use AppBundle\Entity\User;
 class ConteneurRepository extends \Doctrine\ORM\EntityRepository
 {
     // Les contenus aussi consultés sont classés par ceux qui ont le plus grand nombre de vue totale
-    public function findContenusAussiConsultes($criteres)
+    public function findContenusTries($criteres, $actionOrderBy)
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->select('c');
+        $qb->select("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
+            "contenu.nombreLike", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
+            "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique");
         $qb->join('c.contenu', 'contenu');
+        $qb->join('contenu.rubrique', 'rubrique');
+        $qb->join('contenu.sousRubrique', 'sousRubrique');
         $qb->where('c.annee=:critereAnnee');
+        $qb->andWhere('c.niveau=:critereNiveau');
+        $qb->andWhere('c.groupe=:critereGroupe');
         $qb->setParameter('critereAnnee', $criteres["annee"]);
-        $qb->orderBy('contenu.nombreVueTotal', "DESC");
+        $qb->setParameter('critereNiveau', $criteres["niveau"]);
+        $qb->setParameter('critereGroupe', $criteres["groupe"]);
+        $qb->orderBy('contenu.' . $actionOrderBy, "DESC");
+        $qb->setMaxResults(10);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findContenusRecents(User $user)
+    {
+        $qb = $this->createQueryBuilder('uc');
+        $qb->select(array("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
+            "contenu.nombreLike", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
+            "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique", "uc.nbreVue"));
+        $qb->join('uc.contenu', 'contenu');
+        $qb->join('contenu.rubrique', 'rubrique');
+        $qb->join('contenu.sousRubrique', 'sousRubrique');
+        $qb->orderBy('uc.nbreVue','DESC');
+        $qb->where('uc.user=:user');
+        $qb->setParameter('user', $user);
         $qb->setMaxResults(10);
         return $qb->getQuery()->getResult();
     }

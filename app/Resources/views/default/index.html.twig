@@ -1,14 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="preloader" ng-show="chargementEnCours">
+    <div class="preloader" ng-show="chargementEnCours" hidden>
         <div class="msg-preloader">
             <img ng-src="{{ asset('img/preloader.gif') }}"/>
         </div>
     </div>
-    <div class="jumbotron" > 
+    <div class="jumbotron"  hidden> 
 
-        <div id="wrapper">
+        <div id="wrapper" >
+
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
                 <div class="container-fluid" >
                     <div class="navbar-header">
@@ -83,24 +84,22 @@
                     <ul class="courses " style="margin-top: 15px !important; ">
                         <div class="side-menu-head"> Promotion</div>
                         <div class="caption-item-content" >
-                            <div class="sel1" style="width: 70%; margin: 8px ">
-                                <select class="form-control"  >
+                            <div class="sel1" style="width: 100%; margin: 8px 2px 8px 8px">
+                                <select class="form-control" title="Niveau de la promotion" >
                                     <option value="{[{niveau.id}]}" ng-repeat="niveau in niveaux" >
                                         {[{niveau.libelle}]}</option>
                                 </select>
                             </div>
-                            <div class="sel1" style="width: 40%; margin: 8px" >
-                                <select class="form-control ">
-                                    <option>2013</option>
-                                    <option>2016</option>
-                                    <option>2017</option>
+                            <div class="sel1" style="width: 50%; margin: 8px 2px 2px 8px" >
+                                <select class="form-control " title="Année de la promotion">
+                                    <option value="{[{annee.id}]}" ng-repeat="annee in annees" >
+                                        {[{annee.libelle}]}</option>
                                 </select>
                             </div>
-                            <div class="sel1" style="width: 30%; margin: 8px" >
-                                <select class="form-control ">
-                                    <option>2</option>
-                                    <option>1</option>
-                                    <option>2</option>
+                            <div class="sel1" style="width: 30%; margin: 8px 8px 2px 8px" >
+                                <select class="form-control " title="Groupe de la promotion">
+                                    <option value="{[{groupe.id}]}" ng-repeat="groupe in groupes" >
+                                        {[{groupe.libelle}]}</option>
                                 </select>
                             </div>
                         </div>
@@ -109,27 +108,22 @@
                     <ul class="courses " style="margin-top: 15px !important;">
                         <div class="side-menu-head">Matières</div>
                         <li ng-cloak><a  ng-class="{active: rubriqueCourante=='Tous'}" ng-click="selectionRubrique('Tous')" href="#home"><img ng-src="{{asset('img/All.png')}}" class="side-menu-image">Tous</a></li>
-                        <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'contenu.rubrique.id'" ng-cloak>
-                            <a  ng-if="unConteneur.contenu.rubrique.groupeRubrique.libelle =='Matière'"
-                                ng-class="{active: unConteneur.contenu.rubrique.libelle == rubriqueCourante}"
-                                ng-href="#!/rubriques/{[{unConteneur.contenu.rubrique.libelle}]}"><img ng-src="{{ asset('{[{unConteneur.contenu.rubrique.imageRoot}]}') }}" class="side-menu-image">
-                                {[{unConteneur.contenu.rubrique.libelle | limitTo:25}]}
+                        <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'libelle_rubrique'" ng-cloak>
+                            <a  ng-if="unConteneur.libelle_groupeRubrique =='Matière'"
+                                ng-class="{active: unConteneur.libelle_rubrique == rubriqueCourante}"
+                                ng-href="#!/rubriques/{[{unConteneur.libelle_rubrique}]}"><img ng-src="{{ asset('{[{unConteneur.imageRoot_rubrique}]}') }}" class="side-menu-image">
+                                {[{unConteneur.libelle_rubrique | limitTo:25}]}
                             </a>
 
                         </li>
                     </ul>
 
 
-
                     <ul class="courses">
-                        <div class="side-menu-head">Profs</div>
-                        <li><a href="#home"><img ng-src="img/baillargeat.png" class="prof-image">Baillargeat</a></li>
-                        <li><a href="#news"><img ng-src="img/belabdelhi.png" class="prof-image">Belabdelhi</a></li>
-                        <li><a href="#about"><img ng-src="img/duvalet.png" class="prof-image">Duvalet</a></li>
-                        <li><a href="#about"><img ng-src="img/frigui.png" class="prof-image">Frigui</a></li>
-                        <li><a href="#about"><img ng-src="img/granet.png" class="prof-image">Granet</a></li>
-                        <li><a href="#about"><img ng-src="img/mifdal.png" class="prof-image">Mifdal</a></li>
-                        <li><a href="#about"><img ng-src="img/ruchaud.png" class="prof-image">Ruchaud</a></li>
+                        <div class="side-menu-head">Enseignants</div>
+                        <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'user_id'" ng-cloak>
+                            <a ng-href="#!/enseignants/{[{unConteneur.nom}]}"><img ng-src="{{ asset('{[{unConteneur.userProfilRoot}]}') }}" class="prof-image">{[{unConteneur.nom}]}</a>
+                        </li>
                     </ul>
 
                     <ul class="courses">
@@ -161,19 +155,16 @@
                                 {#Début Affichage de contenus courant concernant une rubrique cliquée#}
                                 <div>
 
-
-
-
                     <contenus-rubrique
-                            ng-repeat="unConteneur in conteneurs | orderBy:'-datePublication'"
-                            ng-show="unConteneur.contenu.rubrique.libelle==rubriqueCourante && hideSearch"
-                            conteneur="unConteneur"></contenus-rubrique>
+                            ng-repeat="unConteneur in conteneurs"
+                            ng-show="(unConteneur.libelle_rubrique==rubriqueCourante || unConteneur.nom==rubriqueCourante) && hideSearch"
+                            contenu="unConteneur"></contenus-rubrique>
 
                                     {#Exclusivily for the search#}
                     <contenus-rubrique
-                            ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: rechercheContenu) | orderBy:'-datePublication'"
+                            ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: rechercheContenu) "
                             ng-if="!hideSearch"
-                            conteneur="unConteneur"
+                            contenu="unConteneur"
                             recherche="rechercheContenu"></contenus-rubrique>
                                     {#End of the search#}
 
@@ -183,27 +174,29 @@
                                 {#Début Affichage de tous les éléments#}
                                 <data-owl-carousel ng-show="rubriqueCourante=='Tous' && hideSearch">
 
-                                    <div class="aside-menu-head">Favoris</div>
+                                    <div class="aside-menu-head">Consultés recemment</div>
 
                                     <data-owl-carousel class="owl-carousel owl-theme" >
 
-                                        <contenus-tries owl-carousel-item=""  ng-repeat="unFavoris in groupesContenus.FAVORIS | orderBy:'-userContenus[1].nbreVue'"
+                                        <contenus-tries owl-carousel-item=""  ng-repeat="unFavoris in groupesContenus.FAVORIS"
                                               class="item" contenu="unFavoris">
+
                                         </contenus-tries>
+
                                     </data-owl-carousel>
 
-                                    <div class="aside-menu-head">Récents</div>
+                                    <div class="aside-menu-head">Publiés recemment</div>
                                     <data-owl-carousel class="owl-carousel owl-theme" >
                                         {#La date a déjà été triée côté serveur#}
                                         <contenus-tries owl-carousel-item="" ng-repeat="unRecent in groupesContenus.RECENTS"
                                                         class="item" contenu="unRecent"></contenus-tries>
 
                                     </data-owl-carousel >
-                                    <div class="aside-menu-head">Tes camarades ont aussi consultés</div>
+                                    <div class="aside-menu-head">Les plus populaires</div>
 
                                     <data-owl-carousel class="owl-carousel owl-theme" >
-                                        <contenus-tries owl-carousel-item=""  ng-repeat="aussiConsulte in groupesContenus.AUSSICONSULTES | orderBy:'-nombreVueTotal'"
-                                                        class="item" contenu="aussiConsulte.contenu"></contenus-tries>
+                                        <contenus-tries owl-carousel-item=""  ng-repeat="aussiConsulte in groupesContenus.AUSSICONSULTES"
+                                                        class="item" contenu="aussiConsulte"></contenus-tries>
 
                                     </data-owl-carousel >
 
@@ -215,8 +208,56 @@
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
+
+    <!-- Page Authentification -->
+<div class="authentification" >
+    <header>
+
+        <nav class="navbar navbar-inverse">
+            <div class="container">
 
 
+                <ul class="nav navbar-nav">
+                    <li><a class="navbar-brand" href='?controller=apropos&action=apropos'><img ng-src="img/3ischool_logo.png" height="30" width="130" style="margin-top:-2px; margin-right: -20px;"></a></li>
+                    <li>
+                        <a href='?controller=apropos&action=apropos'>A propos</a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="jumbotron">
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1">
+
+                    </div>
+
+                    <div class="col-md-10">
+                        <div id="titreBienvenue">
+                            <h1><strong>Bienvenue sur FastLearn</strong></h1>
+                            <h3 id="sstitreBienveue"><i>1er réseau social de collaboration entre étudiants et enseignants</i></h3>
+                        </div>
+
+                        <authentification
+                                connexion="suivant(userEmail)"
+                                maj-password="majPassword(user)"
+                                show-m-a-j-password="showEmptyCard"
+                                show-email-error="showEmailError"
+                                show-connexion = "showConnexion"
+                                show-email-card="showEmailCard"></authentification>
+
+
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</div>
 {% endblock %}
 

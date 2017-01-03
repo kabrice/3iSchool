@@ -180,12 +180,36 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         }
 
+                                                                            /*** *** *** *** *** AUTHENTIFICATION  *** *** *** *** ***/
 
+         $scope.showMAJPassword = false;
+         $scope.showEmailError = false;
+         $scope.showConnexion = false;
+        $scope.showEmailCard = true;
 
+        $scope.connexion = function(userEmail)
+        {
+            //console.log(contenuService.isPasswordEmpty(userEmail));
+           contenuService.isPasswordEmpty(userEmail).$promise.then(function() {
+               var isEmpty = contenuService.isPasswordEmpty(userEmail);
+                if(isEmpty){
+                    $scope.showMAJPassword = true;
+                    $scope.showEmailCard = true;
+                }else if(isEmpty=="incorrect") {
+                   $scope.showEmailError = true;
+                }else{
+                    $scope.showConnexion = true;
+                    $scope.showEmailCard = true;
+                }
+            });
+        }
 
+        $scope.majPassword = function(user)
+        {
 
+        }
 
-
+        $scope.
         $scope.$watch(function(){
             return $location.path();
         }, function (newPath) {
@@ -202,8 +226,21 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
                         $scope.groupesContenus.$promise.then(function(){
                             $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
-                                if(unConteneur.contenu.rubrique.libelle==rubrique){
+                                if(unConteneur.libelle_rubrique==rubrique){
                                     $scope.selectionRubrique(rubrique);
+                                }
+                            })
+                        });
+
+
+                        break;
+                    case 'enseignants':
+                        var enseignantNom = tabPath[2];
+
+                        $scope.groupesContenus.$promise.then(function(){
+                            $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
+                                if(unConteneur.nom==enseignantNom){
+                                    $scope.selectionRubrique(enseignantNom);
                                 }
                             })
                         });

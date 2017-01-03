@@ -34,10 +34,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class DashboardController extends Controller
 {
     /**
-     * @Rest\View(serializableGroup={"annee", "groupe", "niveau", "rubrique", "sous_rubrique", "user"}, statusCode=Response::HTTP_CREATED)
+     * @Rest\View(serializerGroups={"annee", "groupe", "niveau", "rubrique", "sousRubrique", "user"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/ecritureContenu/{annee_id}/{groupe_id}/{niveau_id}/{rubrique_id}/{sous_rubrique_id}/{user_id}/Contenu")
      */
-    private function postEcritureContenuAction(Request $request)
+    public function postEcritureContenuAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $annee      = $em->getRepository('AppBundle:Annee')->find($request->get('annee_id'));
@@ -61,8 +61,10 @@ class DashboardController extends Controller
         $contenu->setRubrique($rubrique)
             ->setSousRubrique($sousRubrique);
 
-        $userContenu->setUser($user);
-        $userContenu->setContenu($contenu);
+        $userContenu->setUser($user)
+        ->setContenu($contenu)
+            ->setAPublie(1)
+            ->setNbreVue(1);
 
         $form = $this->createForm(ContenuType::class, $contenu);
         $form->submit($request->request->all());

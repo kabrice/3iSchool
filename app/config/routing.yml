@@ -51,6 +51,11 @@ app_bundle_contenus_tries:
         _controller: AppBundle:Template:contenusTries
         template:    'AppBundle:Static:contenus-tries.html.twig'
 
+app_bundle_authentification:
+    path: /authentification
+    defaults:
+        _controller: AppBundle:Template:authentification
+        template:    'AppBundle:Static:authentification.html.twig'
 
         
 
