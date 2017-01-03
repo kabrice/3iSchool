@@ -118,6 +118,12 @@ class UserController extends Controller
             return $this->userNotFound();
         }
 
+        if ($user->getActive()) {
+            return $this->accessForbidden();
+        }
+
+
+
         if ($clearMissing) { // Si une mise à jour complète, le mot de passe doit être validé
             $options = ['validation_groups'=>['Default', 'FullUpdate']];
         } else {
@@ -147,6 +153,11 @@ class UserController extends Controller
     private function userNotFound()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'Utilisateur introuvable'], Response::HTTP_NOT_FOUND);
+    }
+
+    private function accessForbidden()
+    {
+        return \FOS\RestBundle\View\View::create(['message' => 'Acces interdit'], Response::HTTP_FORBIDDEN);
     }
 
 }

@@ -39,7 +39,7 @@ class UserContenu
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userContenus")
      * @var User
      */
-    protected $user1;
+    protected $user;
 
 
     /**

@@ -72,9 +72,10 @@ class Reponse
 
 
     /**
-     * @ManyToMany(targetEntity="User", mappedBy="reponses")
+     * @ORM\OneToMany(targetEntity="UserReponse", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @var UserReponse[]
      */
-    protected $users;
+    protected $userReponses;
 
 
     /**
@@ -82,9 +83,8 @@ class Reponse
      */
     public function __construct()
     {
-        $this->datePublication = new DateTime();
         $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userReponses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -121,6 +121,29 @@ class Reponse
         return $this->libelle;
     }
 
+    /**
+     * Set typeReponse
+     *
+     * @param string $typeReponse
+     *
+     * @return Reponse
+     */
+    public function setTypeReponse($typeReponse)
+    {
+        $this->typeReponse = $typeReponse;
+
+        return $this;
+    }
+
+    /**
+     * Get typeReponse
+     *
+     * @return string
+     */
+    public function getTypeReponse()
+    {
+        return $this->typeReponse;
+    }
 
     /**
      * Set datePublication
@@ -173,7 +196,7 @@ class Reponse
     /**
      * Set report
      *
-     * @param boolean $report
+     * @param integer $report
      *
      * @return Reponse
      */
@@ -187,7 +210,7 @@ class Reponse
     /**
      * Get report
      *
-     * @return boolean
+     * @return integer
      */
     public function getReport()
     {
@@ -253,60 +276,36 @@ class Reponse
     }
 
     /**
-     * Add user
+     * Add userReponse
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\UserReponse $userReponse
      *
      * @return Reponse
      */
-    public function addUser(\AppBundle\Entity\User $user)
+    public function addUserReponse(\AppBundle\Entity\UserReponse $userReponse)
     {
-        $this->users[] = $user;
+        $this->userReponses[] = $userReponse;
 
         return $this;
     }
 
     /**
-     * Remove user
+     * Remove userReponse
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\UserReponse $userReponse
      */
-    public function removeUser(\AppBundle\Entity\User $user)
+    public function removeUserReponse(\AppBundle\Entity\UserReponse $userReponse)
     {
-        $this->users->removeElement($user);
+        $this->userReponses->removeElement($userReponse);
     }
 
     /**
-     * Get users
+     * Get userReponses
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
+    public function getUserReponses()
     {
-        return $this->users;
-    }
-
-    /**
-     * Set typeReponse
-     *
-     * @param string $typeReponse
-     *
-     * @return Reponse
-     */
-    public function setTypeReponse($typeReponse)
-    {
-        $this->typeReponse = $typeReponse;
-
-        return $this;
-    }
-
-    /**
-     * Get typeReponse
-     *
-     * @return string
-     */
-    public function getTypeReponse()
-    {
-        return $this->typeReponse;
+        return $this->userReponses;
     }
 }

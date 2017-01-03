@@ -18,7 +18,7 @@ angular.module("ContenuServiceRest", ['ngResource'])
                           "getAnnee": {method: 'GET', isArray: true, url: "/api/promotion/annees", headers: headers},
                          "getGroupe": {method: 'GET', isArray: true, url: "/api/promotion/groupes", headers: headers},
                          "getNiveau": {method: 'GET', isArray: true, url: "/api/promotion/niveaux", headers: headers},
-                "getIsPasswordEmpty": {method: 'GET', isArray: false, url: "/api/users/checkPW/:useremail"},
+                //"getIsPasswordEmpty": {method: 'GET', isArray: false, url: "/api/users/checkPW/:useremail"},
 
                 "getIsPasswordEmpty": {method: 'GET', isArray: false, url: "/api/users/checkPW/:useremail"},
 

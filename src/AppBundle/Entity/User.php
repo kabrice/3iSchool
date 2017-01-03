@@ -86,26 +86,30 @@ class User implements UserInterface
     protected $validationCode;
 
     /**
-     * @ORM\Column(type="bool")
+     * @var bool
+     * @ORM\Column(name="active", type="boolean")
      */
     protected $active;
 
 
 
     /**
-     * @ManyToMany(targetEntity="Commentaire", inversedBy="users")
+     * @ORM\OneToMany(targetEntity="UserCommentaire", mappedBy="user")
+     * @var UserCommentaire[]
      */
-    protected $commentaires;
+    protected $userCommentaires;
 
     /**
-     * @ManyToMany(targetEntity="Reponse", inversedBy="users")
+     * @ORM\OneToMany(targetEntity="UserReponse", mappedBy="user")
+     * @var UserReponse[]
      */
-    protected $reponses;
+    protected $userReponses;
 
     /**
-     * @ManyToMany(targetEntity="Question", inversedBy="users")
+     * @ORM\OneToMany(targetEntity="UserQuestion", mappedBy="user")
+     * @var UserQuestion[]
      */
-    protected $questions;
+    protected $userQuestions;
 
     /**
      * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="user")
@@ -113,14 +117,135 @@ class User implements UserInterface
      */
     protected $userContenus;
 
+
+    /**
+     * Set isPersonnel
+     *
+     * @param boolean $isPersonnel
+     *
+     * @return User
+     */
+    public function setIsPersonnel($isPersonnel)
+    {
+        $this->isPersonnel = $isPersonnel;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     * <code>
+     * public function getRoles()
+     * {
+     *     return array('ROLE_USER');
+     * }
+     * </code>
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * Set userProfilRoot
+     *
+     * @param string $userProfilRoot
+     *
+     * @return User
+     */
+    public function setUserProfilRoot($userProfilRoot)
+    {
+        $this->userProfilRoot = $userProfilRoot;
+
+        return $this;
+    }
+
+    /**
+     * Get userProfilRoot
+     *
+     * @return string
+     */
+    public function getUserProfilRoot()
+    {
+        return $this->userProfilRoot;
+    }
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userCommentaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userReponses = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userQuestions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userContenus = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -254,109 +379,156 @@ class User implements UserInterface
         return $this->isBDE;
     }
 
-
-
+    /**
+     * Get isPersonnel
+     *
+     * @return boolean
+     */
+    public function getIsPersonnel()
+    {
+        return $this->isPersonnel;
+    }
 
     /**
-     * Add commentaire
+     * Set password
      *
-     * @param \AppBundle\Entity\Commentaire $commentaire
+     * @param string $password
      *
      * @return User
      */
-    public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    public function setPassword($password)
     {
-        $this->commentaires[] = $commentaire;
+        $this->password = $password;
 
         return $this;
     }
 
     /**
-     * Remove commentaire
+     * Set validationCode
      *
-     * @param \AppBundle\Entity\Commentaire $commentaire
-     */
-    public function removeCommentaire(\AppBundle\Entity\Commentaire $commentaire)
-    {
-        $this->commentaires->removeElement($commentaire);
-    }
-
-    /**
-     * Get commentaires
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCommentaires()
-    {
-        return $this->commentaires;
-    }
-
-    /**
-     * Add reponse
-     *
-     * @param \AppBundle\Entity\Reponse $reponse
+     * @param string $validationCode
      *
      * @return User
      */
-    public function addReponse(\AppBundle\Entity\Reponse $reponse)
+    public function setValidationCode($validationCode)
     {
-        $this->reponses[] = $reponse;
+        $this->validationCode = $validationCode;
 
         return $this;
     }
 
     /**
-     * Remove reponse
+     * Get validationCode
      *
-     * @param \AppBundle\Entity\Reponse $reponse
+     * @return string
      */
-    public function removeReponse(\AppBundle\Entity\Reponse $reponse)
+    public function getValidationCode()
     {
-        $this->reponses->removeElement($reponse);
+        return $this->validationCode;
     }
 
-    /**
-     * Get reponses
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getReponses()
-    {
-        return $this->reponses;
-    }
+
 
     /**
-     * Add question
+     * Add userCommentaire
      *
-     * @param \AppBundle\Entity\Question $question
+     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
      *
      * @return User
      */
-    public function addQuestion(\AppBundle\Entity\Question $question)
+    public function addUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
     {
-        $this->questions[] = $question;
+        $this->userCommentaires[] = $userCommentaire;
 
         return $this;
     }
 
     /**
-     * Remove question
+     * Remove userCommentaire
      *
-     * @param \AppBundle\Entity\Question $question
+     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
      */
-    public function removeQuestion(\AppBundle\Entity\Question $question)
+    public function removeUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
     {
-        $this->questions->removeElement($question);
+        $this->userCommentaires->removeElement($userCommentaire);
     }
 
     /**
-     * Get questions
+     * Get userCommentaires
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getQuestions()
+    public function getUserCommentaires()
     {
-        return $this->questions;
+        return $this->userCommentaires;
+    }
+
+    /**
+     * Add userReponse
+     *
+     * @param \AppBundle\Entity\UserReponse $userReponse
+     *
+     * @return User
+     */
+    public function addUserReponse(\AppBundle\Entity\UserReponse $userReponse)
+    {
+        $this->userReponses[] = $userReponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove userReponse
+     *
+     * @param \AppBundle\Entity\UserReponse $userReponse
+     */
+    public function removeUserReponse(\AppBundle\Entity\UserReponse $userReponse)
+    {
+        $this->userReponses->removeElement($userReponse);
+    }
+
+    /**
+     * Get userReponses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserReponses()
+    {
+        return $this->userReponses;
+    }
+
+    /**
+     * Add userQuestion
+     *
+     * @param \AppBundle\Entity\UserQuestion $userQuestion
+     *
+     * @return User
+     */
+    public function addUserQuestion(\AppBundle\Entity\UserQuestion $userQuestion)
+    {
+        $this->userQuestions[] = $userQuestion;
+
+        return $this;
+    }
+
+    /**
+     * Remove userQuestion
+     *
+     * @param \AppBundle\Entity\UserQuestion $userQuestion
+     */
+    public function removeUserQuestion(\AppBundle\Entity\UserQuestion $userQuestion)
+    {
+        $this->userQuestions->removeElement($userQuestion);
+    }
+
+    /**
+     * Get userQuestions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserQuestions()
+    {
+        return $this->userQuestions;
     }
 
     /**
@@ -394,145 +566,26 @@ class User implements UserInterface
     }
 
     /**
-     * Set isPersonnel
+     * Set active
      *
-     * @param boolean $isPersonnel
+     * @param boolean $active
      *
      * @return User
      */
-    public function setIsPersonnel($isPersonnel)
+    public function setActive($active)
     {
-        $this->isPersonnel = $isPersonnel;
+        $this->active = $active;
 
         return $this;
     }
 
     /**
-     * Get isPersonnel
+     * Get active
      *
      * @return boolean
      */
-    public function getIsPersonnel()
+    public function getActive()
     {
-        return $this->isPersonnel;
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    /**
-     * @param mixed $plainPassword
-     */
-    public function setPlainPassword($plainPassword)
-    {
-        $this->plainPassword = $plainPassword;
-    }
-
-
-    /**
-     * Returns the roles granted to the user.
-     *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return (Role|string)[] The user roles
-     */
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
-
-    /**
-     * Returns the salt that was originally used to encode the password.
-     *
-     * This can return null if the password was not encoded using a salt.
-     *
-     * @return string|null The salt
-     */
-    public function getSalt()
-    {
-        // TODO: Implement getSalt() method.
-    }
-
-    /**
-     * Returns the username used to authenticate the user.
-     *
-     * @return string The username
-     */
-    public function getUsername()
-    {
-        // TODO: Implement getUsername() method.
-    }
-
-    /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
-     */
-    public function eraseCredentials()
-    {
-        // TODO: Implement eraseCredentials() method.
-    }
-
-    /**
-     * Set userProfilRoot
-     *
-     * @param string $userProfilRoot
-     *
-     * @return User
-     */
-    public function setUserProfilRoot($userProfilRoot)
-    {
-        $this->userProfilRoot = $userProfilRoot;
-
-        return $this;
-    }
-
-    /**
-     * Get userProfilRoot
-     *
-     * @return string
-     */
-    public function getUserProfilRoot()
-    {
-        return $this->userProfilRoot;
+        return $this->active;
     }
 }

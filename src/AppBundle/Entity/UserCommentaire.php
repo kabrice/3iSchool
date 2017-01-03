@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserQuestion
+ * UserCommentaire
  *
- * @ORM\Table(name="user_question")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserQuestionRepository")
+ * @ORM\Table(name="user_commentaire")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserCommentaireRepository")
  */
-class UserQuestion
+class UserCommentaire
 {
     /**
      * @var int
@@ -28,8 +28,6 @@ class UserQuestion
      */
     protected $inutile;
 
-
-
     /**
      * @var bool
      *
@@ -45,30 +43,29 @@ class UserQuestion
     protected $dateReport;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="userQuestions")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userCommentaires")
      * @var User
      */
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="userQuestions")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userCommentaires")
      * @var User
      */
     protected $userReporter;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Question", inversedBy="userQuestions")
-     * @var Question
+     * @ORM\ManyToOne(targetEntity="Commentaire", inversedBy="userCommentaires")
+     * @var Commentaire
      */
-    protected $question;
-
+    protected $commentaire;
 
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -80,7 +77,7 @@ class UserQuestion
      *
      * @param boolean $inutile
      *
-     * @return UserQuestion
+     * @return UserCommentaire
      */
     public function setInutile($inutile)
     {
@@ -92,7 +89,7 @@ class UserQuestion
     /**
      * Get inutile
      *
-     * @return boolean
+     * @return bool
      */
     public function getInutile()
     {
@@ -104,7 +101,7 @@ class UserQuestion
      *
      * @param boolean $anonyme
      *
-     * @return UserQuestion
+     * @return UserCommentaire
      */
     public function setAnonyme($anonyme)
     {
@@ -116,7 +113,7 @@ class UserQuestion
     /**
      * Get anonyme
      *
-     * @return boolean
+     * @return bool
      */
     public function getAnonyme()
     {
@@ -128,7 +125,7 @@ class UserQuestion
      *
      * @param \DateTime $dateReport
      *
-     * @return UserQuestion
+     * @return UserCommentaire
      */
     public function setDateReport($dateReport)
     {
@@ -152,7 +149,7 @@ class UserQuestion
      *
      * @param \AppBundle\Entity\User $user
      *
-     * @return UserQuestion
+     * @return UserCommentaire
      */
     public function setUser(\AppBundle\Entity\User $user = null)
     {
@@ -176,7 +173,7 @@ class UserQuestion
      *
      * @param \AppBundle\Entity\User $userReporter
      *
-     * @return UserQuestion
+     * @return UserCommentaire
      */
     public function setUserReporter(\AppBundle\Entity\User $userReporter = null)
     {
@@ -196,26 +193,26 @@ class UserQuestion
     }
 
     /**
-     * Set question
+     * Set commentaire
      *
-     * @param \AppBundle\Entity\Question $question
+     * @param \AppBundle\Entity\Commentaire $commentaire
      *
-     * @return UserQuestion
+     * @return UserCommentaire
      */
-    public function setQuestion(\AppBundle\Entity\Question $question = null)
+    public function setCommentaire(\AppBundle\Entity\Commentaire $commentaire = null)
     {
-        $this->question = $question;
+        $this->commentaire = $commentaire;
 
         return $this;
     }
 
     /**
-     * Get question
+     * Get commentaire
      *
-     * @return \AppBundle\Entity\Question
+     * @return \AppBundle\Entity\Commentaire
      */
-    public function getQuestion()
+    public function getCommentaire()
     {
-        return $this->question;
+        return $this->commentaire;
     }
 }

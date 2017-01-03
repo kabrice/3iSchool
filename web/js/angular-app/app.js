@@ -185,7 +185,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
          $scope.showMAJPassword = false;
          $scope.showEmailError = false;
          $scope.showConnexion = false;
-        $scope.showEmailCard = true;
+         $scope.showEmailCard = true;
 
         $scope.connexion = function(userEmail)
         {
@@ -209,7 +209,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         }
 
-        $scope.
+
         $scope.$watch(function(){
             return $location.path();
         }, function (newPath) {
