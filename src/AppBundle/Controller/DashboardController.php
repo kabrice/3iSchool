@@ -18,6 +18,8 @@ use AppBundle\Entity\Question;
 use AppBundle\Entity\Reponse;
 use AppBundle\Entity\Rubrique;
 use AppBundle\Entity\SousRubrique;
+use AppBundle\Entity\TypeQuestion;
+use AppBundle\Entity\User;
 use AppBundle\Entity\UserContenu;
 use AppBundle\Form\Type\CommentaireType;
 use AppBundle\Form\Type\ContenuType;
@@ -62,8 +64,13 @@ class DashboardController extends Controller
             ->setSousRubrique($sousRubrique);
 
         $userContenu->setUser($user)
+<<<<<<< HEAD
+            ->setContenu($contenu)
+            ->setAPublie(true)
+=======
         ->setContenu($contenu)
             ->setAPublie(1)
+>>>>>>> a653f9596e99e9ca3e398143cc12a366eee473bb
             ->setNbreVue(1);
 
         $form = $this->createForm(ContenuType::class, $contenu);
@@ -80,5 +87,44 @@ class DashboardController extends Controller
         else {
             return $form;
         }
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"libelle", "description", "nombreLike", "nombreDislike", "datePublication", "report", "page", "ligne"})
+     * @Rest\Get("/listerQuestion/Contenu")
+     */
+    public function listerQuestionAction()
+    {
+        $question       = new Question();
+        $typeQuestion   = new TypeQuestion();
+        $reponse        = new Reponse();
+        $user           = new User();
+        $contenu        = new Contenu();
+
+
+        $question->setContenu($contenu)
+            ->setTypeQuestion($typeQuestion);
+
+        $reponse->setQuestion($question);
+
+        $user->addQuestion($question);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($question);
+        $em->persist($reponse);
+        $em->persist($user);
+        $em->flush();
+
+        return $contenu;
+    }
+
+    public function listerContenuSignalerAction()
+    {
+
+    }
+
+    public function listerCoursEtMatiereAction()
+    {
+
     }
 }
