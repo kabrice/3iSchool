@@ -131,9 +131,12 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres"])
                 $scope.clicMAJPassword = function(){
                     if(user.plainPassword.length<8) {
                         $scope.showErrorShortPassword = true;
+                        return;
                     }else if(user.plainPassword.length>50) {
                         $scope.showErrorLongPassword = true;
+                        return;
                     }
+
 
                 }
 
