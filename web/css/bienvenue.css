@@ -5,12 +5,14 @@
     bottom: 0px;
     right: 0px;
     z-index: 999;
-    background-image: url('http://s32.postimg.org/i3mwrlz11/image_libre.jpg');
+    background-image: url('https://s32.postimg.org/i3mwrlz11/image_libre.jpg');
     background-attachment: fixed;
     background-size:100% auto;
 
 
 }
+
+
 
 .authentification header{
     font-family: Georgia;
@@ -152,23 +154,198 @@
 
 
 
-.authentification .form-signin button {
+/*.authentification .form-signin button:not(.close) {
 
     height:43px;
 
     margin-top: 10px;
     text-align: center;
     background-color: deepskyblue;
-    border-color:deepskyblue;
+    border:  deepskyblue
 
+
+}*/
+
+.authentification .form-signin button:not(.close),
+.send-email button,
+.review{
+
+    height:43px;
+
+    margin-top: 10px;
+    text-align: center;
+    background-color: deepskyblue;
+    border:  deepskyblue;
+    animation-name: example;
+    animation-duration: 10s;
 }
 
-.authentification .form-signin button:hover{
+.changer-image{
+    text-decoration: none;
+    color: #0078a1;
+}
+.changer-image:hover{
+    text-decoration: none;
+    color: deepskyblue;
+    cursor: pointer;
+}
+
+.authentification .form-signin  button:hover,
+.send-email button:hover,
+.review:hover{
     background: dodgerblue;
     border-color:dodgerblue;
     color: whitesmoke;
 }
 
 
+
+/*upload image*/
+
+
+.authentification .fuzzy {
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+
+.authentification  .upload-container
+{
+    top:0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 350px;
+    height: 400px;
+    transform: translateY(50%);
+    margin: auto;
+    position: absolute;
+
+    padding: 10px;
+    background: #ddd;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+    color: white
+}
+    .authentification .upload-image div
+{
+    margin: auto;
+    font-size: 17pt;
+    color: darkgrey;
+    text-align: center;
+
+}
+
+.authentification .upload-image #glisser
+{
+    margin: auto;
+    padding: 100px 5px 5px 5px;
+
+}
+
+.authentification #upload-image #upload
+{
+
+    padding-top: -30px;
+}
+.authentification #title-upload{
+    color: dimgrey !important;
+    margin-bottom: 5px;
+}
+
+.authentification .bg-end{
+    background-color:#42b72a;
+}
+
+.g-recaptcha {
+    transform:scale(0.93);
+    transform-origin:0 0;
+    margin-bottom: -12px;
+}
+
+/*Button animation*/
+
+.authentification .draw {
+    overflow: hidden;
+    position: relative;
+
+}
+
+.authentification .draw::before, .draw::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    border: 2px solid transparent;
+    width: 0;
+    height: 0;
+}
+
+.authentification .draw::before {
+    top: 0;
+    left: 0;
+    border-top-color: ghostwhite;
+    border-right-color: ghostwhite;
+    animation: border 1.5s infinite;
+}
+.authentification .draw::after {
+    bottom: 0;
+    right: 0;
+    animation: border 1.5s 0.75s infinite, borderColor 1.5s 0.75s infinite;
+}
+
+.authentification .forgot-password
+{
+    margin-top: 10px;
+
+}
+
+.authentification .forgot-password a
+{
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+@keyframes border {
+    0% {
+        width: 0;
+        height: 0;
+    }
+    25% {
+        width: 100%;
+        height: 0;
+    }
+    50% {
+        width: 100%;
+        height: 100%;
+    }
+    100% {
+        width: 100%;
+        height: 100%;
+    }
+}
+@keyframes borderColor {
+    0% {
+        border-bottom-color: ghostwhite;
+        border-left-color: ghostwhite;
+    }
+    50% {
+        border-bottom-color: ghostwhite;
+        border-left-color: ghostwhite;
+    }
+    51% {
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    }
+    100% {
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    }
+}
 
 

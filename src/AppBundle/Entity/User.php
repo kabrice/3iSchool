@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -34,9 +35,17 @@ class User implements UserInterface
     /**
      * @var string
      *
+     * @ORM\Column(name="email_personnel", type="string", length=255, nullable=false)
+     */
+    protected $emailPersonnel;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="nom", type="string")
      */
     protected $nom;
+
 
     /**
      * @var string
@@ -49,9 +58,9 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="user_profil_root", type="string", nullable=true)
+     *
      */
     protected $userProfilRoot;
-
     /**
      * @var \DateTime
      *
@@ -80,6 +89,12 @@ class User implements UserInterface
 
     protected $plainPassword;
 
+    protected $croppedDataUrl;
+
+    protected $picFileName;
+
+    protected $gRecaptchaResponse;
+
     /**
      * @ORM\Column(type="string")
      */
@@ -94,22 +109,22 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="UserCommentaire", mappedBy="user")
-     * @var UserCommentaire[]
+     * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="user", cascade={"persist", "remove", "merge"})
+     * @var Commentaire[]
      */
-    protected $userCommentaires;
+    protected $commentaires;
 
     /**
-     * @ORM\OneToMany(targetEntity="UserReponse", mappedBy="user")
-     * @var UserReponse[]
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="user", cascade={"persist", "remove", "merge"})
+     * @var Reponse[]
      */
-    protected $userReponses;
+    protected $reponses;
 
     /**
-     * @ORM\OneToMany(targetEntity="UserQuestion", mappedBy="user")
-     * @var UserQuestion[]
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="user", cascade={"persist", "remove", "merge"})
+     * @var Question[]
      */
-    protected $userQuestions;
+    protected $questions;
 
     /**
      * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="user")
@@ -130,6 +145,22 @@ class User implements UserInterface
         $this->isPersonnel = $isPersonnel;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmailPersonnel()
+    {
+        return $this->emailPersonnel;
+    }
+
+    /**
+     * @param string $emailPersonnel
+     */
+    public function setEmailPersonnel($emailPersonnel)
+    {
+        $this->emailPersonnel = $emailPersonnel;
     }
 
 
@@ -168,7 +199,7 @@ class User implements UserInterface
      * public function getRoles()
      * {
      *     return array('ROLE_USER');
-     * }
+      }
      * </code>
      *
      * Alternatively, the roles might be stored on a ``roles`` property,
@@ -282,6 +313,8 @@ class User implements UserInterface
     {
         return $this->email;
     }
+
+
 
     /**
      * Set nom
@@ -430,108 +463,6 @@ class User implements UserInterface
 
 
     /**
-     * Add userCommentaire
-     *
-     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
-     *
-     * @return User
-     */
-    public function addUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
-    {
-        $this->userCommentaires[] = $userCommentaire;
-
-        return $this;
-    }
-
-    /**
-     * Remove userCommentaire
-     *
-     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
-     */
-    public function removeUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
-    {
-        $this->userCommentaires->removeElement($userCommentaire);
-    }
-
-    /**
-     * Get userCommentaires
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserCommentaires()
-    {
-        return $this->userCommentaires;
-    }
-
-    /**
-     * Add userReponse
-     *
-     * @param \AppBundle\Entity\UserReponse $userReponse
-     *
-     * @return User
-     */
-    public function addUserReponse(\AppBundle\Entity\UserReponse $userReponse)
-    {
-        $this->userReponses[] = $userReponse;
-
-        return $this;
-    }
-
-    /**
-     * Remove userReponse
-     *
-     * @param \AppBundle\Entity\UserReponse $userReponse
-     */
-    public function removeUserReponse(\AppBundle\Entity\UserReponse $userReponse)
-    {
-        $this->userReponses->removeElement($userReponse);
-    }
-
-    /**
-     * Get userReponses
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserReponses()
-    {
-        return $this->userReponses;
-    }
-
-    /**
-     * Add userQuestion
-     *
-     * @param \AppBundle\Entity\UserQuestion $userQuestion
-     *
-     * @return User
-     */
-    public function addUserQuestion(\AppBundle\Entity\UserQuestion $userQuestion)
-    {
-        $this->userQuestions[] = $userQuestion;
-
-        return $this;
-    }
-
-    /**
-     * Remove userQuestion
-     *
-     * @param \AppBundle\Entity\UserQuestion $userQuestion
-     */
-    public function removeUserQuestion(\AppBundle\Entity\UserQuestion $userQuestion)
-    {
-        $this->userQuestions->removeElement($userQuestion);
-    }
-
-    /**
-     * Get userQuestions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserQuestions()
-    {
-        return $this->userQuestions;
-    }
-
-    /**
      * Add userContenus
      *
      * @param \AppBundle\Entity\UserContenu $userContenus
@@ -587,5 +518,157 @@ class User implements UserInterface
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCroppedDataUrl()
+    {
+        return $this->croppedDataUrl;
+    }
+
+    /**
+     * @param mixed $croppedDataUrl
+     */
+    public function setCroppedDataUrl($croppedDataUrl)
+    {
+        $this->croppedDataUrl = $croppedDataUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPicFileName()
+    {
+        return $this->picFileName;
+    }
+
+    /**
+     * @param mixed $picFileName
+     */
+    public function setPicFileName($picFileName)
+    {
+        $this->picFileName = $picFileName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGRecaptchaResponse()
+    {
+        return $this->gRecaptchaResponse;
+    }
+
+    /**
+     * @param mixed $gRecaptchaResponse
+     */
+    public function setGRecaptchaResponse($gRecaptchaResponse)
+    {
+        $this->gRecaptchaResponse = $gRecaptchaResponse;
+    }
+
+
+
+    /**
+     * Add commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     *
+     * @return User
+     */
+    public function addCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires[] = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove commentaire
+     *
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     */
+    public function removeCommentaire(\AppBundle\Entity\Commentaire $commentaire)
+    {
+        $this->commentaires->removeElement($commentaire);
+    }
+
+    /**
+     * Get commentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommentaires()
+    {
+        return $this->commentaires;
+    }
+
+    /**
+     * Add reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     *
+     * @return User
+     */
+    public function addReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->reponses[] = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponse
+     *
+     * @param \AppBundle\Entity\Reponse $reponse
+     */
+    public function removeReponse(\AppBundle\Entity\Reponse $reponse)
+    {
+        $this->reponses->removeElement($reponse);
+    }
+
+    /**
+     * Get reponses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReponses()
+    {
+        return $this->reponses;
+    }
+
+    /**
+     * Add question
+     *
+     * @param \AppBundle\Entity\Question $question
+     *
+     * @return User
+     */
+    public function addQuestion(\AppBundle\Entity\Question $question)
+    {
+        $this->questions[] = $question;
+
+        return $this;
+    }
+
+    /**
+     * Remove question
+     *
+     * @param \AppBundle\Entity\Question $question
+     */
+    public function removeQuestion(\AppBundle\Entity\Question $question)
+    {
+        $this->questions->removeElement($question);
+    }
+
+    /**
+     * Get questions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 }

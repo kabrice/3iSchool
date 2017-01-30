@@ -36,7 +36,7 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
 
     public function createToken(Request $request, $providerKey)
     {
-        $targetUrl = '/api/auth-tokens';
+        $targetUrl = 'post_auth_tokens';
         $targetUrlCheckPW = 'get_is_password_empty';
         $targetPatchUser  = 'patch_user';
 

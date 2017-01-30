@@ -38,6 +38,16 @@ AppBundle\Entity\User:
             - Length:
                 min: 8
                 max: 50
+        gRecaptchaResponse:
+            - NotBlank: { groups: [New, FullUpdate] }
+            - Type: string
+        croppedDataUrl:
+            - NotBlank: { groups: [New, FullUpdate] }
+            - Type: string
+        picFileName:
+            - NotBlank: { groups: [New, FullUpdate] }
+            - Type: string
+
 
 AppBundle\Entity\Credentials:
     properties:

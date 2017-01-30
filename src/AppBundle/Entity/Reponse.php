@@ -52,11 +52,18 @@ class Reponse
     protected $nombreLike=0;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="anonyme", type="boolean")
+     */
+    protected $anonyme=0;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="report", type="integer")
      */
-    protected $report=0;
+    protected $nbreInutile=0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="reponses")
@@ -72,10 +79,10 @@ class Reponse
 
 
     /**
-     * @ORM\OneToMany(targetEntity="UserReponse", mappedBy="contenu", cascade={"persist", "remove", "merge"})
-     * @var UserReponse[]
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="reponses")
+     * @var User
      */
-    protected $userReponses;
+    protected $user;
 
 
     /**
@@ -83,6 +90,7 @@ class Reponse
      */
     public function __construct()
     {
+        $this->datePublication = new DateTime();
         $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userReponses = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -193,29 +201,6 @@ class Reponse
         return $this->nombreLike;
     }
 
-    /**
-     * Set report
-     *
-     * @param integer $report
-     *
-     * @return Reponse
-     */
-    public function setReport($report)
-    {
-        $this->report = $report;
-
-        return $this;
-    }
-
-    /**
-     * Get report
-     *
-     * @return integer
-     */
-    public function getReport()
-    {
-        return $this->report;
-    }
 
     /**
      * Set question
@@ -275,29 +260,6 @@ class Reponse
         return $this->commentaires;
     }
 
-    /**
-     * Add userReponse
-     *
-     * @param \AppBundle\Entity\UserReponse $userReponse
-     *
-     * @return Reponse
-     */
-    public function addUserReponse(\AppBundle\Entity\UserReponse $userReponse)
-    {
-        $this->userReponses[] = $userReponse;
-
-        return $this;
-    }
-
-    /**
-     * Remove userReponse
-     *
-     * @param \AppBundle\Entity\UserReponse $userReponse
-     */
-    public function removeUserReponse(\AppBundle\Entity\UserReponse $userReponse)
-    {
-        $this->userReponses->removeElement($userReponse);
-    }
 
     /**
      * Get userReponses
@@ -307,5 +269,77 @@ class Reponse
     public function getUserReponses()
     {
         return $this->userReponses;
+    }
+
+    /**
+     * Set anonyme
+     *
+     * @param boolean $anonyme
+     *
+     * @return Reponse
+     */
+    public function setAnonyme($anonyme)
+    {
+        $this->anonyme = $anonyme;
+
+        return $this;
+    }
+
+    /**
+     * Get anonyme
+     *
+     * @return boolean
+     */
+    public function getAnonyme()
+    {
+        return $this->anonyme;
+    }
+
+    /**
+     * Set nbreInutile
+     *
+     * @param integer $nbreInutile
+     *
+     * @return Reponse
+     */
+    public function setNbreInutile($nbreInutile)
+    {
+        $this->nbreInutile = $nbreInutile;
+
+        return $this;
+    }
+
+    /**
+     * Get nbreInutile
+     *
+     * @return integer
+     */
+    public function getNbreInutile()
+    {
+        return $this->nbreInutile;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Reponse
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

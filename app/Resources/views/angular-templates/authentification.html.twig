@@ -1,27 +1,196 @@
-<div class="card card-container">
-
+<div class="card card-container" ng-class="{'bg-end': showEnd}">
 
     <!-- Form1 -->
-    <form  class="form-signin" id="formAuthentification" name="formAuthentification">
-        <div ng-if="!showEmailCard">
-            <input type="email" id="inputEmail" name="email" ng-model="user.email" class="form-control" autocomplete="off" placeholder="Email scolaire (exemple@ecole.fr)"  required >
-            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="clicConnexion()">Connexion</button>
-        </div>
-        <div ng-if="!showMAJPassword">
-        <div class="input-append" >
-            <input  type="email" id="inputPassword" name="email" class="form-control" value="user.email"  disabled>
-            <div class="alert alert-danger" id="question-error" role="alert" ng-if="showErrorShortPassword || showErrorLongPassword">
-
+    <form class="form-signin" id="formAuthentification" name="formAuthentification">
+        <div ng-if="showSuivant">
+            <input type="email" id="inputEmail" name="email" ng-model="temp.email" class="form-control"
+                   autocomplete="on" placeholder="Email scolaire (exemple@ecole.fr)" required>
+            <div class="alert alert-danger" role="alert" ng-if="showEmailError">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <span ng-if="showErrorShortPassword">Le mot de passe est trop court</span>
-                <span ng-if="showErrorLongPassword">Le mot de passe est trop long</span>
+
+                    <span>Ce mail n'existe dans aucune école.</span>
             </div>
-            <input type="password" id="inputPassword" name="plainPassword" ng-model="user.plainPassword" class="form-control" placeholder="Nouveau mot de passe"  required>
+            <button class="btn btn-lg btn-primary btn-block btn-signin "
+                    ng-class="{draw: chargementEnCours}"
+                    title="Cliquez sur Suivant pour vous connecter"
+                    type="submit"
+                    ng-click="clicSuivant()">Suivant
+            </button>
         </div>
-            <button class="btn btn-lg btn-primary btn-block btn-signin" ng-click="clicMAJPassword()" type="submit">Suivant</button>
+        <div ng-if="showMAJPassword">
+            <div class="input-append">
+                {[{showErrorShortPassword}]}
+                <input type="email" id="inputPassword" class="form-control" ng-model="temp.email" disabled>
+
+                <div class="alert alert-danger" role="alert" ng-if="(showErrorShortPassword || showErrorLongPassword)">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeError()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                    <span ng-if="showErrorShortPassword">Le mot de passe est trop court.</span>
+                    <span ng-if="showErrorLongPassword">Le mot de passe est trop long.</span>
+                </div>
+
+                <input type="email" id="inputPassword"  class="form-control" placeholder="Email personnel" ng-model="user.emailPersonnel" ng-if="!isPersonnel">
+
+                <div class="alert alert-danger" role="alert" ng-if="showErrorSameEmail">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeSameEmail()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span>L'email scolaire doit être différent de l'email personnel.</span>
+                </div>
+
+                <input type="password" id="inputPassword" name="plainPassword" ng-model="user.plainPassword"
+                       class="form-control" placeholder="Nouveau mot de passe" required>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block btn-signin"
+                    ng-class="{draw: chargementEnCours}"
+                    ng-click="clicMAJPassword()"
+                    type="submit">
+                Créer un mot de passe
+            </button>
+            <div class="forgot-password" >
+                <a href=""
+                   ng-if="!isPersonnel"
+                   uib-tooltip="Vous permettre d'accéder aux différents contenus même si votre école désactive votre compte"
+                   style="font-size: 12px">
+                    Pourquoi nous demandons votre email personnel ? </a></div>
+
         </div>
+
+        <div ng-if="showConnexion">
+            <div class="input-append">
+                <input type="email" id="inputPassword" name="email" class="form-control" ng-model="temp.email" disabled>
+                <div class="alert alert-danger" role="alert" ng-if="showCredentialsError">
+
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span>Email ou mot de passe incorrect.</span>
+                </div>
+                <input type="password" id="inputPassword" name="plainPassword" ng-model="user.plainPassword"
+                       class="form-control" placeholder="Mot de passe" required>
+            </div>
+
+            <div class="g-recaptcha"
+                 vc-recaptcha
+                 key="'6LfLyBAUAAAAANE97OVWKJL51BEnRa7Pj3atosRR'"
+                 theme="'light'"
+                 on-create="setWidgetId(widgetId)"
+                 on-success="setResponse(response)"
+                 on-expire="cbExpiration()"
+                 lang="fr" ng-if="countClickConnexion>3 && !checkingCredentials()"></div>
+
+            <button class="btn btn-lg btn-primary btn-block btn-signin"
+                    ng-class="{draw: chargementEnCours}"
+                    ng-click="clicConnexion()" type="submit" style="position: relative">
+                Connexion
+            </button>
+            <div class="forgot-password"><a href="/forgotPassword" >Mot de passe oublié?</a></div>
+        </div>
+
+
+        <div class="upload-container" ng-show="showImageSubmit || showImageUpload" {#click-outside="closeThis()"#}>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeAjoutBox()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div id="title-upload"><strong>Ajout d'une photo de profil</strong></div>
+
+            <div style="border: 3px dashed darkgray; height: 90%" class="upload-image" ng-show="showImageUpload">
+
+                <div id="glisser">Glisser & déposer une photo  ou</div>
+                <div>
+                    <button type="file"
+                            id="upload" ngf-drop ng-model="picFile" ngf-pattern="'.png,.jpg,.jpeg,!.gif'"
+                            ngf-select="clicImportPhoto()"
+                            ng-model="picFile" ngf-max-size="8MB" accept="image/x-png,image/jpeg,image/jpg"
+                            class="btn btn-lg btn-primary btn-upload ">Importer de mon ordinateur
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div ng-show="showImageSubmit">
+                <div class="cropArea">
+                    <img-crop image="picFile  | ngfDataUrl"
+                              result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
+                    </img-crop>
+
+                </div>
+
+                <div style="margin: auto; text-align: center;">
+                    <button type="button" class="btn btn-lg btn-primary btn-upload "
+                            ng-click="clicUpload(croppedDataUrl, picFile.name)">
+                        Soumettre
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div ng-show="showAlmostDone">
+            <div class="input-append">
+
+                <div style="margin: auto; text-align: center; padding-bottom: 5px ">
+
+
+                    <div>
+                        <img class="img-circle" ng-src="{[{image.croppedDataUrl}]}" width="150" height="150"
+                             ng-show="showImageCropped"/>
+
+
+                    </div>
+                    <div ng-show="!showImageCropped">
+                        <img ng-src="{{ asset('img/happystudent.png') }}" width="200" height="150" style="">
+                        <button type="button" class="btn btn-lg btn-primary btn-upload "
+                                style="background-color: #42b72a; border: none;padding-bottom: 20px; width: 100%;
+                            margin-top: -60px; margin-bottom: -25px "
+                                ng-click="clicAjoutPhoto()">
+                            <i class="material-icons" style="vertical-align: middle; font-size: 14pt">add_a_photo</i>
+                            Ajouter une photo profil
+                        </button>
+
+                    </div>
+                    <div>
+                        <a class="changer-image"
+                           ng-show="showImageCropped" ng-click="clicAjoutPhoto()">changer l'image</a>
+                    </div>
+                </div>
+
+                <div class="g-recaptcha"
+                     vc-recaptcha
+                     key="'6LfLyBAUAAAAANE97OVWKJL51BEnRa7Pj3atosRR'"
+                     theme="'light'"
+                     on-create="setWidgetId(widgetId)"
+                     on-success="setResponse(response)"
+                     on-expire="cbExpiration()"
+                     lang="fr"></div>
+                </div>
+            <div >
+            <button class="btn btn-lg btn-primary btn-block btn-signin"
+                    ng-click="clicSignUp()"
+                    type="submit"
+                    style="position: relative">
+                Presque Fini!
+            </button>
+                <div class="forgot-password">
+                <a href=""
+                   uib-tooltip="Ceci prouve votre crédibilité et votre sérieux auprès des enseignants"
+                   style="font-size: 12px">
+                    Pourquoi nous demandons une photo ? </a>
+                </div>
+        </div>
+
     </form>
-    <a class="forgot-password" hidden>Mot de passe oublié?</a>
+
+    <div style="font-size: 13pt; text-align: center " ng-show="showEnd">
+        <h5>Dernière chose :)</h5>
+        <p>Vérifiez votre identité en cliquant sur le lien que nous avons envoyé à votre adresse personnelle.</p>
+    </div>
+
+
+
 </div>

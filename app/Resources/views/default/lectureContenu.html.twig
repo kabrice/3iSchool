@@ -2,13 +2,13 @@
 
 {% block body %}
 
-    <div class="preloader" ng-show="chargementEnCours">
+    <div class="preloader" ng-show="chargementEnCours" ng-controller="lectureContenuCtrl" ng-cloak >
         <div class="msg-preloader">
             <img ng-src="{{ asset('img/preloader.gif') }}"/>
         </div>
     </div>
-  <div class="container-fluid" ng-init="getConteneurByID({{ idConteneur }})">
-
+  <div class="container-fluid" ng-controller="lectureContenuCtrl" ng-cloak>
+        <div ng-init="getConteneurByID({{ idConteneur }})" ></div>
 
         <a id="titleHead" href="" >{[{conteneurCourant.contenu.titre | limitTo:150}]}
         <span ng-if="conteneurCourant.contenu.titre.length > 150">&hellip;</span>
@@ -238,9 +238,22 @@
         </div>
     </div>
     <i class="material-icons comment-footer"
+       ng-click="clickToOpen()"
        title="Donnez un avis expliqué et constructif sur ce cours">comment</i>
-    <i class="fa fa-heart fa-1x like-footer " aria-hidden="true"
-       title="Les concepts de ce cours sont expliqués clairement"></i>
+
+          <ng-rate-it
+                      class="like-footer custom"
+                      title="Notez la clarté et l'explication de ce cours"
+                      cancel-width="1"
+                      width="15"
+                      cancel-height="1"
+                      ng-model="test.rateit"
+                      ng-click="rate()"></ng-rate-it>
+
+
+
+
+
     <i class="material-icons question-answer-footer  hidden-md hidden-lg"
        title="Faire apparaître ou disparaître le panneau de questions"
        ng-click="displayQuestionOnMobile()">question_answer</i>

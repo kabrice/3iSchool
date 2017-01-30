@@ -1,0 +1,231 @@
+<div class="preloader" ng-show="chargementEnCours && showHome" ng-cloak>
+    <div class="msg-preloader">
+        <img ng-src="{{ asset('img/preloader.gif') }}"/>
+    </div>
+</div>
+
+<div class="jumbotron"  ng-if="showHome"  ng-cloak> 
+
+    <div id="wrapper" >
+
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid" >
+                <div class="navbar-header">
+                    <button style="background-color: red" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div  class="navbar-brand">
+                        <a id="menu-toggle" href="#"  toggle-class="active"
+                           class="glyphicon glyphicon-align-justify btn-menu toggle" style="color: red">
+
+                        </a>
+                        <a ng-href="/"><img ng-src="{{ asset('img/3ischool_logo.png') }}" height="30" width="130" style="margin-top: -4px">   </a>
+                    </div>
+                </div>
+
+                <div id="navbar" class="collapse navbar-collapse" style="border-top: none">
+                    <ul class="nav navbar-nav navbar-justified">
+                        <li>
+                            <form id="custom-search-input" role="search">
+                                <div class="input-group col-md-12">
+                                    <input type="search"
+                                           ng-model="data.rechercheContenu"
+                                           class="search-query form-control"
+                                           placeholder="Recherchez un cours, un TD, un TP et plus dans cette promotion"
+                                           ng-keydown="showSearch()"/>
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" >
+                                        <span class=" glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" style="margin-top: -6px">
+
+                        <li id="notification_li" >
+                            <span id="notification_count" hidden></span>
+                            <a href='?controller=utilisateur&action=posterpensee' class="header-text" id="notificationLink"><i class="material-icons">notifications</i></a>
+                            <div id="notificationContainer">
+                                <div id="notificationTitle">Notifications</div>
+                                <div id="notificationsBody" class="notifications scroll">
+                                    <ul class="nav" id="notifications-ul">
+
+                                    </ul>
+                                </div>
+                                <div id="notificationFooter"><a href="#" class="notif-link-footer"><i class="material-icons">sentiment_satisfied</i></a></div>
+                            </div>
+                        </li>
+                        <li >
+                            <a href='?controller=utilisateur&action=posterpensee' class="header-text">Accueil</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px; color:dimgrey;" onmouseover="this.style.color='#1e90fe';this.style.color='#1e90fe';" onmouseout="this.style.background='';this.style.color='dimgrey';">
+                                {[{authToken.user.prenom}]}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/3il/{[{username}]}">Profil</a></li>
+                                <li><a href='?controller=profil&action=suggestion'>Tableau de Bord</a></li>
+                                <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" ng-show="!chargementEnCours">
+            <div class="left" >
+
+                <ul class="courses " style="margin-top: 15px !important; ">
+                    <div class="side-menu-head"> Promotion</div>
+                    <div class="caption-item-content" >
+                        <div class="sel1" style="width: 100%; margin: 8px 2px 8px 8px">
+                            <select class="form-control"
+                                    ng-model="selectedValue.niveauid"
+                                    ng-change="reload()"
+                                    uib-tooltip="Niveau de promotion">
+
+                                <option value="{[{niveau.id}]}"
+                                        ng-repeat="niveau in niveaux">
+                                    {[{niveau.libelle}]}</option>
+                            </select>
+                        </div>
+
+                        <div class="sel1" style="width: 50%; margin: 8px 2px 2px 8px" >
+                            <select class="form-control"
+                                    ng-model="selectedValue.anneeid"
+                                    ng-change="reload()"
+                                    uib-tooltip="Année de promotion">
+
+                                <option value="{[{annee.id}]}"
+                                        ng-repeat="annee in annees">
+                                    {[{annee.libelle}]}</option>
+                            </select>
+                        </div>
+                        <div class="sel1" style="width: 30%; margin: 8px 8px 2px 8px" >
+                            <select class="form-control"
+                                    ng-model="selectedValue.groupeid"
+                                    ng-change="reload()"
+                                    uib-tooltip="Groupe de promotion">
+
+                                <option value="{[{groupe.id}]}"
+                                        ng-repeat="groupe in groupes">
+                                    {[{groupe.libelle}]}</option>
+                            </select>
+                        </div>
+                    </div>
+                </ul>
+
+                <ul class="courses " style="margin-top: 15px !important;">
+                    <div class="side-menu-head">Matières</div>
+                    <li ng-cloak><a  ng-class="{active: rubriqueCourante=='Tous'}" ng-click="selectionRubrique('Tous')" href="#home"><img ng-src="{{asset('img/All.png')}}" class="side-menu-image">Tous</a></li>
+                    <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'libelle_rubrique'" ng-cloak>
+                        <a  ng-if="unConteneur.libelle_groupeRubrique =='Matière'"
+                            ng-class="{active: unConteneur.libelle_rubrique == rubriqueCourante}"
+                            ng-href="#!/rubriques/{[{unConteneur.libelle_rubrique}]}"><img ng-src="{{ asset('{[{unConteneur.imageRoot_rubrique}]}') }}" class="side-menu-image">
+                            {[{unConteneur.libelle_rubrique | limitTo:25}]}
+                        </a>
+
+                    </li>
+                </ul>
+
+
+                <ul class="courses">
+                    <div class="side-menu-head">Enseignants</div>
+                    <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'user_id'" ng-cloak>
+                        <a ng-href="#!/enseignants/{[{unConteneur.nom}]}"><img ng-src="{{ asset('{[{unConteneur.userProfilRoot}]}') }}" class="prof-image">{[{unConteneur.nom}]}</a>
+                    </li>
+                </ul>
+
+                <ul class="courses">
+                    <div class="side-menu-head">Administration</div>
+                    <li><a href="#!/underConstruction"><img ng-src="{{ asset('img/important.png') }}"  class="side-menu-image">Annonces Importantes</a></li>
+                    <li><a href="#!/underConstruction"><img ng-src="{{ asset('img/international.png') }}"  class="side-menu-image">International</a></li>
+                    <li><a href="#!/underConstruction"><img ng-src="{{ asset('img/internship.png') }}"  class="side-menu-image">Infos Stage</a></li>
+                    <li><a href="#!/underConstruction"><img ng-src="{{ asset('img/entreprise.png') }}"  class="side-menu-image">Entreprises</a></li>
+                </ul>
+
+                <ul class="courses" style="margin-bottom: 90px">
+                    <div class="side-menu-head">Divers</div>
+                    <li><a href="#!/underConstruction"><img ng-src="{{ asset('img/bde.png') }}" class="side-menu-image">BDE</a></li>
+                    <li><a href="#!/underConstruction"><img ng-src="{{ asset('img/question.png') }}" class="side-menu-image">Questions Importantes</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Page content -->
+        <div id="page-content-wrapper" ng-show="!chargementEnCours" ng-cloak>
+            <div class="page-content">
+                <div class="container-fluid">
+                    {#A modifier avec ng-model#}
+                    <div class="alert alert-info" ng-if="!hideSearch">{[{contenusFiltres.length}]}
+                        <span ng-if="contenusFiltres.length<2">contenu trouvé</span>
+                        <span ng-if="contenusFiltres.length>=2">contenus trouvés</span></div>
+                    <div class="row">
+
+                        <div class="span12">
+                            {#Début Affichage de contenus courant concernant une rubrique cliquée#}
+                            <div>
+
+                                <contenus-rubrique
+                                        ng-repeat="unConteneur in conteneurs "
+                                        ng-show="(unConteneur.libelle_rubrique==rubriqueCourante || unConteneur.nom==rubriqueCourante) && hideSearch"
+                                        contenu="unConteneur"></contenus-rubrique>
+
+                                <administration ng-if="showAnnoncesImportantes"></administration>
+                                {#Exclusivily for the search#}
+                                <contenus-rubrique
+                                        ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: data.rechercheContenu) "
+                                        ng-if="!hideSearch"
+                                        contenu="unConteneur"
+                                        recherche="data.rechercheContenu"></contenus-rubrique>
+                                {#End of the search#}
+
+                            </div>
+                            {#Fin Affichage de contenus concernant une rubrique#}
+
+                            {#Début Affichage de tous les éléments#}
+                            <data-owl-carousel ng-show="rubriqueCourante=='Tous' && hideSearch">
+
+                                <div class="aside-menu-head" ng-if="groupesContenus.FAVORIS.length>0">Consultés recemment</div>
+
+                                <data-owl-carousel class="owl-carousel owl-theme" >
+
+                                    <contenus-tries owl-carousel-item=""  ng-repeat="unFavoris in groupesContenus.FAVORIS"
+                                                    class="item" contenu="unFavoris">
+
+                                    </contenus-tries>
+
+                                </data-owl-carousel>
+
+                                <div class="aside-menu-head" ng-if="groupesContenus.RECENTS.length>0">Publiés recemment</div>
+                                <data-owl-carousel class="owl-carousel owl-theme" >
+                                    {#La date a déjà été triée côté serveur#}
+                                    <contenus-tries owl-carousel-item="" ng-repeat="unRecent in groupesContenus.RECENTS"
+                                                    class="item" contenu="unRecent"></contenus-tries>
+
+                                </data-owl-carousel >
+                                <div class="aside-menu-head" ng-if="groupesContenus.AUSSICONSULTES.length>0">Les plus populaires</div>
+
+                                <data-owl-carousel class="owl-carousel owl-theme" >
+                                    <contenus-tries owl-carousel-item=""  ng-repeat="aussiConsulte in groupesContenus.AUSSICONSULTES"
+                                                    class="item" contenu="aussiConsulte"></contenus-tries>
+
+                                </data-owl-carousel >
+
+                        </div>
+                        {#Fin Affichage de tous les éléments#}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page Authentification -->
+{#End Authentification#}

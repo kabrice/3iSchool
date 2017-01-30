@@ -935,7 +935,7 @@ body>.container-fluid,
     height: 191px;
 
     top: 0px;
-    left: 0px;
+    left: 30px;
     bottom: 0px;
     right: 0px;
     color: white;
@@ -953,7 +953,7 @@ body>.container-fluid,
     width: 70px;
     height: 70px;
     border: none !important;
-    left: 125px;
+    left: 95px;
     top: 95px;
 }
 

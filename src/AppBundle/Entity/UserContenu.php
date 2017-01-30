@@ -35,6 +35,15 @@ class UserContenu
      */
     protected $aPublie;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="review", type="string", length=255, nullable=true)
+     */
+    protected $review;
+
+
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userContenus")
      * @var User
@@ -155,4 +164,22 @@ class UserContenu
     {
         return $this->aPublie;
     }
+
+    /**
+     * @return string
+     */
+    public function getReview()
+    {
+        return $this->review;
+    }
+
+    /**
+     * @param string $review
+     */
+    public function setReview($review)
+    {
+        $this->review = $review;
+    }
+    
+
 }

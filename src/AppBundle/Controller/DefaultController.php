@@ -23,6 +23,15 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("3il/{username}", name="user")
+     */
+    public function userAction($username)
+    {
+        $email = $username."@3il.fr";
+        return $this->render('default/profil.html.twig', ['email' => $email]);
+    }
+
+    /**
      * @Route("/lectureContenu/{idConteneur}", name="lectureContenu")
      */
     public function lectureContenuAction($idConteneur)
@@ -30,5 +39,35 @@ class DefaultController extends Controller
         return $this->render('default/lectureContenu.html.twig', ['idConteneur' => $idConteneur]);
     }
 
+    /**
+     *  Activation du mail
+     *
+     * @Route("/verify/{activationCode}", name="verifyEmail")
+     */
+    public function verifyAction()
+    {
+
+        return $this->render('default/lectureContenu.html.twig', []);
+    }
+
+    /**
+     * @Route("/forgotPassword", name="forgotPassword")
+     */
+    public function forgotPasswordAction()
+    {
+        return $this->render('default/forgotPassword.html.twig', []);
+    }
+
+    /**
+     *
+     *
+     * @Route("/resetPassword/{validationCode}", name="resetPassword")
+     */
+    public function resetPasswordAction()
+    {
+        //Gérer avec un cookie
+
+        return $this->render('default/resetPassword.html.twig', []);
+    }
 
 }

@@ -15,6 +15,8 @@ class Credentials
 
     protected $password;
 
+    protected $gRecaptchaResponse;
+
     public function getLogin()
     {
         return $this->login;
@@ -34,4 +36,16 @@ class Credentials
     {
         $this->password = $password;
     }
+
+    public function getGRecaptchaResponse()
+    {
+        return $this->gRecaptchaResponse;
+    }
+
+    public function setGRecaptchaResponse($gRecaptchaResponse)
+    {
+        $this->gRecaptchaResponse = $gRecaptchaResponse;
+    }
+
+
 }

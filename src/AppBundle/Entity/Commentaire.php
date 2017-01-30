@@ -58,11 +58,18 @@ class Commentaire
     protected $nombreLike=0;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="anonyme", type="boolean")
+     */
+    protected $anonyme=0;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="report", type="integer")
      */
-    protected $report=0;
+    protected $nbreInutile=0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Reponse", inversedBy="commentaires")
@@ -73,10 +80,10 @@ class Commentaire
 
 
     /**
-     * @ORM\OneToMany(targetEntity="UserCommentaire", mappedBy="contenu", cascade={"persist", "remove", "merge"})
-     * @var UserCommentaire[]
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="commentaires")
+     * @var User
      */
-    protected $userCommentaires;
+    protected $user;
 
 
 
@@ -85,6 +92,7 @@ class Commentaire
      */
     public function __construct()
     {
+        $this->datePublication = new DateTime();
         $this->userCommentaires = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -218,29 +226,6 @@ class Commentaire
         return $this->nombreLike;
     }
 
-    /**
-     * Set report
-     *
-     * @param integer $report
-     *
-     * @return Commentaire
-     */
-    public function setReport($report)
-    {
-        $this->report = $report;
-
-        return $this;
-    }
-
-    /**
-     * Get report
-     *
-     * @return integer
-     */
-    public function getReport()
-    {
-        return $this->report;
-    }
 
     /**
      * Set reponse
@@ -266,29 +251,6 @@ class Commentaire
         return $this->reponse;
     }
 
-    /**
-     * Add userCommentaire
-     *
-     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
-     *
-     * @return Commentaire
-     */
-    public function addUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
-    {
-        $this->userCommentaires[] = $userCommentaire;
-
-        return $this;
-    }
-
-    /**
-     * Remove userCommentaire
-     *
-     * @param \AppBundle\Entity\UserCommentaire $userCommentaire
-     */
-    public function removeUserCommentaire(\AppBundle\Entity\UserCommentaire $userCommentaire)
-    {
-        $this->userCommentaires->removeElement($userCommentaire);
-    }
 
     /**
      * Get userCommentaires
@@ -298,5 +260,77 @@ class Commentaire
     public function getUserCommentaires()
     {
         return $this->userCommentaires;
+    }
+
+    /**
+     * Set anonyme
+     *
+     * @param boolean $anonyme
+     *
+     * @return Commentaire
+     */
+    public function setAnonyme($anonyme)
+    {
+        $this->anonyme = $anonyme;
+
+        return $this;
+    }
+
+    /**
+     * Get anonyme
+     *
+     * @return boolean
+     */
+    public function getAnonyme()
+    {
+        return $this->anonyme;
+    }
+
+    /**
+     * Set nbreInutile
+     *
+     * @param integer $nbreInutile
+     *
+     * @return Commentaire
+     */
+    public function setNbreInutile($nbreInutile)
+    {
+        $this->nbreInutile = $nbreInutile;
+
+        return $this;
+    }
+
+    /**
+     * Get nbreInutile
+     *
+     * @return integer
+     */
+    public function getNbreInutile()
+    {
+        return $this->nbreInutile;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Commentaire
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
