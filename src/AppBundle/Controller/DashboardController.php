@@ -37,7 +37,7 @@ class DashboardController extends Controller
 {
     /**
      * @Rest\View(serializerGroups={"annee", "groupe", "niveau", "rubrique", "sousRubrique", "user"}, statusCode=Response::HTTP_CREATED)
-     * @Rest\Post("/ecritureContenu/{annee_id}/{groupe_id}/{niveau_id}/{rubrique_id}/{sous_rubrique_id}/{user_id}/Contenu")
+     * @Rest\Post("/contenu/{annee_id}/{groupe_id}/{niveau_id}/{rubrique_id}/{sous_rubrique_id}/{user_id}/Contenu")
      */
     public function postEcritureContenuAction(Request $request)
     {
@@ -64,13 +64,10 @@ class DashboardController extends Controller
             ->setSousRubrique($sousRubrique);
 
         $userContenu->setUser($user)
-<<<<<<< HEAD
             ->setContenu($contenu)
             ->setAPublie(true)
-=======
-        ->setContenu($contenu)
+            ->setContenu($contenu)
             ->setAPublie(1)
->>>>>>> a653f9596e99e9ca3e398143cc12a366eee473bb
             ->setNbreVue(1);
 
         $form = $this->createForm(ContenuType::class, $contenu);
@@ -93,7 +90,7 @@ class DashboardController extends Controller
      * @Rest\View(serializerGroups={"libelle", "description", "nombreLike", "nombreDislike", "datePublication", "report", "page", "ligne"})
      * @Rest\Get("/listerQuestion/Contenu")
      */
-    public function listerQuestionAction()
+    public function getQuestionAction()
     {
         $question       = new Question();
         $typeQuestion   = new TypeQuestion();
@@ -118,12 +115,20 @@ class DashboardController extends Controller
         return $contenu;
     }
 
-    public function listerContenuSignalerAction()
+    /**
+     * @Rest\View(serializerGroups={"libelle", "description", "nombreLike", "nombreDislike", "datePublication", "report", "page", "ligne"})
+     * @Rest\Get("/listerContenuSignale/Contenu")
+     */
+    public function listerContenuSignaleAction()
     {
 
     }
 
-    public function listerCoursEtMatiereAction()
+    /**
+     * @Rest\View(serializerGroups={"libelle", "description", "nombreLike", "nombreDislike", "datePublication", "report", "page", "ligne"})
+     * @Rest\Get("/listerCoursEtMatieres/Contenu")
+     */
+    public function listerCoursEtMatieresAction()
     {
 
     }
