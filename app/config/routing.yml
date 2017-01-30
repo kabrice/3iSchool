@@ -57,5 +57,17 @@ app_bundle_authentification:
         _controller: AppBundle:Template:authentification
         template:    'AppBundle:Static:authentification.html.twig'
 
+app_bundle_administration:
+    path: /administration
+    defaults:
+        _controller: AppBundle:Template:administration
+        template:    'AppBundle:Static:administration.html.twig'
+
+app_bundle_review:
+    path: /review
+    defaults:
+        _controller: AppBundle:Template:review
+        template:    'AppBundle:Static:review.html.twig'
+
         
 

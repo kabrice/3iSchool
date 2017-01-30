@@ -1,0 +1,14 @@
+<form  id="formReview" name="formReview" >
+    <label for="exampleTextarea">Votre avis: </label>
+    <textarea class="form-control"
+              id="exampleTextarea"
+              rows="4"
+              placeholder="Donnez un avis expliqué et constructif sur ce contenu (200 caractères minimum)"
+              ng-model="data.review"
+              required></textarea>
+    <button class="btn btn-lg btn-primary btn-block btn-signin review"
+            type="submit"
+            ng-click="closeThisDialog(data.review)">Envoyer
+    </button>
+
+</form>

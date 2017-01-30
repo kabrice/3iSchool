@@ -18,6 +18,10 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('plainPassword');
+        $builder->add('croppedDataUrl');
+        $builder->add('gRecaptchaResponse');
+        $builder->add('picFileName');
+        $builder->add('emailPersonnel');
     }
 
     public function configureOptions(OptionsResolver $resolver)

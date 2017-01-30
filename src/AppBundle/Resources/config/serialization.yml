@@ -8,7 +8,7 @@ AppBundle\Entity\Contenu:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
         datePublication:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
-        nombreLike:
+        note:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
         nombreVueTotal:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
@@ -44,14 +44,16 @@ AppBundle\Entity\Question:
             groups: ['contenu', 'question', 'reponse',  'user']
         ligne:
             groups: ['contenu', 'question', 'reponse',  'user']
-        report:
+        nbreInutile:
             groups: ['contenu', 'question', 'reponse',  'user']
+        anonyme:
+            groups: ['contenu', 'question', 'reponse',  'user']
+        user:
+            groups: ['question', 'reponse', 'user']
         typeQuestion:
-            groups: ['contenu', 'question', 'reponse',  'user']
-        users:
-            groups: ['contenu', 'question']
+            groups: ['question', 'reponse',  'user']
         reponses:
-            groups: ['contenu']
+            groups: ['question']
 
 AppBundle\Entity\TypeQuestion:
     attributes:
@@ -74,46 +76,51 @@ AppBundle\Entity\UserContenu:
         contenu:
             groups: ['userContenu']
 
+
 AppBundle\Entity\Reponse:
     attributes:
         id:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         libelle:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         typeReponse:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         datePublication:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         nombreLike:
-            groups: ['reponse', 'commentaire',  'user']
-        report:
-            groups: ['reponse', 'commentaire',  'user']
-        users:
-            groups: ['reponse']
+            groups: ['reponse', 'commentaire',  'user', 'question']
+        nbreInutile:
+            groups: ['reponse', 'commentaire',  'user', 'question']
+        anonyme:
+            groups: ['reponse', 'commentaire',  'user', 'question']
+        user:
+            groups: ['reponse', 'question']
         question:
-            groups: [ 'commentaire']
+            groups: ['commentaire']
         commentaires:
-            groups: ['reponse']
+            groups: ['reponse', 'question']
 
 
 AppBundle\Entity\Commentaire:
     attributes:
         id:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         libelle:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         parent_id:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         datePublication:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         depth:
-            groups: ['reponse', 'commentaire',  'user']
+            groups: ['reponse', 'commentaire',  'user', 'question']
         nombreLike:
-            groups: ['reponse', 'commentaire',  'user']
-        report:
-            groups: ['reponse', 'commentaire',  'user']
-        users:
-            groups: ['reponse', 'commentaire']
+            groups: ['reponse', 'commentaire',  'user', 'question']
+        nbreInutile:
+            groups: ['reponse', 'commentaire',  'user', 'question']
+        anonyme:
+            groups: ['reponse', 'commentaire',  'user', 'question']
+        user:
+            groups: ['reponse', 'commentaire', 'question']
         reponse:
             groups: ['commentaire']
 
@@ -139,7 +146,8 @@ AppBundle\Entity\User:
             groups: ['user', 'commentaire', 'question', 'reponse', 'auth-token']
 
 
-            
+
+
 #Serialisation for user homepage
 
 AppBundle\Entity\Conteneur:
@@ -154,6 +162,7 @@ AppBundle\Entity\Conteneur:
             groups: ['conteneur']
         contenu:
             groups: ['conteneur']
+
 
 AppBundle\Entity\Annee:
     attributes:
@@ -210,9 +219,9 @@ AppBundle\Entity\GroupeRubrique:
 AppBundle\Entity\SousRubrique:
     attributes:
         id:
-            groups: ['sousRubrique', 'rubrique']
+            groups: ['sousRubrique', 'rubrique', 'contenu']
         libelle:
-            groups: ['sousRubrique', 'rubrique']
+            groups: ['sousRubrique', 'rubrique', 'contenu']
 
 
 AppBundle\Entity\AuthToken:

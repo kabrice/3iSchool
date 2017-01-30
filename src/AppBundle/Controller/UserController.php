@@ -14,6 +14,7 @@ use AppBundle\Entity\ContenusGroupes;
 use AppBundle\Entity\Rubrique;
 use AppBundle\Entity\UserContenu;
 use AppBundle\Form\Type\UserType;
+use DateTime;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -27,12 +28,12 @@ class UserController extends Controller
 
     /**
      * @Rest\View(serializerGroups={"user"})
-     * @Rest\Get("/users/{id}")
+     * @Rest\Get("/users/{email}")
      */
-    public function getEtudiantAction(Request $request)
+    public function getUserAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository('AppBundle:User')->findUserOnlyWithCredentials($request->get('id'));
+        $user = $em->getRepository('AppBundle:User')->findByEmail($request->get('email'));
 
         if (empty($user)) {
             return new JsonResponse(['message' => 'Utilisateur introuvable'], Response::HTTP_NOT_FOUND);
@@ -51,7 +52,10 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $user = $em->getRepository('AppBundle:User')->findOneByEmail($request->get('user_email'));
+
         $tab["isPasswordEmpty"] = (!empty($user)) ? $this->get("app.user_service")->isPasswordEmpty($user) : "incorrect" ;
+        if(!empty($user)) $tab["isPersonnel"] = $user->getIsPersonnel();
+        if($tab["isPasswordEmpty"]===true) $tab["userID"] = $user->getId();
         return $tab ;
 
     }
@@ -110,54 +114,155 @@ class UserController extends Controller
 
     private function updateUser(Request $request, $clearMissing)
     {
-        $user = $this->getDoctrine()->getEntityManager()
-            ->getRepository('AppBundle:User')
-            ->find($request->get('id'));
-
-        if (empty($user)) {
-            return $this->userNotFound();
-        }
-
-        if ($user->getActive()) {
-            return $this->accessForbidden();
-        }
 
 
 
-        if ($clearMissing) { // Si une mise à jour complète, le mot de passe doit être validé
-            $options = ['validation_groups'=>['Default', 'FullUpdate']];
-        } else {
-            $options = []; // Le groupe de validation par défaut de Symfony est Default
-        }
+            $user = $this->getDoctrine()->getEntityManager()
+                ->getRepository('AppBundle:User')
+                ->find($request->get('id'));
 
-        $form = $this->createForm(UserType::class, $user, $options);
-
-        $form->submit($request->request->all(), $clearMissing);
-
-        if ($form->isValid()) {
-            // Si l'utilisateur veut changer son mot de passe
-            if (!empty($user->getPlainPassword())) {
-                $encoder = $this->get('security.password_encoder');
-                $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
-                $user->setPassword($encoded);
+            if (empty($user)) {
+                return $this->userNotFound();
             }
-            $em = $this->get('doctrine.orm.entity_manager');
-            $em->merge($user);
-            $em->flush();
-            return $user;
-        } else {
-            return $form;
-        }
+
+            if(empty($user->getUserProfilRoot())){
+                $user->setDateCreation(new DateTime());
+            }
+
+            if ($clearMissing) { // Si une mise à jour complète, le mot de passe doit être validé
+                $options = ['validation_groups'=>['Default', 'FullUpdate']];
+            } else {
+                $options = []; // Le groupe de validation par défaut de Symfony est Default
+            }
+
+            $form = $this->createForm(UserType::class, $user, $options);
+
+            $form->submit($request->request->all(), $clearMissing);
+
+
+            if ($form->isValid()) {
+
+                //Recaptcha verification
+                //Should be some validations before you proceed
+                //Not in the scope of this tutorial.
+
+                $captcha = $user->getGRecaptchaResponse(); //Captcha response send by client
+
+                //Build post data to make request with fetch_file_contents
+                $postdata = http_build_query(
+                    array(
+                        'secret' => '6LfLyBAUAAAAAHy-mq02Sk1ukQ5SYEosEL_1nFc5', //secret key provided by google
+                        'response' => $captcha,                    // g-captcha-response string sent from client
+                        'remoteip' => $_SERVER['REMOTE_ADDR']
+                    )
+                );
+
+                //Build options for the post request
+                $opts = array('http' =>
+                    array(
+                        'method'  => 'POST',
+                        'header'  => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata
+                    )
+                );
+
+                //Create a stream this is required to make post request with fetch_file_contents
+                $context  = stream_context_create($opts);
+
+                /* Send request to Googles siteVerify API */
+                $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify",false,$context);
+                $response = json_decode($response, true);
+
+
+                if($response["success"]===false) { //if user verification failed
+
+                    return $response;
+
+                }
+
+                // Si l'utilisateur veut changer son mot de passe
+                if (!empty($user->getPlainPassword())) {
+                    $encoder = $this->get('security.password_encoder');
+                    $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
+                    $validationCode = base64_encode(random_bytes(64));
+                    $user->setValidationCode($validationCode);
+                    $user->setPassword($encoded);
+                    $this->sendEmailActivation($user->getPrenom(), $validationCode);
+                }
+                $em = $this->get('doctrine.orm.entity_manager');
+
+                if(!empty($user->getCroppedDataUrl()))
+                {
+                    $data = $request->get('croppedDataUrl');
+                    $file_name = $request->get('id')."_".date("Y_m_d")."_".date("h_i_sa")."_".$request->get('picFileName');
+                    list($type, $data) = explode(';', $data);
+                    list(, $data)      = explode(',', $data);
+                    $data = base64_decode($data);
+
+                    $type = finfo_buffer(finfo_open(), $data, FILEINFO_MIME_TYPE);
+
+                    file_put_contents("img/imgProfils/".$file_name, $data);
+                    $user->setUserProfilRoot("img/imgProfils/".$file_name);
+
+                }else{
+                    $user->setUserProfilRoot("img/happystudent.png");
+                }
+
+                $em->merge($user);
+                $em->flush();
+                return $user;
+
+            } else {
+                return $form;
+            }
+
+
+
+        //End of verification
+
+
     }
 
     private function userNotFound()
     {
-        return \FOS\RestBundle\View\View::create(['message' => 'Utilisateur introuvable'], Response::HTTP_NOT_FOUND);
+        return \FOS\RestBundle\View\View::create(['message' => 'user not found'], Response::HTTP_NOT_FOUND);
     }
 
     private function accessForbidden()
     {
-        return \FOS\RestBundle\View\View::create(['message' => 'Acces interdit'], Response::HTTP_FORBIDDEN);
+        return \FOS\RestBundle\View\View::create(['message' => 'Access Forbidden'], Response::HTTP_FORBIDDEN);
     }
+
+    private function sendEmailActivation($name, $validationCode)
+    {
+     /*   $message = \Swift_Message::newInstance()
+            ->setSubject('Hello Email')
+            ->setFrom('send@example.com')
+            ->setTo('recipient@example.com')
+            ->setBody(
+                $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                    'default/registration.html.twig',
+                    array('name' => $name, 'activationCode' =>$validationCode)
+                ),
+                'text/html'
+            )*/
+            /*
+             * If you also want to include a plaintext version of the message
+            ->addPart(
+                $this->renderView(
+                    'Emails/registration.txt.twig',
+                    array('name' => $name)
+                ),
+                'text/plain'
+            )
+            */
+        ;
+       // $this->get('mailer')->send($message);
+
+        //return $this->render(...);
+    }
+
+
 
 }

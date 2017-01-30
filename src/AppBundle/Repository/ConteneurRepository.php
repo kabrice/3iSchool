@@ -16,7 +16,7 @@ class ConteneurRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('c');
         $qb->select("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
-            "contenu.nombreLike", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
+            "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
             "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique");
         $qb->join('c.contenu', 'contenu');
         $qb->join('contenu.rubrique', 'rubrique');
@@ -37,7 +37,7 @@ class ConteneurRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('uc');
         $qb->select(array("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
-            "contenu.nombreLike", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
+            "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
             "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique", "uc.nbreVue"));
         $qb->join('uc.contenu', 'contenu');
         $qb->join('contenu.rubrique', 'rubrique');

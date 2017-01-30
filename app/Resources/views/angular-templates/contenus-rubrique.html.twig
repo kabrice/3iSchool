@@ -17,7 +17,15 @@
             </div>
             <div style="display: flex">
                 <div style="color: orangered;" >
-                    <i class="fa fa-heart fa-1x" aria-hidden="true"></i>
+                    <ng-rate-it
+                            style="margin-top: 3px; margin-left: -1px;"
+                            read-only="true"
+                            class="custom"
+                            cancel-width="1"
+
+                            cancel-height="1"
+                            ng-model="3.5"
+                            ng-click="rate()"></ng-rate-it>
                 </div>
                 <div style="margin-left: 18px; color: orangered;">
                     {[{contenu.nombreLike}]} j'aime
@@ -25,7 +33,7 @@
             </div>
             <div class="caption-item-content">
                 <div class="course-view">{[{contenu.nombreVueTotal}]} vues</div>
-                <div class="course-date">{[{contenu.datePublication | date:'dd MMM yyyy à HH : mm'}]}</div>
+                <div class="course-date">{[{contenu.datePublication | date:'dd MMM yyyy à HH:mm'}]}</div>
             </div>
         </div>
     </div>

@@ -68,6 +68,10 @@ class DashboardController extends Controller
             ->setAPublie(true)
             ->setContenu($contenu)
             ->setAPublie(1)
+            ->setContenu($contenu)
+            ->setAPublie(true)
+        ->setContenu($contenu)
+            ->setAPublie(1)
             ->setNbreVue(1);
 
         $form = $this->createForm(ContenuType::class, $contenu);

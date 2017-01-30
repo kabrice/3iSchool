@@ -46,9 +46,9 @@ class Contenu
     /**
      * @var int
      *
-     * @ORM\Column(name="nombre_like", type="integer")
+     * @ORM\Column(name="note", type="integer")
      */
-    protected $nombreLike=0;
+    protected $note=0;
 
     /**
      * @var int
@@ -200,29 +200,6 @@ class Contenu
         return $this->datePublication;
     }
 
-    /**
-     * Set nombreLike
-     *
-     * @param integer $nombreLike
-     *
-     * @return Contenu
-     */
-    public function setNombreLike($nombreLike)
-    {
-        $this->nombreLike = $nombreLike;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreLike
-     *
-     * @return integer
-     */
-    public function getNombreLike()
-    {
-        return $this->nombreLike;
-    }
 
     /**
      * Set nombreVueTotal
@@ -445,4 +422,23 @@ class Contenu
     {
         return $this->sousRubrique;
     }
+
+    /**
+     * @return int
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * @param int $note
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    }
+
+
+
 }

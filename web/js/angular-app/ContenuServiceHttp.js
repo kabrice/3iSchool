@@ -12,10 +12,16 @@ angular.module("ContenuServiceHttp", ['angular.filter'])
         //console.log($http.get("/api/users/1/3/2/3", config));
 
         return {
+
             getGroupesContenus: function (user_id, annee_id, groupe_id, niveau_id) {
+
                 var promesse = $http.get("/api/users/"+user_id+"/"+annee_id+"/"+groupe_id+"/"+niveau_id, config);
+
                 var groupesContenus = [];
+
+
                 promesse.then(function (reponse) {
+
                    //console.log(reponse.data);
                     angular.extend(groupesContenus, reponse.data);
 
@@ -25,6 +31,7 @@ angular.module("ContenuServiceHttp", ['angular.filter'])
                 console.log(groupesContenus);
                 return groupesContenus;
             },
+
             getConteneur: function (conteneur_id) {
                 var promesse = $http.get("http://127.0.0.1:8000/api/lectureConteneur/"+conteneur_id, config);
                 var resultat = [];

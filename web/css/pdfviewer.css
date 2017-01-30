@@ -215,7 +215,7 @@ padding-left: 0;
 .comment-footer .active,
 .comment-footer:hover,
 .question-answer-footer:hover,
-.like-footer:hover{
+.like-footer{
     color: #e84e0f;
     cursor: pointer;
 }
@@ -229,12 +229,12 @@ padding-left: 0;
 
 .like-footer {
     position:absolute;
-    width:40px;
-    margin-bottom: 5px;
+    width:120px;
+
     bottom:0px;
     right:25%;
     left:50%;
-    margin-left:-20px;
+    margin-left:-58px;
     text-align: center;
 }
 
@@ -287,3 +287,36 @@ padding-left: 0;
     backface-visibility: hidden;
     perspective: 1000px;
 }
+
+
+/* Background */
+.custom .ngrateit-bg-star{
+
+    background-image: url("bg-heart.png");
+}
+/* Selected state */
+.custom .ngrateit-selected {
+    
+    background-image: url("hover-heart.png");
+}
+/* Cancelation of hover styling */
+.custom.ngrateit:not(.ngrateit-readonly) .ngrateit-rating span:hover ~ span {
+    
+    background-image: url("bg-heart.png");
+}
+/* Hover styling */
+.custom.ngrateit:not(.ngrateit-readonly) .ngrateit-rating:hover span {
+    
+    background-image: url("hover-heart.png");
+}
+
+/* Margin left */
+.custom.ngrateit:not(.ngrateit-readonly) .ngrateit-rating:hover span:nth-child(even),
+.custom.ngrateit:not(.ngrateit-readonly) .ngrateit-rating span:hover ~ span:nth-child(even),
+.custom .ngrateit-selected:nth-child(even),
+.custom .ngrateit-bg-star:nth-child(even){
+
+    margin-right: 1px;
+}
+
+

@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class ContenuController extends Controller
 {
     /**
-     * @Rest\View(serializerGroups={"conteneur", "contenu", "reponse"})
+     * @Rest\View(serializerGroups={"conteneur", "contenu", "question"})
      * @Rest\Get("/lectureConteneur/{id}")
      */
     public function getConteneurAction($id, Request $request)

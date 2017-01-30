@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div ng-controller="3ischoolCtrl">
+    <div class="preloader" ng-show="chargementEnCours && showHome"  ng-cloak>
+        <div class="msg-preloader">
+            <img ng-src="{{ asset('img/preloader.gif') }}"/>
+        </div>
+    </div>
+
+    <div class="jumbotron" ng-init="getUser('{{ email | json_encode()  }}')" ng-cloak> 
+
+        <div>
+
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="container-fluid" >
+                    <div class="navbar-header">
+
+                        <div  class="navbar-brand">
+                            <a ng-href="/"><img ng-src="{{ asset('img/3ischool_logo.png') }}" height="30" width="130" style="margin-top: -4px">   </a>
+                        </div>
+                    </div>
+
+                    <div id="navbar" class="collapse navbar-collapse" style="border-top: none">
+                        <ul class="nav navbar-nav navbar-justified">
+                            <li>
+                                <form id="custom-search-input" role="search">
+                                    <div class="input-group col-md-12">
+                                        <input type="search"
+                                               ng-model="data.rechercheContenu"
+                                               class="search-query form-control"
+                                               placeholder="Recherchez un cours, un TD, un TP et plus dans cette promotion"
+                                               ng-keydown="showSearch()"/>
+                                        <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" >
+                                        <span class=" glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right" style="margin-top: -6px">
+
+                            <li id="notification_li" >
+                                <span id="notification_count" hidden></span>
+                                <a href='?controller=utilisateur&action=posterpensee' class="header-text" id="notificationLink"><i class="material-icons">notifications</i></a>
+                                <div id="notificationContainer">
+                                    <div id="notificationTitle">Notifications</div>
+                                    <div id="notificationsBody" class="notifications scroll">
+                                        <ul class="nav" id="notifications-ul">
+
+                                        </ul>
+                                    </div>
+                                    <div id="notificationFooter"><a href="#" class="notif-link-footer"><i class="material-icons">sentiment_satisfied</i></a></div>
+                                </div>
+                            </li>
+                            <li >
+                                <a href='/' class="header-text">Accueil</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px; color:dimgrey;" onmouseover="this.style.color='#1e90fe';this.style.color='#1e90fe';" onmouseout="this.style.background='';this.style.color='dimgrey';">
+                                    {[{authToken.user.prenom}]}<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/3il/{[{username}]}">Profil</a></li>
+                                    <li><a href='?controller=profil&action=suggestion'>Tableau de Bord</a></li>
+                                    <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+            <!-- Sidebar -->
+
+            <!-- Page content -->
+            <div id="page-content-wrapper" ng-show="!chargementEnCours && !hideSearch" ng-cloak>
+                <div class="page-content">
+                    <div class="container-fluid">
+                        {#A modifier avec ng-model#}
+                        <div class="alert alert-info" ng-if="!hideSearch">{[{contenusFiltres.length}]}
+                            <span ng-if="contenusFiltres.length<2">contenu trouvé</span>
+                            <span ng-if="contenusFiltres.length>=2">contenus trouvés</span></div>
+                        <div class="row">
+
+                            <div class="span12">
+                                {#Début Affichage de contenus courant concernant une rubrique cliquée#}
+                                <div>
+
+                                    <contenus-rubrique
+                                            ng-hide="showProfil"
+                                            ng-repeat="unConteneur in conteneurs "
+                                            ng-show="(unConteneur.libelle_rubrique==rubriqueCourante || unConteneur.nom==rubriqueCourante) && hideSearch"
+                                            contenu="unConteneur"></contenus-rubrique>
+
+                                    <administration ng-if="showAnnoncesImportantes" ng-hide="showProfil"></administration>
+                                    {#Exclusivily for the search#}
+                                    <contenus-rubrique
+                                            ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: data.rechercheContenu) "
+                                            ng-if="!hideSearch"
+                                            contenu="unConteneur"
+                                            recherche="data.rechercheContenu"></contenus-rubrique>
+                                    {#End of the search#}
+
+                                </div>
+                                {#Fin Affichage de contenus concernant une rubrique#}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div></div>
+    <div class="container">
+        <div class="row">
+<div class="col-xl-2 col-lg-3 col-md-2 col-sm-2"></div>
+            <div class="col-xl-8 col-lg-6 col-md-8 col-sm-8 col-xs-12 panel send-email" ng-show="!chargementEnCours" ng-cloak>
+                <h3 class="display-3"><img ng-src="{{ asset('{[{userProfil[0].userProfilRoot}]}') }}" height="150" width="150">
+                    <span>{[{userProfil[0].prenom}]} {[{userProfil[0].nom}]}</br>
+                        <a href="mailto:{[{userProfil[0].email}]}" style="text-decoration: none">
+                        <button class="btn btn-lg btn-primary btn-block" style="width: 300px">
+                            <i class="material-icons" style="vertical-align: middle">email</i>
+                            <span >Envoyer un message</span>
+                        </button></a></span></h3>
+
+
+                <div><h4>A propos:</h4><p>Professeur de base de donnée</p></div>
+                <table class="table">
+
+                    <tr>
+                        <th><b>Statut:</b></th>
+                        <td><span ng-show="userProfil[0].isPersonnel">Enseignant</span>
+                            <span ng-show="!userProfil[0].isPersonnel">Etudiant</span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-2 col-sm-2"></div>
+        </div>
+    </div>
+    </div>
+    </div>
+    {#End Authentification#}
+
+{% endblock %}

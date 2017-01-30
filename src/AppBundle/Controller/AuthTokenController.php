@@ -21,13 +21,15 @@ class AuthTokenController extends Controller
 {
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
-     * @Rest\Post("/auth-tokens")
+     * @Rest\Post("/auth-tokens/{countClick}")
      */
     public function postAuthTokensAction(Request $request)
     {
+
         $credentials = new Credentials();
         $form = $this->createForm(CredentialsType::class, $credentials);
-        $form->submit($request->request->all());
+        //$form->submit(array($request->request["login"],$request->request["password"] ));
+        $form->submit($request->request->all(), false);
 
         if (!$form->isValid()) {
             return $form;
@@ -47,8 +49,47 @@ class AuthTokenController extends Controller
         $encoder = $this->get('security.password_encoder');
         $isPasswordValid = $encoder->isPasswordValid($user, $credentials->getPassword());
 
+        if($request->get("countClick")>3)
+        {
+            $captcha = $credentials->getGRecaptchaResponse(); //Captcha response send by client
+
+            //Build post data to make request with fetch_file_contents
+            $postdata = http_build_query(
+                array(
+                    'secret' => '6LfLyBAUAAAAAHy-mq02Sk1ukQ5SYEosEL_1nFc5', //secret key provided by google
+                    'response' => $captcha,                    // g-captcha-response string sent from client
+                    'remoteip' => $_SERVER['REMOTE_ADDR']
+                )
+            );
+
+            //Build options for the post request
+            $opts = array('http' =>
+                array(
+                    'method'  => 'POST',
+                    'header'  => 'Content-type: application/x-www-form-urlencoded',
+                    'content' => $postdata
+                )
+            );
+
+            //Create a stream this is required to make post request with fetch_file_contents
+            $context  = stream_context_create($opts);
+
+            /* Send request to Googles siteVerify API */
+            $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify",false,$context);
+            $response = json_decode($response, true);
+
+            $response["gRecaptchaResponse"]=$captcha;
+            if($response["success"]===false) { //if user verification failed
+
+                return $response;
+
+            }
+        }
+
         if (!$isPasswordValid) { // Le mot de passe n'est pas correct
-            return $this->invalidCredentials();
+
+             $tab["credentials"] = false;
+             return $tab;
         }
 
         $authToken = new AuthToken();

@@ -85,4 +85,20 @@ class TemplateController extends Controller
     {
         return $this->render('angular-templates/authentification.html.twig', []);
     }
+
+    /**
+     * @Route("/administration", name="administration")
+     */
+    public function administrationAction()
+    {
+        return $this->render('angular-templates/administration.html.twig', []);
+    }
+
+    /**
+     * @Route("/review", name="review")
+     */
+    public function reviewAction()
+    {
+        return $this->render('angular-templates/review.html.twig', []);
+    }
 }

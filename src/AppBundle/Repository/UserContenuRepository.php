@@ -16,7 +16,7 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('uc');
         $qb->select(array("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
-                         "contenu.nombreLike", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
+                         "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
                          "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique", "uc.nbreVue"));
         $qb->join('uc.contenu', 'contenu');
         $qb->join('contenu.rubrique', 'rubrique');
@@ -32,7 +32,7 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('uc');;
         $qb->select("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
-            "contenu.nombreLike", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
+            "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
             "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique",
             "groupeRubrique.libelle as libelle_groupeRubrique", "rubrique.imageRoot as imageRoot_rubrique","user.nom", "user.userProfilRoot", "user.id as user_id", "user.isPersonnel");
         $qb->join('uc.contenu', 'contenu');
