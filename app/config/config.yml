@@ -80,9 +80,6 @@ fos_rest:
         rules:
             - {path: '^/api', priorities: ['json'], fallback_format: 'json'}
 
-# configuration à rajouter pour désactiver le body listener (par défaut il est à true)
-    body_listener:
-        enabled: true
 
     exception:
         enabled: true

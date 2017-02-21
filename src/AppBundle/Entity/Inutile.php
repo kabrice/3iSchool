@@ -25,9 +25,16 @@ class Inutile
     /**
      * @var int
      *
-     * @ORM\Column(name="num_ref", type="integer")
+     * @ORM\Column(name="user_id", type="integer")
      */
-    private $numRef;
+    private $userID;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ref_id", type="integer")
+     */
+    private $refID;
 
     /**
      * @var string
@@ -47,16 +54,18 @@ class Inutile
      * Inutile constructor.
      * @param \DateTime $dateInutile
      */
-    public function __construct(\DateTime $dateInutile)
+    public function __construct()
     {
         $this->dateInutile =  new DateTime();
     }
 
 
+
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -64,27 +73,51 @@ class Inutile
     }
 
     /**
-     * Set numRef
+     * Set userID
      *
-     * @param integer $numRef
+     * @param integer $userID
      *
      * @return Inutile
      */
-    public function setNumRef($numRef)
+    public function setUserID($userID)
     {
-        $this->numRef = $numRef;
+        $this->userID = $userID;
 
         return $this;
     }
 
     /**
-     * Get numRef
+     * Get userID
      *
-     * @return int
+     * @return integer
      */
-    public function getNumRef()
+    public function getUserID()
     {
-        return $this->numRef;
+        return $this->userID;
+    }
+
+    /**
+     * Set refID
+     *
+     * @param integer $refID
+     *
+     * @return Inutile
+     */
+    public function setRefID($refID)
+    {
+        $this->refID = $refID;
+
+        return $this;
+    }
+
+    /**
+     * Get refID
+     *
+     * @return integer
+     */
+    public function getRefID()
+    {
+        return $this->refID;
     }
 
     /**

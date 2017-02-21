@@ -101,4 +101,36 @@ class TemplateController extends Controller
     {
         return $this->render('angular-templates/review.html.twig', []);
     }
+
+    /**
+     * @Route("/chart", name="chart")
+     */
+    public function chartAction()
+    {
+        return $this->render('angular-templates/chart.html.twig', []);
+    }
+
+    /**
+     * @Route("/questionManager", name="questionManager")
+     */
+    public function questionManagerAction()
+    {
+        return $this->render('angular-templates/questionManager.html.twig', []);
+    }
+
+    /**
+     * @Route("/contenusSignales", name="contenusSignales")
+     */
+    public function contenusSignalesAction()
+    {
+        return $this->render('angular-templates/contenusSignales.html.twig', []);
+    }
+
+    /**
+     * @Route("/mesCours", name="mesCours")
+     */
+    public function mesCoursAction()
+    {
+        return $this->render('angular-templates/mesCours.html.twig', []);
+    }
 }

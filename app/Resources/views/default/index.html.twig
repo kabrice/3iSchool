@@ -72,7 +72,7 @@
                                     {[{authToken.user.prenom}]}<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/3il/{[{username}]}">Profil</a></li>
-                                    <li><a href='?controller=profil&action=suggestion'>Tableau de Bord</a></li>
+                                    <li><a href="/1/dashboard">Tableau de Bord</a></li>
                                     <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
                                 </ul>
                             </li>
@@ -107,7 +107,7 @@
                                         uib-tooltip="Année de promotion">
 
                                     <option value="{[{annee.id}]}"
-                                            ng-repeat="annee in annees">
+                                            ng-repeat="annee in annees" >
                                         {[{annee.libelle}]}</option>
                                 </select>
                             </div>
@@ -177,7 +177,12 @@
 
                     <contenus-rubrique
                             ng-repeat="unConteneur in conteneurs "
-                            ng-show="(unConteneur.libelle_rubrique==rubriqueCourante || unConteneur.nom==rubriqueCourante) && hideSearch"
+                            ng-if="(unConteneur.libelle_rubrique==rubriqueCourante && unConteneur.libelle_rubrique!='Enseignant') && hideSearch"
+                            contenu="unConteneur"></contenus-rubrique>
+
+                    <contenus-rubrique
+                            ng-repeat="unConteneur in conteneurs "
+                            ng-if="(unConteneur.libelle_rubrique=='Enseignant' && (unConteneur.nom==rubriqueCourante) && hideSearch)"
                             contenu="unConteneur"></contenus-rubrique>
 
                     <administration ng-if="showAnnoncesImportantes"></administration>

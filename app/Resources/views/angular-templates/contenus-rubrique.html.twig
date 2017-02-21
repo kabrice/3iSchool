@@ -1,6 +1,6 @@
-<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
     <div class="panel panel-default course-pointer">
-        <a target="_blank" href="/lectureContenu/{[{contenu.id}]}">
+        <a target="_blank" href="/lectureContenu/{[{contenu.conteneurID}]}">
             <div class="panel-heading">
                 <img ng-src="{{ asset('{[{contenu.imageRoot}]}') }}" class="img-wrapper " />
             </div>
@@ -22,9 +22,8 @@
                             read-only="true"
                             class="custom"
                             cancel-width="1"
-
                             cancel-height="1"
-                            ng-model="3.5"
+                            ng-model="contenu.note"
                             ng-click="rate()"></ng-rate-it>
                 </div>
                 <div style="margin-left: 18px; color: orangered;">

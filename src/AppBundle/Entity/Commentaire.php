@@ -2,8 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToMany;
+
 
 /**
  * Commentaire
@@ -67,7 +68,7 @@ class Commentaire
     /**
      * @var int
      *
-     * @ORM\Column(name="report", type="integer")
+     * @ORM\Column(name="nbre_inutile", type="integer")
      */
     protected $nbreInutile=0;
 

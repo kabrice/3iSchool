@@ -18,6 +18,7 @@ class ReponseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('libelle');
+        $builder->add('anonyme');
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -29,7 +29,7 @@ class ContenuController extends Controller
      * @Rest\View(serializerGroups={"conteneur", "contenu", "question"})
      * @Rest\Get("/lectureConteneur/{id}")
      */
-    public function getConteneurAction($id, Request $request)
+    public function getConteneurAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $conteneur = $em->getRepository('AppBundle:Conteneur')->find($request->get('id'));
@@ -49,23 +49,24 @@ class ContenuController extends Controller
      */
     public function postQuestionAction(Request $request)
     {
+
         $em = $this->getDoctrine()->getEntityManager();
         $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
         $typeQuestion = $em->getRepository('AppBundle:TypeQuestion')->find($request->get('type_question_id'));
 
-        // Todo Recuperer l'id session plutard avec les token ou les session (1
 
-        $thisUser = $em->getRepository('AppBundle:User')->find($request->get('contenu_id'));
+        $thisUser = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
 
 
-        if (empty($contenu)) {
-            return \FOS\RestBundle\View\View::create(['message' => 'Contenu concernant la question inexistant'], Response::HTTP_NOT_FOUND);
+        if (empty($contenu) || empty($typeQuestion) || empty($thisUser)) {
+            return \FOS\RestBundle\View\View::create(['message' => 'entity not found'], Response::HTTP_NOT_FOUND);
         }
 
         $question = new Question();
         $question->setContenu($contenu)
                  ->setTypeQuestion($typeQuestion)
-                 ->addUser($thisUser);
+                 ->setUser($thisUser)
+                 ->setNombreVu(1);
 
         $thisUser->addQuestion($question)  ;
 
@@ -86,17 +87,17 @@ class ContenuController extends Controller
     }
 
     /**
-     * @Rest\View(serializerGroups={"user"}, statusCode=Response::HTTP_CREATED)
-     * @Rest\Post("/lectureContenu/Question/{id}/Reponses")
+     * @Rest\View(serializerGroups={"reponse"}, statusCode=Response::HTTP_CREATED)
+     * @Rest\Post("/lectureContenu/Question/{question_id}/{user_id}/Reponses")
      */
     public function postReponseAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $question = $em->getRepository('AppBundle:Question')->find($request->get('id'));
+        $question = $em->getRepository('AppBundle:Question')->find($request->get('question_id'));
 
 // Todo configurer plutard
 
-        $thisUser = $em->getRepository('AppBundle:User')->find(1);
+        $thisUser = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
 
 
         if (empty($question)) {
@@ -105,7 +106,7 @@ class ContenuController extends Controller
 
         $reponse = new Reponse();
         $reponse->setQuestion($question)
-                ->addUser($thisUser);
+                ->setUser($thisUser);
 
         $thisUser->addReponse($reponse)  ;
 
@@ -125,20 +126,18 @@ class ContenuController extends Controller
     }
 
     /**
-     * @Rest\View(serializerGroups={"user"}, statusCode=Response::HTTP_CREATED)
-     * @Rest\Post("/lectureContenu/Question/Reponse/{id}/Commentaires")
+     * @Rest\View(serializerGroups={"commentaire"}, statusCode=Response::HTTP_CREATED)
+     * @Rest\Post("/lectureContenu/Question/Reponse/{reponse_id}/{user_id}/Commentaires")
      */
     public function postCommentaireAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $reponse = $em->getRepository('AppBundle:Reponse')->find($request->get('id'));
-
-        // Todo configurer plutard
-        $thisUser = $em->getRepository('AppBundle:User')->find(1);
+        $reponse = $em->getRepository('AppBundle:Reponse')->find($request->get('reponse_id'));
+        $thisUser = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
 
 
-        if (empty($reponse)) {
-            return \FOS\RestBundle\View\View::create(['message' => 'Réponse concernant le commentaire inexistante'], Response::HTTP_NOT_FOUND);
+        if (empty($reponse) || empty($thisUser) ) {
+            $this->entityNotFound();
         }
 
         $commentaire = new Commentaire();
@@ -148,9 +147,7 @@ class ContenuController extends Controller
         $commentaire->setReponse($reponse)
                     ->setParentId(1)
                     ->setDepth(1)
-                    ->addUser($thisUser);
-
-        $thisUser->addCommentaire($commentaire);
+                    ->setUser($thisUser);
 
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->submit($request->request->all());
@@ -158,6 +155,7 @@ class ContenuController extends Controller
         if ($form->isValid()) {
 
             $em->persist($commentaire);
+            $thisUser->addCommentaire($commentaire);
             $em->persist($thisUser);
             $em->flush();
             return $commentaire;
@@ -237,9 +235,20 @@ class ContenuController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository("AppBundle:$entityName")
             ->find($request->get('id'));
-        $entity->setDatePublication(new \DateTime());
 
-        if (empty($entity)) {
+        if(strcmp($entityName,"Question")==0)
+        {
+            $entity->setNombreVu(1+$entity->getNombreVu());
+        }
+
+        $question = new Question();
+
+        if(strlen($question->getLibelle())>10)
+        {
+            $entity->setDatePublication(new \DateTime());
+        }
+
+        if(empty($entity)) {
             return \FOS\RestBundle\View\View::create(["message" => "$entityName not found"], Response::HTTP_NOT_FOUND);
         }
 
@@ -249,7 +258,7 @@ class ContenuController extends Controller
 
         $form = $this->createForm($entityType, $entity);
 
-        $form->submit($request->request->all(), true);
+        $form->submit($request->request->all(), false);
 
         if ($form->isValid()) {
             $em->persist($entity);
@@ -259,4 +268,60 @@ class ContenuController extends Controller
             return $form;
         }
     }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\Post("/contenu/contenuRoot")
+     */
+    public function postCreateContenuRootAction(Request $request)
+    {
+
+        $uid = $_REQUEST['uid'];
+        $filename = $_FILES['file']['name'];
+        $upload_folder = 'media/';
+        if (file_exists($upload_folder . $filename)) {
+             $tab["fileAlreadyExist"] = true;
+            return $tab;
+        }
+
+        if (empty($_FILES['file']['name'])) {
+            return \FOS\RestBundle\View\View::create(['message' => 'Undefined file'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (isset($_POST['_chunkNumber'])) {
+            // the file is uploaded piece by piece, chunk mode
+            $current_chunk_number = $_REQUEST['_chunkNumber'];
+            $chunk_size = $_REQUEST['_chunkSize'];
+            $total_size = $_REQUEST['_totalSize'];
+            $upload_folder = 'media/';
+
+            $total_chunk_number = ceil($total_size / $chunk_size);
+            move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder . $uid . '.part' . $current_chunk_number);
+            // the last chunk of file has been received
+            if ($current_chunk_number == ($total_chunk_number - 1)) {
+                // reassemble the partial pieces to a whole file
+                for ($i = 0; $i < $total_chunk_number; $i ++) {
+                    $content = file_get_contents($upload_folder . $uid . '.part' . $i);
+                    file_put_contents($upload_folder . $filename, $content, FILE_APPEND);
+                    unlink($upload_folder . $uid . '.part' . $i);
+                }
+
+            }
+            //return;
+        } else {
+            // the file is uploaded as a whole, no chunk mode
+
+            move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder.$filename);
+        }
+
+        $tab["contenuRoot"] = "http://localhost:8000/$upload_folder$filename";
+        return $tab;
+
+    }
+
+    private function entityNotFound()
+    {
+        return \FOS\RestBundle\View\View::create(['message' => 'entity not found'], Response::HTTP_NOT_FOUND);
+    }
+
 }

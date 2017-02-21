@@ -56,12 +56,12 @@ class Reponse
      *
      * @ORM\Column(name="anonyme", type="boolean")
      */
-    protected $anonyme=0;
+    protected $anonyme=false;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="report", type="integer")
+     * @ORM\Column(name="nbre_inutile", type="integer")
      */
     protected $nbreInutile=0;
 

@@ -15,7 +15,7 @@ class ConteneurRepository extends \Doctrine\ORM\EntityRepository
     public function findContenusTries($criteres, $actionOrderBy)
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->select("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
+        $qb->select("c.id as conteneurID", "contenu.id", "contenu.titre", "contenu.description", "contenu.datePublication",
             "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
             "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique");
         $qb->join('c.contenu', 'contenu');
@@ -36,7 +36,7 @@ class ConteneurRepository extends \Doctrine\ORM\EntityRepository
     public function findContenusRecents(User $user)
     {
         $qb = $this->createQueryBuilder('uc');
-        $qb->select(array("contenu.id", "contenu.titre", "contenu.information", "contenu.datePublication",
+        $qb->select(array("contenu.id", "contenu.titre", "contenu.description", "contenu.datePublication",
             "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
             "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique", "uc.nbreVue"));
         $qb->join('uc.contenu', 'contenu');

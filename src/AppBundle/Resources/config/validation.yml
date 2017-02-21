@@ -1,3 +1,5 @@
+# src/AppBundle/Resources/config/validation.yml
+
 AppBundle\Entity\Question:
     properties:
         libelle:
@@ -12,6 +14,8 @@ AppBundle\Entity\Question:
                 value: 0
             - LessThanOrEqual:
                 value: 1000
+        anonyme:
+            - Type: bool
         ligne:
             - Type: integer
             - GreaterThan:
@@ -64,7 +68,7 @@ AppBundle\Entity\Contenu:
           titre:
               - NotBlank: ~
               - Type: string
-          information:
+          description:
               - NotBlank: ~
               - Type: string
           imageRoot:
@@ -73,3 +77,18 @@ AppBundle\Entity\Contenu:
           contenuRoot:
               - NotBlank: ~
               - Type: string
+#         note:
+#              - Type: float
+#              - GreaterThanOrEqual:
+#                  value: 0
+#              - LessThanOrEqual:
+#                  value: 5
+
+AppBundle\Entity\Vote:
+    properties:
+        valeur:
+            - GreaterThan:
+                value: 0
+            - LessThanOrEqual:
+                value: 5
+

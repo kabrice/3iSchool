@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\User;
 
 /**
  * QuestionRepository
@@ -10,4 +11,5 @@ namespace AppBundle\Repository;
  */
 class QuestionRepository extends \Doctrine\ORM\EntityRepository
 {
+
 }

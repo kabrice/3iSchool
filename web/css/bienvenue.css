@@ -168,7 +168,8 @@
 
 .authentification .form-signin button:not(.close),
 .send-email button,
-.review{
+.review
+{
 
     height:43px;
 
@@ -258,8 +259,15 @@ position: absolute;
     margin-bottom: 5px;
 }
 
-.authentification .bg-end{
+.authentification .bg-end,
+.poster button{
     background-color:#42b72a;
+    border: none;
+}
+
+.authentification .bg-end:hover,
+.poster button:hover{
+    background-color: limegreen;
 }
 
 .g-recaptcha {

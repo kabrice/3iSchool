@@ -81,7 +81,7 @@
     color: #414c54;
 }
 
-td img{
+td .liste-questions{
 
     height: 30px;
     display:block;
@@ -137,6 +137,7 @@ th{
 
 .inutile{
     color: #989898;
+    font-size: 9pt;
 }
 
 .reponse-light,
@@ -253,7 +254,6 @@ padding-left: 0;
 .contenu-newQuestion,
 .input-group{
     width: 100%;
-
 }
 
 

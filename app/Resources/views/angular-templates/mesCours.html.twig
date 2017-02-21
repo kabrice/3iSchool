@@ -1,0 +1,119 @@
+<div>
+    <div class="row">
+        <div class="col-xl-1 col-lg-1 col-md-1"></div>
+        <div class="col-xl-3 col-lg-3 col-md-3">
+            <div class="row">
+                <div class="col-sm-3 "></div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-6 ">
+                    <div class="panel panel-default course-pointer">
+                        <a target="_blank" href="/lectureContenu/{[{contenu.id}]}">
+                            <div class="panel-heading">
+                                <img ng-src="{{ asset('{[{contenu.imageRoot}]}') }}" class="img-wrapper " />
+                            </div>
+                        </a>
+                        <div class="caption-wrapper">
+                            <div class="title-course" ng-bind-html="contenu.titre | limitTo:40">
+                                <span ng-if="contenu.titre.length > 40">&hellip;</span>
+                            </div>
+                            <div class="course"><span ng-bind-html="contenu.libelle_rubrique | limitTo:25"></span>
+                                <span ng-if="contenu.libelle_rubrique.length > 25">&hellip;</span>
+                                <div style="float: right;display: inline-block"
+                                     ng-if="contenu.libelle_sousRubrique != null"
+                                     ng-bind-html="contenu.libelle_sousRubrique | surbrillanceRecherche:recherche"></div>
+                            </div>
+                            <div style="display: flex">
+                                <div style="color: orangered;" >
+                                    {#<ng-rate-it
+                                            style="margin-top: 3px; margin-left: -1px;"
+                                            read-only="true"
+                                            class="custom"
+                                            cancel-width="1"
+                                            cancel-height="1"
+                                            ng-model="3.5"
+                                            ng-click="rate()"></ng-rate-it>#}
+                                </div>
+                                <div style="margin-left: 18px; color: orangered;">
+                                    {[{contenu.nombreLike}]} j'aime
+                                </div>
+                            </div>
+                            <div class="caption-item-content">
+                                <div class="course-view">{[{contenu.nombreVueTotal}]} vues</div>
+                                <div class="course-date">{[{contenu.datePublication | date:'dd MMM yyyy à HH:mm'}]}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3"></div>
+           </div>
+        </div>
+        <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12  panel ">
+            <table class="table vu-detail " cellspacing="pixels"  >
+                <tr>
+                    <td colspan="4">
+                        <h5><b>Présentation générale des visites</b></h5>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" ng-controller="GloabalModalCtrl">
+                        <canvas id="line" class="chart chart-line" chart-data="data" height="70%"
+                                chart-labels="labels" chart-series="series" chart-options="options"
+                                chart-dataset-override="datasetOverride" chart-click="onClick">
+                        </canvas>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <h5><b>Présentation des visites/étudiant</b></h5>
+                    </td>
+                </tr>
+                <tr style="background:ghostwhite;">
+                    <th>A vu ce contenu</th>
+                    <th>Nombre de vue</th>
+                    <th>Durée Total (min)</th>
+                    <th>Avis</th>
+                </tr>
+                <tr>
+                    <td><a style="text-decoration: none;">kamdeme</a></td>
+                    <td>50</td>
+                    <td style="color: #1e90fe;">200</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><a style="text-decoration: none;">mbatkam</a></td>
+                    <td>42</td>
+                    <td style="color: #1e90fe;">180</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><a style="text-decoration: none;">tonglem</a></td>
+                    <td>36</td>
+                    <td style="color: #1e90fe;">150</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><a style="text-decoration: none;">kamdemr</a></td>
+                    <td>32</td>
+                    <td style="color: #1e90fe;">130</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><a style="text-decoration: none;">kouamv</a></td>
+                    <td>24</td>
+                    <td style="color: #1e90fe;">80</td>
+                    <td></td>
+                </tr >
+                <tr>
+                    <td><a style="text-decoration: none;">ngamyou</a></td>
+                    <td>6</td>
+                    <td
+                            style="color: #1e90fe;"
+                            ng-mouseover="showOptionDetails()">2</td>
+                    <td></td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="col-xl-1 col-lg-1 col-md-1"></div>
+    </div>
+
+</div>

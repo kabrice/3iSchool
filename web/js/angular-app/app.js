@@ -1,7 +1,11 @@
-angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "ContenuServiceRest", "ngAnimate", 'ui.bootstrap', "ngDialog",
-    "MesFiltres", "MesDirectives", "ngFileUpload", "ngImgCrop", "vcRecaptcha", "angular-click-outside", "ngRateIt"])
+var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "ContenuServiceRest", "ngAnimate", "chart.js",
+                         "ui.bootstrap", "ngDialog", "MesFiltres", "MesDirectives", "ngFileUpload", "ngImgCrop", "vcRecaptcha",
+                         "angular-click-outside", "ngRateIt", "DashboardDirectives", 'ui.select',  'angular-thumbnails'])
+
     .config(function($interpolateProvider, $httpProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+
+
 
         $httpProvider.interceptors.push(function ($q, $rootScope, $window) {
 
@@ -9,7 +13,16 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
             return {
                 request: function (config) {
                     nbreReqs++;
-                    $rootScope.chargementEnCours = true;
+
+                    if($rootScope.blockLoading != undefined && $rootScope.blockLoading)
+                    {
+                        console.log("ok");
+                        $rootScope.chargementEnCours = false;
+                        $rootScope.chargementNouveauContenu = false;
+                    }else {
+                        $rootScope.chargementEnCours = true;
+                        $rootScope.chargementNouveauContenu = true;
+                    }
                     return config;
                 },
                 /*requestError: function (motifRejet) {
@@ -18,6 +31,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
                 response: function (reponse) {
                     if(--nbreReqs == 0){
                         $rootScope.chargementEnCours = false;
+                        $rootScope.chargementNouveauContenu = false;
                     }
                     return reponse;
                 },
@@ -27,7 +41,9 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
                     if(--nbreReqs == 0){
                         $rootScope.chargementEnCours = false;
+                        $rootScope.chargementNouveauContenu = false;
                     }
+
                     return $q.reject(motifRejet);
                 }
             }
@@ -40,7 +56,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         //Chargement En cours
         $rootScope.chargementEnCours =false;
-
+        $rootScope.blockLoading = false;
         $rootScope.headers = null;
 
         $scope.rubriqueCourante = 'Tous';
@@ -53,14 +69,6 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
 
 
-        //Default values
-        $scope.test = {
-            rateit: 0
-        }
-
-        $scope.rate = function () {
-            console.log($scope.test.rateit);
-        }
 
         $scope.ecole = {
             anneeid: 3,
@@ -131,14 +139,6 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         }
 
 
-
-
-
-
-
-
-
-
         // Recherche Contenu
 
         $scope.showSearch = function()
@@ -152,6 +152,31 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
                 $scope.hideSearch = true;
             }
 
+        }
+
+        //File management
+
+        $scope.setFileEventListener = function(element) {
+            $scope.uploadedFile = element.files[0];
+
+            if ($scope.uploadedFile) {
+                $scope.$apply(function() {
+                    $scope.upload_button_state = true;
+                });
+            }
+        }
+
+        $scope.uploadFile = function() {
+            uploadFile();
+        };
+
+
+        function uploadFile() {
+            if (!$scope.uploadedFile) {
+                return;
+            }
+
+          console.log($scope.uploadedFile);
         }
 
         //Todo A faire plutard par rapport au resize de la homepage
@@ -293,7 +318,10 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
 
         /*** *** *** *** ***III-1 IMAGE HANDLE  *** *** *** *** ***/
 
-
+        $scope.bfiConfig = {
+            showUpload: false,
+            previewFileType: 'any'
+        }
 
         $scope.upload = function (imgData) {
             $scope.showImageSubmit = false;
@@ -303,8 +331,6 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
             console.log(imgData);
         }
         /*** *** *** *** ***III-2 RECAPTCHA  *** *** *** *** ***/
-
-
 
 
 
@@ -358,7 +384,6 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
             }
 
         });
-
 
 
 
@@ -428,153 +453,7 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
         };
     }])
 
-    .controller("lectureContenuCtrl", function ($scope, $filter,  $http, $sce,contenuService, ngDialog, $rootScope, $location) {
 
-        $rootScope.chargementEnCours =false;
-
-        $scope.idConteneurSelectionne = null;
-
-        $scope.idQuestionSelectionnee = null;
-        $scope.questionSelectionnee = null;
-        $scope.conteneurCourant = null;
-        // panel question
-        $scope.questionFullscreen = false;
-        $scope.questionDetailFullscreen = null;
-
-        $scope.backToQuestion = function () {
-            $scope.questionDetailFullscreen = null;
-            $scope.afficherNewQuestion = false;
-            //$scope.getConteneurByID($scope.idConteneurSelectionne);
-        }
-
-        $scope.displayQuestionDetail = function(id)
-        {
-
-            $scope.questionDetailFullscreen = $scope.questionFullscreen;
-            $scope.idQuestionSelectionnee = id;
-            $scope.getQuestionByID($scope.idQuestionSelectionnee);
-
-        }
-
-        // Création d'une question
-
-        $scope.afficherNewQuestion = false;
-        $scope.showQuestionError = false;
-
-        $scope.publierQuestion = function(newQuestion)
-        {
-
-            contenuService.postQuestion(newQuestion, 1, 1, 1);
-            $scope.afficherNewQuestion = false;
-            $location.path("/");
-
-        }
-
-        $scope.getConteneurByID = function(id)
-        {
-
-            $scope.idConteneurSelectionne = id;
-
-
-
-
-            contenuService.getConteneur(id).$promise.then(function(data){
-                $scope.conteneurCourant = data;
-                $scope.contenuRoot = $scope.conteneurCourant.contenu.contenuRoot;
-                $scope.contenuURL = $sce.trustAsResourceUrl("https://docs.google.com/viewer?embedded=true&url=" + $scope.contenuRoot);
-                $scope.sousRubriqueLibelle = $scope.conteneurCourant.contenu.sousRubrique.libelle;
-                $scope.conteneurQuestion = $scope.conteneurCourant.contenu.questions;
-            });
-        }
-
-        $scope.getQuestionByID = function(idQuestion)
-        {
-
-            $scope.conteneurCourant.$promise.then(function(){
-                $scope.questionSelectionnee = $filter('filter')($scope.conteneurCourant.contenu.questions, function (d) {
-                    return d.id === idQuestion;
-                })[0];
-            });
-
-            //console.log("getQuestionByID "+$scope.questionSelectionnee);
-            return ($scope.questionSelectionnee!=undefined);
-        }
-
-
-
-        $scope.zoom = function()
-        {
-            $scope.questionFullscreen = !$scope.questionFullscreen;
-
-            if($scope.questionDetailFullscreen != null)
-            {
-                $scope.questionDetailFullscreen = !$scope.questionDetailFullscreen;
-            }
-
-        }
-
-        $scope.displayQuestionOnMobile = function(){
-            $scope.zoom();
-        }
-
-
-
-
-        $scope.clickToOpen = function () {
-            ngDialog.open({ template: '/review', className: 'ngdialog-theme-default', controller: 'lectureContenuCtrl' });
-        };
-
-        $scope.closeThisDialog = function (review) {
-
-            console.log(review);
-            if(review==undefined || review.length<199) return;
-            ngDialog.close();
-        }
-
-        if(localStorage.userData != undefined)
-        {
-            $scope.authToken = angular.fromJson(localStorage.userData);
-            $http.defaults.headers.common["X-Auth-Token"] =  $scope.authToken.value;
-        }
-
-        $scope.$watch(function(){
-            return $location.path();
-        }, function (newPath) {
-
-            var tabPath = newPath.split("/");
-            if(tabPath.length>1)
-            {
-                var categorie = tabPath[1];
-                //console.log(categorie);
-
-                switch(categorie) {
-
-                    case "questions":
-                        var idQuestion = parseInt(tabPath[2]);
-                        console.log("questions");
-                        if($scope.getQuestionByID(idQuestion)) {
-                            $scope.displayQuestionDetail(idQuestion);
-                        }else{
-                            $scope.questionDetailFullscreen = null;
-                        }
-                        break;
-                    case "back":
-                        $scope.backToQuestion();
-                        break;
-                    case "newQuestion":
-                        $scope.afficherNewQuestion = true;
-                        $scope.$broadcast("initNewQuestion");
-                        // $scope.conteneurCourant = null;
-                        break;
-                    default:
-                    //console.log("WEIRD !")
-                }
-
-            }
-
-        });
-
-    })
     .controller("forgotPasswordCtrl", function ($scope, contenuService) {
 
         $scope.showEmailError = false;
@@ -605,6 +484,8 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
             return input.slice(start);
         };
     })
+
+
     .directive('toggleClass', function() {
         return {
             restrict: 'A',
@@ -614,4 +495,58 @@ angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymce', "Conte
                 });
             }
         };
-    });
+    })
+
+    .directive("fileread", [function () {
+        return {
+            scope: {
+                fileread: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    scope.$apply(function () {
+                        scope.fileread = changeEvent.target.files[0];
+                    });
+                });
+            }
+        }
+    }])
+
+    // .directive("fileread", [function () {
+    //     return {
+    //         scope: {
+    //             fileread: "="
+    //         },
+    //         link: function (scope, element, attributes) {
+    //             element.bind("change", function (changeEvent) {
+    //
+    //                 var reader = new FileReader();
+    //                 reader.onload = function (loadEvent) {
+    //                     scope.$apply(function () {
+    //
+    //                         scope.fileread = loadEvent.target.result;
+    //
+    //                     });
+    //                 }
+    //                 reader.readAsDataURL(changeEvent.target.files[0]);
+    //             });
+    //         }
+    //
+    //     }
+    // }])
+
+
+
+.directive('ngPrism',['$interpolate', function ($interpolate) {
+    "use strict";
+    return {
+        restrict: 'E',
+        template: '<pre><code ng-transclude></code></pre>',
+        replace: true,
+        transclude: true,
+        link: function (scope, elm) {
+            var tmp = $interpolate(elm.find('code').text())(scope);
+            elm.find('code').html(Prism.highlightElement(tmp).value);
+        }
+    };
+}]);

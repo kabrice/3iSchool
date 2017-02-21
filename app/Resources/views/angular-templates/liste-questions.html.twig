@@ -1,4 +1,5 @@
-<div>
+<div ng-show="!afficherNewQuestion">
+
     <div >
         <a style="">
             <form class="padding-question-search" style="display: inline-block; width: 100%">
@@ -28,11 +29,17 @@
             <span ng-if="questionsTrouvees.length>=2">questions pour ce contenu</span>
         </div>
         <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;" >
-            <tr ng-repeat="uneQuestion in questionsTrouvees = questions | filter: rechercheQuestion| orderBy:'-datePublication'">
+            <tr ng-repeat="uneQuestion in questionsTrouvees = conteneurQuestion | filter: rechercheQuestion| orderBy:'-datePublication'">
 
-                <td>
+                <td >
                     <div>
-                        <div class="m-img-profil" style="display: inline-block; margin-right: 20px"><img style="margin-bottom: -5px" ng-src="{{ asset('{[{uneQuestion.user.userProfilRoot}]}') }}">
+                        <div class="m-img-profil" style="display: inline-block; margin-right: 20px">
+                            <img class="liste-questions" style="margin-bottom: -5px"
+                                 ng-src="{{ asset('{[{uneQuestion.user.userProfilRoot}]}') }}"
+                                 ng-if="!uneQuestion.anonyme">
+                            <img class="liste-questions" style="margin-bottom: -5px; margin-left: -5px"
+                                 ng-src="{{ asset('img/happystudent.png') }}"
+                                 ng-if="uneQuestion.anonyme">
                         </div>
                         <div style="display: inline-block;">
                             <div class="date-publication">le {[{uneQuestion.datePublication | date:'dd MMM yyyy à HH : mm'}]}

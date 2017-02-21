@@ -8,12 +8,16 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
             <link rel="stylesheet" type="text/css"  href="{{ asset('bower/bootstrap/dist/css/bootstrap.min.css') }}">
+            <link rel="stylesheet" type="text/css"  href="{{ asset('css/bootstrapXL.css') }}">
+            <link rel="stylesheet" type="text/css"  href="{{ asset('bower/bootstrap-select/dist/css/bootstrap-select.min.css') }}">
             <link rel="stylesheet" type="text/css"  href="{{ asset('bower/components-font-awesome/css/font-awesome.min.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ asset('bower/ng-img-crop/compile/minified/ng-img-crop.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ asset('bower/angular-rateit/dist/ng-rateit.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('bower/jasny-bootstrap/dist/css/jasny-bootstrap.min.css') }}">
 
             <link rel="stylesheet" type="text/css" href="{{ asset('bower/ng-dialog/css/ngDialog.min.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ asset('bower/ng-dialog/css/ngDialog-theme-default.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('bower/angular-ui-select/dist/select.min.css') }}">
 
             <link rel="stylesheet" type="text/css"  href="https://fonts.googleapis.com/icon?family=Material+Icons">
             <!-- Important Owl stylesheet -->
@@ -21,6 +25,10 @@
                                                                                                           <!-- Default Theme -->
             <link rel="stylesheet" type="text/css"  href="{{ asset('owl-carousel/owl.theme.css') }}" /> 
 
+            <link rel="stylesheet" type="text/css"  href="{{ asset('prismjs/prism.css') }}" /> 
+
+            <link rel="stylesheet" type="text/css"  href="{{ asset('css/dashboard.css') }}" />
+            <link rel="stylesheet" type="text/css"  href="{{ asset('css/common.css') }}" />
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/posterPensee.css') }}" />
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/mgSuggestion.css') }}" /> 
             <link rel="stylesheet" type="text/css"  href="{{ asset('css/pdfviewer.css') }}" /> 
@@ -28,7 +36,7 @@
             <link rel="stylesheet" type="text/css" href="{{ asset('css/bienvenue.css') }}" rel="stylesheet" type="text/css"/>
             <link rel="stylesheet" href="{{ asset('bower/Croppie/croppie.css') }}"  type="text/css">
         <style>
-            iframe {
+            #myIframe {
                 height: 100% !important;
                 width: 100% !important;
                 overflow: hidden
@@ -47,26 +55,27 @@
                 width: 100px;
                 border: 3px groove #CCC;
             }
-            .progress div {
+           /* .progress div {
                 font-size: smaller;
                 background: orange;
                 width: 0;
             }
+*/
+
         </style>
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body ng-app="3ischool">
-        {% block body %}
-
-        {% endblock %}
+    <body ng-app="3ischool" >
+        {% block body %}{% endblock %}
 
         {% block javascripts %}
-
             <script type="text/javascript" src="{{ asset('bower/tinymce/tinymce.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/jquery/dist/jquery.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/jquery.cookie/jquery.cookie.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/jasny-bootstrap/dist/js/jasny-bootstrap.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular/angular.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular-sanitize/angular-sanitize.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular-resource/angular-resource.js') }}"></script>
@@ -74,32 +83,63 @@
             <script type="text/javascript" src="{{ asset('bower/angular-click-outside/clickoutside.directive.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular-animate/angular-animate.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular-ui-tinymce/src/tinymce.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-ui-select/dist/select.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('prismjs/prism.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/ng-file-upload/ng-file-upload.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/ng-img-crop/compile/minified/ng-img-crop.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular-recaptcha/release/angular-recaptcha.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular-bootstrap/ui-bootstrap-tpls.min.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/angular-rateit/dist/ng-rateit.js') }}"></script>
             <script type="text/javascript" src="{{ asset('bower/ng-dialog/js/ngDialog.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-file-model/angular-file-model.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-thumbnails/dist/angular-thumbnails.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/chart.js/dist/Chart.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/angular-chart.js/dist/angular-chart.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bower/pdfjs-dist/build/pdf.js') }}"></script>
+
 
             <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
             <script type="text/javascript" src="{{ asset('owl-carousel/owl.carousel.min.js') }}"></script>
 
-            <script type="text/javascript" src="{{ asset('js/angular-app/app.js') }}" ></script>
-            <script type="text/javascript" src="{{ asset('js/angular-app/MesDirectives.js') }}" ></script>
-            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceHttp.js') }}" ></script>
-            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceMock.js') }}" ></script>
-            <script type="text/javascript" src="{{ asset('js/angular-app/ContenuServiceRest.js') }}" ></script>
-            <script type="text/javascript" src="{{ asset('js/angular-app/MesFiltres.js') }}" ></script>
 
-            <script type="text/javascript" src="{{ asset('js/votePensee.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('js/posterPensee.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('js/contribution.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/app.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/controllers/LectureContenuCtrl.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/controllers/DashboardCtrl.js') }}" ></script>
+
+           {# <div ng-app="3ischool" ng-controller="LectureContenuCtrl">#}
+
+
+            <script type="text/javascript" src="{{ asset('js/angular-app/directives/MesDirectives.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/directives/DashboardDirectives.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/services/ContenuServiceRest.js') }}" ></script>
+            <script type="text/javascript" src="{{ asset('js/angular-app/filters/MesFiltres.js') }}" ></script>
+
             <script type="text/javascript" src="{{ asset('js/countLimit.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('js/commentaire.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/showmore.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('js/notification.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script>
 
-        {% endblock %}
+            {#<script type="text/javascript" src="{{ asset('js/bootstrap-filestyle/bootstrap-filestyle.min.js') }}"></script>
+            #}<script type="text/javascript">
+                /*$('#input01').filestyle()
+
+                $('#input001').filestyle({
+                    'placeholder' : 'Uploader des fichiers pdf, ppt, word et autres'
+                });*/
+                // Initialize tooltip component
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                })
+
+                // Initialize popover component
+                $(function () {
+                    $('[data-toggle="popover"]').popover()
+                })
+
+                $('[data-toggle="popover"]').popover({
+                    placement: "auto",
+                    trigger: "hover"
+                })
+            </script>
+            {% endblock %}
     </body>
 </html>

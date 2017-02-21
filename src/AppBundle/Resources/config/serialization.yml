@@ -4,7 +4,7 @@ AppBundle\Entity\Contenu:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
         titre:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
-        information:
+        description:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
         datePublication:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
@@ -38,7 +38,7 @@ AppBundle\Entity\Question:
             groups: ['contenu', 'question', 'reponse',  'user']
         nombreLike:
             groups: ['contenu', 'question', 'reponse',  'user']
-        nombreDislike:
+        nombreVu:
             groups: ['contenu', 'question', 'reponse',  'user']
         page:
             groups: ['contenu', 'question', 'reponse',  'user']
@@ -70,6 +70,8 @@ AppBundle\Entity\UserContenu:
         nbreVue:
             groups: ['contenu', 'userContenu']
         aPublie:
+            groups: ['contenu', 'userContenu']
+        review:
             groups: ['contenu', 'userContenu']
         user:
             groups: ['contenu', 'userContenu']
@@ -203,8 +205,8 @@ AppBundle\Entity\Rubrique:
             groups: ['rubrique', 'groupeRubrique', 'sousRubrique', 'contenu']
         importance:
             groups: ['rubrique', 'groupeRubrique', 'sousRubrique', 'contenu']
-        groupeRubrique:
-            groups: ['rubrique']
+#        groupeRubrique:
+#            groups: ['rubrique']
 
 
 AppBundle\Entity\GroupeRubrique:
@@ -234,3 +236,38 @@ AppBundle\Entity\AuthToken:
             groups: ['auth-token']
         user:
             groups: ['auth-token']
+
+AppBundle\Entity\Vote:
+    attributes:
+        id:
+            groups: ['vote']
+        userID:
+            groups: ['vote']
+        refID:
+            groups: ['vote']
+        ref:
+            groups: ['vote']
+        valeur:
+            groups: ['vote']
+        dateVote:
+            groups: ['vote']
+
+AppBundle\Entity\Image:
+    attributes:
+        id:
+            groups: ['image']
+        userID:
+            groups: ['image']
+        imageRoot:
+            groups: ['image']
+        dateUpload:
+            groups: ['image']
+
+AppBundle\Entity\VisiteContenu:
+    attributes:
+        id:
+            groups: ['visiteContenu']
+        dateVisite:
+            groups: ['visiteContenu']
+        duree:
+            groups: ['visiteContenu']

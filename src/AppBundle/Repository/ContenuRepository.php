@@ -12,5 +12,33 @@ use AppBundle\Entity\User;
 class ContenuRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    public function findQuestionsEtudiants(User $user)
+    {
+
+        $qb = $this->createQueryBuilder('c');
+        $qb->select("c.id as contenuId", "c.titre as contenuTitre", "questions.id as questionID","questions.libelle as questionLibelle",
+            "questions.datePublication as questionDatePublication", "questions.nombreLike as questionNombreLike",
+            "questions.nombreVu as questionNombreVu","auteur.email as auteurEmail", "auteur.nom as auteurNom", "auteur.prenom as auteurPrenom");
+        //Découverte d'une nouvelle notion pour compter une entité associative dans un query builder
+        $qb->addSelect( "count(reponses.id) as nbreReponses");
+        $qb->addGroupBy('questions.id');
+        $qb->join('c.userContenus', 'userContenus');
+        $qb->join('c.questions', 'questions');
+        $qb->join('questions.user', 'auteur');
+        $qb->leftJoin('questions.reponses', 'reponses');
+
+
+        $qb->where("userContenus.user=:enseignant AND userContenus.aPublie=:aPublie");
+        $qb->setParameter('aPublie', true);
+        $qb->setParameter('enseignant', $user);
+        $qb->orderBy('questionDatePublication', 'DESC');
+
+        $result = $qb->getQuery()->getResult();
+        $nbreResults = count($result);
+        $result[] = $nbreResults;
+        return $result;
+    }
+
+
 
 }

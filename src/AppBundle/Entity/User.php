@@ -132,6 +132,12 @@ class User implements UserInterface
      */
     protected $userContenus;
 
+    /**
+     * @ORM\OneToMany(targetEntity="VisiteContenu", mappedBy="user")
+     * @var VisiteContenu[]
+     */
+    protected $visiteContenus;
+
 
     /**
      * Set isPersonnel
@@ -670,5 +676,39 @@ class User implements UserInterface
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * Add visiteContenus
+     *
+     * @param \AppBundle\Entity\VisiteContenu $visiteContenus
+     *
+     * @return User
+     */
+    public function addVisiteContenus(\AppBundle\Entity\VisiteContenu $visiteContenus)
+    {
+        $this->visiteContenus[] = $visiteContenus;
+
+        return $this;
+    }
+
+    /**
+     * Remove visiteContenus
+     *
+     * @param \AppBundle\Entity\VisiteContenu $visiteContenus
+     */
+    public function removeVisiteContenus(\AppBundle\Entity\VisiteContenu $visiteContenus)
+    {
+        $this->visiteContenus->removeElement($visiteContenus);
+    }
+
+    /**
+     * Get visiteContenus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVisiteContenus()
+    {
+        return $this->visiteContenus;
     }
 }

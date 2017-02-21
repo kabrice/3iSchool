@@ -32,9 +32,9 @@ class Contenu
     /**
      * @var string
      *
-     * @ORM\Column(name="information", type="text", length=65535)
+     * @ORM\Column(name="description", type="text", length=500)
      */
-    protected $information;
+    protected $description;
 
     /**
      * @var \DateTime
@@ -44,9 +44,9 @@ class Contenu
     protected $datePublication;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="note", type="integer")
+     * @ORM\Column(name="note", type="float")
      */
     protected $note=0;
 
@@ -55,7 +55,7 @@ class Contenu
      *
      * @ORM\Column(name="nombre_vue_total", type="integer")
      */
-    protected $nombreVueTotal=0;
+    protected $nombreVueTotal=1;
 
     /**
      * @var string
@@ -64,12 +64,26 @@ class Contenu
      */
     protected $contenuRoot;
 
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="nbre_noteur", type="integer")
+     */
+    protected $nbreNoteur=0;
+
     /**
      * @var string
      *
      * @ORM\Column(name="image_root", type="string", length=255, nullable=false)
      */
     protected $imageRoot;
+
+    protected $imgB64;
+
+    protected $listeGroupes;
+
+    protected $listeNiveaux;
 
     /**
      * @ORM\ManyToOne(targetEntity="Rubrique", inversedBy="contenus", cascade={"persist", "merge"})
@@ -98,6 +112,13 @@ class Contenu
      * @var UserContenu[]
      */
     protected $userContenus;
+
+    /**
+     * @ORM\OneToMany(targetEntity="VisiteContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @var VisiteContenu[]
+     */
+    protected $visiteContenus;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Conteneur", mappedBy="contenu", cascade={"persist", "remove", "merge"})
@@ -152,29 +173,6 @@ class Contenu
         return $this->titre;
     }
 
-    /**
-     * Set information
-     *
-     * @param string $information
-     *
-     * @return Contenu
-     */
-    public function setInformation($information)
-    {
-        $this->information = $information;
-
-        return $this;
-    }
-
-    /**
-     * Get information
-     *
-     * @return string
-     */
-    public function getInformation()
-    {
-        return $this->information;
-    }
 
     /**
      * Set datePublication
@@ -423,22 +421,169 @@ class Contenu
         return $this->sousRubrique;
     }
 
+
+
+
     /**
-     * @return int
+     * Set note
+     *
+     * @param float $note
+     *
+     * @return Contenu
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return float
      */
     public function getNote()
     {
         return $this->note;
     }
 
+
+
+
     /**
-     * @param int $note
+     * Set nbreNoteur
+     *
+     * @param integer $nbreNoteur
+     *
+     * @return Contenu
      */
-    public function setNote($note)
+    public function setNbreNoteur($nbreNoteur)
     {
-        $this->note = $note;
+        $this->nbreNoteur = $nbreNoteur;
+
+        return $this;
+    }
+
+    /**
+     * Get nbreNoteur
+     *
+     * @return integer
+     */
+    public function getNbreNoteur()
+    {
+        return $this->nbreNoteur;
     }
 
 
 
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Contenu
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImgB64()
+    {
+        return $this->imgB64;
+    }
+
+    /**
+     * @param mixed $imgB64
+     */
+    public function setImgB64($imgB64)
+    {
+        $this->imgB64 = $imgB64;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getListeGroupes()
+    {
+        return $this->listeGroupes;
+    }
+
+    /**
+     * @param mixed $listeGroupes
+     */
+    public function setListeGroupes($listeGroupes)
+    {
+        $this->listeGroupes = $listeGroupes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getListeNiveaux()
+    {
+        return $this->listeNiveaux;
+    }
+
+    /**
+     * @param mixed $listeNiveaux
+     */
+    public function setListeNiveaux($listeNiveaux)
+    {
+        $this->listeNiveaux = $listeNiveaux;
+    }
+
+
+
+
+
+    /**
+     * Add visiteContenus
+     *
+     * @param \AppBundle\Entity\VisiteContenu $visiteContenus
+     *
+     * @return Contenu
+     */
+    public function addVisiteContenus(\AppBundle\Entity\VisiteContenu $visiteContenus)
+    {
+        $this->visiteContenus[] = $visiteContenus;
+
+        return $this;
+    }
+
+    /**
+     * Remove visiteContenus
+     *
+     * @param \AppBundle\Entity\VisiteContenu $visiteContenus
+     */
+    public function removeVisiteContenus(\AppBundle\Entity\VisiteContenu $visiteContenus)
+    {
+        $this->visiteContenus->removeElement($visiteContenus);
+    }
+
+    /**
+     * Get visiteContenus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVisiteContenus()
+    {
+        return $this->visiteContenus;
+    }
 }

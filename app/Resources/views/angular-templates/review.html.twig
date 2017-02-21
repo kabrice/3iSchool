@@ -1,14 +1,20 @@
 <form  id="formReview" name="formReview" >
+    <div class="alert alert-info" role="alert" ng-if="data.oldReview!=null">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <span style="font-size: 10pt">Ceci est votre ancien avis. Voulez vous en poster un autre ?</span>
+    </div>
     <label for="exampleTextarea">Votre avis: </label>
     <textarea class="form-control"
               id="exampleTextarea"
               rows="4"
-              placeholder="Donnez un avis expliqué et constructif sur ce contenu (200 caractères minimum)"
+              placeholder="Donnez un avis expliqué et constructif sur ce contenu"
               ng-model="data.review"
               required></textarea>
     <button class="btn btn-lg btn-primary btn-block btn-signin review"
             type="submit"
             ng-click="closeThisDialog(data.review)">Envoyer
     </button>
-
+<i style="color: darkgrey; font-size: 10pt">Entrez entre 15 et 500 caractères</i>
 </form>

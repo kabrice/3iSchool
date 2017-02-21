@@ -18,9 +18,12 @@ class ContenuType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('titre');
-        $builder->add('information');
+        $builder->add('description');
         $builder->add('imageRoot');
         $builder->add('contenuRoot');
+        $builder->add('imgB64');
+        $builder->add('listeGroupes');
+        $builder->add('listeNiveaux');
     }
 
     public function configureOptions(OptionsResolver $resolver)

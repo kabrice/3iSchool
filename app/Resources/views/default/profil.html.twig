@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div class="jumbotron" ng-init="getUser('{{ email | json_encode()  }}')" ng-cloak> 
+    <div class="jumbotron" ng-init="getUserID('{{ email | json_encode()  }}')" ng-cloak> 
 
         <div>
 
@@ -26,6 +26,7 @@
                         <ul class="nav navbar-nav navbar-justified">
                             <li>
                                 <form id="custom-search-input" role="search">
+
                                     <div class="input-group col-md-12">
                                         <input type="search"
                                                ng-model="data.rechercheContenu"

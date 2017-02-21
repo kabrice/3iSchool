@@ -22,6 +22,19 @@ ecritureContenu:
     type:     rest
     resource: AppBundle\Controller\DashboardController
     prefix: /api
+like:
+    type:     rest
+    resource: AppBundle\Controller\StatsController
+    prefix: /api
+image:
+    type:     rest
+    resource: AppBundle\Controller\ImageController
+    prefix: /api
+inutile:
+    type:     rest
+    resource: AppBundle\Controller\InutileController
+    prefix: /api
+
 
 #Routes statics (pour angularjs)
 app_bundle_contenus_rubriques:
@@ -68,6 +81,30 @@ app_bundle_review:
     defaults:
         _controller: AppBundle:Template:review
         template:    'AppBundle:Static:review.html.twig'
+
+app_bundle_chart:
+    path: /chart
+    defaults:
+        _controller: AppBundle:Template:chart
+        template:    'AppBundle:Static:chart.html.twig'
+
+app_bundle_questionManager:
+    path: /questionManager
+    defaults:
+        _controller: AppBundle:Template:questionManager
+        template:    'AppBundle:Static:questionManager.html.twig'
+
+app_bundle_contenusSignales:
+    path: /contenusSignales
+    defaults:
+        _controller: AppBundle:Template:contenusSignales
+        template:    'AppBundle:Static:contenusSignales.html.twig'
+
+app_bundle_mesCours:
+    path: /mesCours
+    defaults:
+        _controller: AppBundle:Template:mesCours
+        template:    'AppBundle:Static:mesCours.html.twig'
 
         
 

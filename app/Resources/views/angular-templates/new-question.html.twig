@@ -1,7 +1,7 @@
 <div>
     <div class="row">
-        <div class="col-sm-1 col-md-2 col-lg-3" ng-if="fullscreen"></div> {#Change made for fullscreen#}
-        <div ng-class="{'col-sm-10 col-md-8 col-lg-6': fullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
+        <div class="col-xl-4 col-lg-3 col-md-3 col-sm-1" ng-if="fullscreen"></div> {#Change made for fullscreen#}
+        <div ng-class="{'col-sm-10 col-md-6 col-lg-6 col-xl-4': fullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
             <div class="alert alert-danger" id="question-error" role="alert" ng-if="showQuestionError">
 
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="showQuestionError=false">
@@ -15,7 +15,7 @@
                 </ul>
             </div>
 
-            <form id="formNewQuestion" name="formNewQuestion">
+            <form id="formNewQuestion" name="formNewQuestion" >
                 <div class="input-group" ng-class="{shake:showQuestionError}">
                     <span class="input-group-addon label-champ-newQuestion">Titre</span>
                     <input type="text"
@@ -28,21 +28,48 @@
 
                 <div class="input-group">
                     <span class="input-group-addon label-champ-newQuestion">Page</span>
-                    <input type="number" class="form-control" name="page" min="1" max="1000" ng-model="newQuestion.page"/>
+                    <input type="number" class="form-control" name="page" min="0" max="1000"  ng-model="newQuestion.page"/>
                     <span class="input-group-addon label-champ-newQuestion">Ligne</span>
-                    <input type="number" class="form-control" name="ligne" min="1" max="1000" ng-model="newQuestion.ligne"/>
+                    <input type="number" class="form-control" name="ligne" min="0" max="1000" ng-model="newQuestion.ligne"/>
                 </div >
-                <div class="spacer ">
-                    <textarea ui-tinymce="optionTinyMCE" class="contenu-newQuestion form-control" name="description" rows="10" ng-model="newQuestion.description" required></textarea>
+                <div class="spacer " >
+                    <textarea ui-tinymce="optionTinyMCE" class="contenu-newQuestion form-control" name="description" rows="10" ng-model="newQuestion.description"></textarea>
+                    <input name="image" type="file" id="upload" class="hidden" onchange="">
                 </div>
-                <div class="padding-question-search" style="float: right">
+                {#<div class="padding-question-search" style="float: right">
                     <button ng-click="clicPublierQuestion()" ng-disabled="formNewQuestion.$pristine" type="button" class="btn btn-primary">Publier ma question</button>
+                </div>#}
+                <div class="col-sm-9  padding-question-search" style="float: right; width: 200px">
+                    <label class="checkbox-inline"><input type="checkbox" ng-model="newQuestion.anonyme">Anonyme</label>
+                    <button ng-click="clicPublierQuestion()" class="btn btn-lg btn-primary btn-block review" >
+                        <span >Publier ma question</span>
+                    </button>
                 </div>
+                <div style="clear: both"></div>
 
             </form>
-
+            <h3 style="color: grey">Aperçu</h3>
+            <table class="table" cellspacing="pixels" style=" overflow-y: auto;">
+                <thead>
+                <tr>
+                    <th>
+                        <div class="question-title">
+                            {[{newQuestion.libelle}]}
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <p></p>
+                    <td class="votecell" style="vertical-align: top; ">
+                        <div class="post-text" ng-if="prism()" ng-bind-html="newQuestion.description"></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
+        <div class="col-xl-4 col-lg-3 col-md-3 col-sm-1" ng-if="fullscreen"></div> {#Change made for fullscreen#}
     </div>
-    <div class="col-sm-1 col-md-2 col-lg-3" ng-if="fullscreen"></div> {#Change made for fullscreen#}
+
 </div>

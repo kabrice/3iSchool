@@ -21,6 +21,8 @@ class QuestionType extends AbstractType
 
         $builder->add('libelle');
         $builder->add('description');
+        $builder->add('anonyme');
+        $builder->add('nombreVu');
         $builder->add('page', IntegerType::class , array('required' => false));
         $builder->add('ligne', IntegerType::class , array('required' => false));
 

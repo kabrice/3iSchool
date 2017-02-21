@@ -1,0 +1,467 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div ng-controller="DashboardCtrl">
+
+        <div class="jumbotron" ng-init="getUserID('{{userID}}')"  ng-cloak > 
+
+            <div>
+
+                <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                    <div class="container-fluid" >
+                        <div class="navbar-header">
+
+                            <div  class="navbar-brand">
+                                <a ng-href="/"><img ng-src="{{ asset('img/3ischool_logo.png') }}" height="30" width="130" style="margin-top: -4px">   </a>
+                            </div>
+                        </div>
+
+                        <div id="navbar" class="collapse navbar-collapse" style="border-top: none">
+                            <ul class="nav navbar-nav navbar-right" style="margin-top: -6px">
+
+                                <li id="notification_li" >
+                                    <span id="notification_count" hidden></span>
+                                    <a href='?controller=utilisateur&action=posterpensee' class="header-text" id="notificationLink"><i class="material-icons">notifications</i></a>
+                                    <div id="notificationContainer">
+                                        <div id="notificationTitle">Notifications</div>
+                                        <div id="notificationsBody" class="notifications scroll">
+                                            <ul class="nav" id="notifications-ul">
+
+                                            </ul>
+                                        </div>
+                                        <div id="notificationFooter"><a href="#" class="notif-link-footer"><i class="material-icons">sentiment_satisfied</i></a></div>
+                                    </div>
+                                </li>
+                                <li >
+                                    <a href='/' class="header-text">Accueil</a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-top: 5px; color:dimgrey;" onmouseover="this.style.color='#1e90fe';this.style.color='#1e90fe';" onmouseout="this.style.background='';this.style.color='dimgrey';">
+                                        {[{authToken.user.prenom}]}<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/3il/{[{username}]}">Profil</a></li>
+                                        <li><a href="/1/dashboard">Tableau de Bord</a></li>
+                                        <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div><!--/.nav-collapse -->
+                    </div>
+                </nav>
+                <!-- Sidebar -->
+
+                <!-- Page content -->
+            </div>
+        </div>
+
+        <div class=" container page-header" id="headerDashboard" style="margin-top: -110px; margin-bottom: 5px;  width: 100%" >
+
+
+            <h3 style=" margin-bottom: 10px; margin-left: 15px !important;">Tableau de Bord </h3>
+
+            <div style="margin-bottom: 3px">
+
+
+                <nav class="navbar navbar-default" style="border: none; background-color: transparent; margin: inherit;">
+                    <ul class="nav navbar-nav" style="margin: inherit">
+                    <li>
+                        <a  ng-class="{'tbTitle-active': showPublierContenu}"  href="#!/nouveauContenu" >Publier un contenu</a></li>
+                    <li>
+                        <a ng-class="{'tbTitle-active': showQuestionManager}" href="#!/gestionQuestions" >Questions des étudiants</a></li>
+                    <li >
+                        <a  ng-class="{'tbTitle-active': showContenusSignales}" href="#!/contenusSignales">Contenus signalés</a></li>
+                    <li >
+                        <a ng-class="{'tbTitle-active': showMesCours}" href="#!/mesCours" >Contenus publiés</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+        <div class="alert alert-danger"
+             id="question-error"
+             role="alert"
+             style="position: absolute; z-index: 1; right: 0; left: 0;"
+             ng-if="sendSuccess!=undefined && !sendSuccess"
+             ng-cloak>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Contenu non publié <i class="fa fa-frown-o fa-lg" aria-hidden="true"></i></strong>
+
+            <p>Peut-être parce que le titre de ce contenu existe déjà.</p>
+
+        </div>
+        <div class="alert alert-success" id="question-error" role="alert"
+             style="position: absolute; z-index: 1; right: 0; left: 0;"
+             ng-if="sendSuccess!=undefined && sendSuccess"
+             ng-cloak>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Contenu publié avec succès <i class="fa fa-smile-o fa-lg" aria-hidden="true"></i></strong>
+
+            <p>Voulez-vous publier un nouveau ?</p>
+
+        </div>
+        <div style="height: 2px"></div>
+        <div class="loader" ng-if="chargementNouveauContenu">
+            <img src="{{ asset('img/preloader.gif') }}" class="ajax-loader" height="70" width="70"/>
+        </div>
+        <div class="container-fluid" >
+            <div {#ng-show="showPublierContenu"#} ng-show="showPublierContenu && !chargementNouveauContenu" ng-cloak>
+
+                <div class="row" >
+                    <div class="col-xl-3 col-lg-2 col-md-1 " >
+
+                    </div>
+                    <div class="col-xl-5 col-lg-6 col-md-8 col-sm-12 col-xs-12  panel " style="position: inherit">
+                        <form class="form-horizontal">
+
+                            <table class="table borderless dashboard" style="border: 1px solid #d2d2d2">
+                                <thead style="height: 0%">
+                                <tr>
+
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Année</label>
+                                            <div class="col-sm-9 ">
+                                                <select class="form-control"
+                                                        ng-model="selectedDashBoardValue.anneeid"
+
+                                                        uib-tooltip="Année de promotion">
+
+                                                    <option value="{[{annee.id}]}"
+                                                            ng-repeat="annee in annees">
+                                                        {[{annee.libelle}]}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Section</label>
+                                            <div class="col-sm-9 " >
+
+
+
+                                                <ui-select multiple sortable="true" ng-model="selectedNiveau.selected"  title="Choisir une section">
+                                                    <ui-select-match placeholder="Selectionner ou rechercher une ou plusieurs sections">{[{$item.libelle }]}</ui-select-match>
+                                                    <ui-select-choices repeat="item in niveaux | filter: $select.search ">
+                                                        <span ng-bind-html="item.libelle | highlight: $select.search"></span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Groupe</label>
+                                            <div class="col-sm-9 " >
+
+                                                <ui-select multiple sortable="true" ng-model="selectedGroupe.selected"  title="Choisir une section">
+                                                    <ui-select-match placeholder="Selectionner ou rechercher une ou plusieurs sections">{[{$item.libelle }]}</ui-select-match>
+                                                    <ui-select-choices repeat="item in groupes | filter: $select.search ">
+                                                        <span ng-bind-html="item.libelle | highlight: $select.search"></span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Matière</label>
+                                            <div class="col-sm-9 ">
+
+                                                <ui-select ng-model="selectedRubrique.selected">
+                                                    <ui-select-match placeholder="Selectionner ou rechercher une matière">
+                                                        {[{$select.selected.libelle}]}
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="rubrique in (rubriques | filter: $select.search) track by rubrique.id">
+                                            <span ng-bind-html="rubrique.libelle | highlight: $select.search">
+
+                                            </span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Catégorie</label>
+                                            <div class="col-sm-9 ">
+
+                                                <ui-select ng-model="selectedSousRubrique.selected">
+                                                    <ui-select-match placeholder="Sélectionner une catégorie pour la matière sélectionnée">
+                                                        {[{$select.selected.libelle}]}
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="sousRubrique in (sousRubriques | filter: $select.search) track by sousRubrique.id">
+                                            <span ng-bind-html="sousRubrique.libelle | highlight: $select.search">
+
+                                            </span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Titre</label>
+                                            <div class="col-sm-9 ">
+                                                <input type="text"
+                                                       class="form-control"
+                                                       maxlength="200" minlength="10"
+                                                       placeholder="Exemple: I2 Gestion Prévisionnelle Cours (entre 10 et 200 caractères)"
+                                                       ng-model="selectedDashBoardValue.titre">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3 control-label">Charger la ressource</label>
+                                            <div class="col-sm-9 ">
+
+
+                                                <div ngf-select
+                                                     ngf-drop ng-model="files"
+                                                     ngf-model-invalid="invalidFiles"
+                                                     ngf-multiple="false"  ngf-accept="true"
+                                                     ng-disabled="false" ngf-capture="capture"
+                                                     ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', }"
+                                                     ngf-validate="{size: {max: '2000MB', min: '10B'}, height: {max: 12000}, width: {max: 12000}, duration: {max: '5000m'}}"
+                                                     ngf-resize="{width: 1000, height: 1000, centerCrop: true}"
+                                                     ngf-resize-if="'$width > 5000 || $height > 5000'"
+                                                     ngf-dimensions="'$width < 12000 || $height < 12000'"
+                                                     ngf-duration="'$duration < 10000'"
+                                                     ngf-keep="keepDistinct ? 'distinct' : keep"
+                                                     ngf-fix-orientation="true"
+                                                     ngf-max-files="1"
+                                                     ngf-drop-available="dropAvailable"
+                                                     class="up-buttons drop-box"
+                                                     style="float: none!important; height: 100px!important;margin: auto; text-align: center; cursor:pointer;">
+                                                    <div class="upload-buttons">
+
+                                                        <ul style="clear:both" class="response">
+                                                            <li class="sel-file" ng-repeat="f in files">
+                                                                <div>
+                                                                    <img ngf-thumbnail="!f.$error && f" class="thumb">
+                                                                    {#<span class="progress" >#}
+                                                                    {#<div >/div>#}
+                                                                    <div class="progress progress-striped active" ng-show="f.progress >= 0">
+                                                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20"
+                                                                             aria-valuemin="0" aria-valuemax="100" style="width:{[{f.progress}]}%">
+                                                                            <span class="sr-only">{[{f.progress}]}%</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    {#dkdk#}
+                                                                    {#ddd#}
+                                                                    {#</span>#}
+                                                                    <a href="javascript:void(0)" style="text-decoration: none; color:red" ng-click="f.upload.abort();f.upload.aborted=true"
+                                                                       ng-show="f.upload != null && f.progress < 100 && !f.upload.aborted || !validResult">
+                                                                        Reprendre
+                                                                    </a>
+                                                                    {#<a href="javascript:void(0)" style="text-decoration: none; color:red" ng-click="f.upload.abort();f.upload.aborted=true"
+                                                                       ng-show="f.upload != null && f.progress < 100 && !f.upload.aborted">
+                                                                        Changer<span ng-show="isResumeSupported">/Pause</span>
+                                                                    </a>#}
+                                                                    <a href="javascript:void(0)" style="text-decoration: none; color:red"  ng-click="upload(f, true);f.upload.aborted=false"
+                                                                       ng-show="isResumeSupported && f.upload != null && f.upload.aborted">Resume
+                                                                    </a>
+                                                                    {#<a href="javascript:void(0)" style="text-decoration: none; color:red" ng-click="restart(f);f.upload.aborted=false"
+                                                                       ng-show="isResumeSupported && f.upload != null && (f.progress == 100 || f.upload.aborted)">Restart
+                                                                    </a>#}
+                                                                    <span ng-show="validResult">{[{f.name}]}</span> {#- size: {[{f.size}]}B - type: {[{f.type}]}#}
+                                                                    {# <a ng-show="f.result" href="javascript:void(0)" ng-click="f.showDetail = !f.showDetail">details</a>#}
+                                                                    {#<div ng-show="f.showDetail">
+                                                                        <br/>
+
+                                                                        <div data-ng-show="f.result.result == null">{[{f.result}]}</div>
+                                                                        <ul>
+                                                                            <li ng-repeat="item in f.result.result">
+                                                                                <div data-ng-show="item.name">file name: {[{item.name}]}</div>
+                                                                                <div data-ng-show="item.fieldName">name: {[{item.fieldName}]}</div>
+                                                                                <div data-ng-show="item.size">size on the serve: {[{item.size}]}</div>
+                                                                                <div data-ng-show="item.value">value: {[{item.value}]}</div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div data-ng-show="f.result.requestHeaders" class="reqh">request headers: {[{f.result.requestHeaders}]}</div>
+                                                                    </div>#}
+                                                                </div>
+                                                            </li>
+                                                            <li class="sel-file" ng-repeat="f in invalidFiles">
+                                                                <div>Invalid File: {[{f.$errorMessages}]} {[{f.$errorParam}]}, {[{f.name}]} - size: {[{f.size}]}B - type:
+                                                                    {[{f.type}]}
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+
+
+
+                                                        <div style="clear:both" class="err" ng-show="errorMsg != null">{[{errorMsg}]}</div>
+                                                    </div>
+                                                    <div class="fileUpload blue-btn" ng-if="showBox" style="margin-top: -10px">
+                                                        <span style="font-size: 14px">Glisser un fichier ici</span>
+                                                    </div>
+
+                                                    <div ng-if="showBox" style="margin-top: -20px">
+                                                        <span style="font-size: 14px">ou cliquer ici</span>
+                                                    </div>
+
+                                                </div>
+                                                <div ng-if="showBox" style="color:grey; font-size: 8pt"><i>Fichiers supportés: mp4 (10min maximum), pdf, word, powerpoint, excel et zip</i></div>
+                                            </div>
+
+                                            {#<div class="preview">
+                                                <div>Preview image/audio/video:</div>
+                                                <img ngf-src="!files[0].$error && files[0]">
+                                                <audio controls ngf-src="!files[0].$error && files[0]"></audio>
+                                                <video controls ngf-src="!files[0].$error && files[0]"></video>
+                                            </div>#}
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                {#<tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Image descriptif </label>
+                                            <div class="col-sm-9 ">
+
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+                                                    {[{selectedDashBoardValue.imageRoot}]}
+                                                    <div>
+                                                        <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="..." ng-model="selectedDashBoardValue.imageRoot"></span>
+                                                        <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>#}
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <label for="inputEmail3" class="col-sm-3  control-label">Description</label>
+                                            <div class="col-sm-9 ">
+                                            <textarea class="form-control" cols="30" rows="5" maxlength="300" minlength="15"
+                                                      placeholder="Décrivez ce contenu en quelques mots (entre 15 et 300 caractères)"
+                                                      ng-model="selectedDashBoardValue.description"></textarea>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="poster">
+                                            <label for="inputEmail3" class="col-sm-3  control-label"></label>
+                                            <div class="col-sm-9 "
+                                                 style="padding: 0 0 0 7px ; margin-top: -22px"
+                                                 ng-click="creerContenu(selectedDashBoardValue, selectedGroupe, selectedNiveau, selectedRubrique, selectedSousRubrique)" >
+                                                <button class="btn btn-lg btn-block" style="color: white;" >
+                                                    <span >Publier</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-3  ">
+                        <div class="col-xl-6  col-lg-8 col-md-10 col-sm-8 col-xs-8">
+                            <h4>Aperçu</h4>
+                            <div class="panel panel-default course-pointer">
+                                <a target="_blank" href="javascript:void(0)">
+                                    <div class="panel-heading">
+                                        <thumbnail
+                                                ng-if="contenuRoot != undefined"
+                                                class="ng-thumbnail"
+                                                file-type="{[{thumbnail.fileType}]}" source="{{ asset("{[{thumbnail.source}]}") }}" max-height="200" scale="1" ></thumbnail>
+                                    </div>
+                                </a>
+                                <div class="caption-wrapper">
+                                    <div class="title-course"  >
+                                        <span  ng-bind-html="selectedDashBoardValue.titre | limitTo:50"></span>
+                                        <span ng-if="selectedDashBoardValue.titre.length > 50">&hellip;</span>
+                                    </div>
+                                    <div class="course">
+                                        <span ng-bind-html="selectedRubrique.selected.libelle | limitTo:25"></span>
+                                        <span ng-if="selectedRubrique.selected.libelle.length > 25">&hellip;</span>
+                                        <div style="float: right;display: inline-block"
+                                             ng-if="selectedSousRubrique.selected.libelle!= null"
+                                             ng-bind-html="selectedSousRubrique.selected.libelle"></div>
+                                    </div>
+                                    <div style="display: flex">
+                                        <div style="color: orangered;" >
+                                            <ng-rate-it
+                                                    style="margin-top: 3px; margin-left: -1px;"
+                                                    read-only="true"
+                                                    class="custom"
+                                                    cancel-width="1"
+                                                    cancel-height="1"
+                                                    ng-model="tmp.note"
+                                            ></ng-rate-it>
+                                        </div>
+
+                                    </div>
+                                    <div class="caption-item-content">
+                                        <div class="course-view">1 vue</div>
+                                        <div class="course-date">{[{tmp.date | date:'dd MMM yyyy à HH:mm'}]}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <question-manager
+                    ng-if="showQuestionManager && authToken.user.isPersonnel"></question-manager>
+
+            <contenus-signales ng-if="showContenusSignales && authToken.user.isPersonnel"></contenus-signales>
+
+            <mes-cours ng-if="showMesCours && authToken.user.isPersonnel"
+                       show-option-details="showOptionDetails()"></mes-cours>
+
+            {#<div class="panel" ng-if="!authToken.user.isPersonnel" ng-cloak>
+                <h3 style="color: red">ACCES INTERDIT :(</h3></div>#}
+        </div>
+    </div>
+    {#End Authentification#}
+
+{% endblock %}
+
+
+

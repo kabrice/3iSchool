@@ -26,7 +26,7 @@ class UserContenu
      *
      * @ORM\Column(name="nbre_vue", type="integer", nullable=false)
      */
-    protected $nbreVue=0;
+    protected $nbreVue=1;
 
     /**
      * @var bool
@@ -39,7 +39,7 @@ class UserContenu
     /**
      * @var string
      *
-     * @ORM\Column(name="review", type="string", length=255, nullable=true)
+     * @ORM\Column(name="review", type="string", length=510, nullable=true)
      */
     protected $review;
 

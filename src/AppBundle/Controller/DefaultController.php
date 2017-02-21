@@ -70,4 +70,13 @@ class DefaultController extends Controller
         return $this->render('default/resetPassword.html.twig', []);
     }
 
+
+    /**
+     * @Route("/{userID}/dashboard", name="dashboard")
+     */
+    public function dashboardAction($userID)
+    {
+        return $this->render('default/dashboard.html.twig', ["userID"=>$userID]);
+    }
+
 }

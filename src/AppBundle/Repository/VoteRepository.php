@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+
 /**
  * VoteRepository
  *
@@ -10,4 +11,16 @@ namespace AppBundle\Repository;
  */
 class VoteRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findNoteEtudiant($userID)
+    {
+        $qb = $this->createQueryBuilder('v');;
+        $qb->select("v.valeur", "v.dateVote");
+        $qb->where("v.ref=:ref");
+        $qb->andWhere('v.userID = :userID');
+        $qb->setParameter('ref', 'Contenu');
+        $qb->setParameter('userID', $userID);
+        $qb->orderBy('contenu.datePublication' , "DESC");
+
+        return $qb->getQuery()->getResult();
+    }
 }

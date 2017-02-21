@@ -54,9 +54,9 @@ class Question
     /**
      * @var int
      *
-     * @ORM\Column(name="nombre_dislike", type="integer")
+     * @ORM\Column(name="nombre_vu", type="integer")
      */
-    protected $nombreDislike=0;
+    protected $nombreVu=0;
 
     /**
      * @var int
@@ -78,12 +78,12 @@ class Question
      *
      * @ORM\Column(name="anonyme", type="boolean")
      */
-    protected $anonyme=0;
+    protected $anonyme=false;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="report", type="integer")
+     * @ORM\Column(name="nbre_inutile", type="integer")
      */
     protected $nbreInutile=0;
 
@@ -120,7 +120,6 @@ class Question
     {
         $this->datePublication = new DateTime();
         $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->userQuestions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -229,29 +228,6 @@ class Question
         return $this->nombreLike;
     }
 
-    /**
-     * Set nombreDislike
-     *
-     * @param integer $nombreDislike
-     *
-     * @return Question
-     */
-    public function setNombreDislike($nombreDislike)
-    {
-        $this->nombreDislike = $nombreDislike;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreDislike
-     *
-     * @return integer
-     */
-    public function getNombreDislike()
-    {
-        return $this->nombreDislike;
-    }
 
     /**
      * Set page
@@ -385,15 +361,7 @@ class Question
     }
 
 
-    /**
-     * Get userQuestions
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserQuestions()
-    {
-        return $this->userQuestions;
-    }
+
 
     /**
      * Set anonyme
@@ -465,5 +433,29 @@ class Question
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set nombreVu
+     *
+     * @param integer $nombreVu
+     *
+     * @return Question
+     */
+    public function setNombreVu($nombreVu)
+    {
+        $this->nombreVu = $nombreVu;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreVu
+     *
+     * @return integer
+     */
+    public function getNombreVu()
+    {
+        return $this->nombreVu;
     }
 }

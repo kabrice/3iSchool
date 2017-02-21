@@ -62,4 +62,36 @@ class PromotionController extends Controller
 
         return $niveau;
     }
+
+    /**
+     * @Rest\View(serializerGroups={"rubrique"})
+     * @Rest\Get("promotion/rubriques")
+     */
+    public function getRubriqueAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $rubrique = $em->getRepository('AppBundle:Rubrique')->findAll();
+
+        if (empty($rubrique)) {
+            return \FOS\RestBundle\View\View::create(['message' => 'Rubrique introuvable'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $rubrique;
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"sousRubrique"})
+     * @Rest\Get("promotion/sousRubriques")
+     */
+    public function getSousRubriqueAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $sousRubrique = $em->getRepository('AppBundle:SousRubrique')->findAll();
+
+        if (empty($sousRubrique)) {
+            return \FOS\RestBundle\View\View::create(['message' => 'SousRubrique introuvable'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $sousRubrique;
+    }
 }

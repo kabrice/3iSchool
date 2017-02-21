@@ -10,7 +10,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Conteneur;
 use AppBundle\Entity\Contenu;
-use AppBundle\Entity\ContenusGroupes;
 use AppBundle\Entity\Rubrique;
 use AppBundle\Entity\UserContenu;
 use AppBundle\Form\Type\UserType;

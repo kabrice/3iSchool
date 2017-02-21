@@ -55,9 +55,15 @@
 .panel-heading{
     padding:0px;
     position:relative;
+
 }
 .panel-heading img{
+
     width:100%;
+}
+.panel-heading canvas{
+    height: 200px !important;
+    width:100% !important;
 }
 .carousel-control.left {
     background-image: none;

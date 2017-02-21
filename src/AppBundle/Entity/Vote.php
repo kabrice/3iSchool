@@ -24,9 +24,16 @@ class Vote
     /**
      * @var int
      *
-     * @ORM\Column(name="num_ref", type="integer")
+     * @ORM\Column(name="user_id", type="integer")
      */
-    protected $num_ref;
+    protected $userID;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ref_id", type="integer")
+     */
+    protected $refID;
 
     /**
      * @var string
@@ -36,11 +43,13 @@ class Vote
     protected $ref;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valeur", type="integer")
+     * @ORM\Column(name="valeur", type="float")
      */
     protected $valeur;
+
+
 
     /**
      * @var \DateTime
@@ -51,11 +60,10 @@ class Vote
 
     /**
      * Vote constructor.
-     * @param \DateTime $dateVote
+     * @param int $id
      */
     public function __construct()
     {
-
         $this->dateVote = new \DateTime();
     }
 
@@ -63,7 +71,7 @@ class Vote
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -71,27 +79,51 @@ class Vote
     }
 
     /**
-     * Set numRef
+     * Set userID
      *
-     * @param integer $numRef
+     * @param integer $userID
      *
      * @return Vote
      */
-    public function setNumRef($numRef)
+    public function setUserID($userID)
     {
-        $this->num_ref = $numRef;
+        $this->userID = $userID;
 
         return $this;
     }
 
     /**
-     * Get numRef
+     * Get userID
      *
-     * @return int
+     * @return integer
      */
-    public function getNumRef()
+    public function getUserID()
     {
-        return $this->num_ref;
+        return $this->userID;
+    }
+
+    /**
+     * Set refID
+     *
+     * @param integer $refID
+     *
+     * @return Vote
+     */
+    public function setRefID($refID)
+    {
+        $this->refID = $refID;
+
+        return $this;
+    }
+
+    /**
+     * Get refID
+     *
+     * @return integer
+     */
+    public function getRefID()
+    {
+        return $this->refID;
     }
 
     /**
@@ -119,30 +151,6 @@ class Vote
     }
 
     /**
-     * Set valeur
-     *
-     * @param integer $valeur
-     *
-     * @return Vote
-     */
-    public function setValeur($valeur)
-    {
-        $this->valeur = $valeur;
-
-        return $this;
-    }
-
-    /**
-     * Get valeur
-     *
-     * @return int
-     */
-    public function getValeur()
-    {
-        return $this->valeur;
-    }
-
-    /**
      * Set dateVote
      *
      * @param \DateTime $dateVote
@@ -164,5 +172,30 @@ class Vote
     public function getDateVote()
     {
         return $this->dateVote;
+    }
+
+
+    /**
+     * Set valeur
+     *
+     * @param float $valeur
+     *
+     * @return Vote
+     */
+    public function setValeur($valeur)
+    {
+        $this->valeur = $valeur;
+
+        return $this;
+    }
+
+    /**
+     * Get valeur
+     *
+     * @return float
+     */
+    public function getValeur()
+    {
+        return $this->valeur;
     }
 }
