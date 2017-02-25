@@ -15,6 +15,7 @@ use AppBundle\Entity\Vote;
 use AppBundle\Form\Type\UserContenuType;
 use AppBundle\Form\Type\VisiteContenuType;
 use AppBundle\Form\Type\VoteType;
+use DateTime;
 use Proxies\__CG__\AppBundle\Entity\Contenu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -283,11 +284,10 @@ class StatsController extends Controller
     public function postVisiteContenuAction(Request $request)
     {
 
-
         $em = $this->getDoctrine()->getEntityManager();
         $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
         $user = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
-        $visiteContenu = $em->getRepository('AppBundle:VisiteContenu')->findLastVisiteContenuByDate($user, $contenu);
+        $visiteContenu = $em->getRepository('AppBundle:VisiteContenu')->findLastVisiteContenuByDate($request->get('user_id'), $request->get('contenu_id'));
 
         if (empty($user)) {
             return $this->userNotFound();
@@ -297,12 +297,21 @@ class StatsController extends Controller
             return $this->contenuNotFound();
         }
 
+        $newDate = json_decode($request->get('stringDate'));
+        $inputDate = date("Y-m-d", strtotime($newDate));
+        $lastDate = date("Y-m-d", strtotime($visiteContenu["date_visite"]));
 
-        $inputDate = date("Y-m-d", strtotime($request->get('dateVisite')));
-        $lastDate = date("Y-m-d", strtotime($visiteContenu["dateMax"]));
+        $date1=date_create($inputDate);
+        $date2=date_create($lastDate);
 
-        if($inputDate == $lastDate)
+
+        $diff= date_diff($date1,$date2, true);
+
+        $this->patchUserContenuAction($request);
+
+        if(!is_null($visiteContenu["id"]) && $diff->format("%a") == 0 )
         {
+
             return $this->updateVisiteContenuAction($request, $visiteContenu["id"]);
 
         }
@@ -317,7 +326,11 @@ class StatsController extends Controller
 
 
         $form = $this->createForm(VisiteContenuType::class, $visiteContenu);
-        $form->submit($request->request->all());
+        //return $request->get('dateVisite');
+
+        /*$form->submit(array($newDate));
+        $form->submit($request->get('duree'));*/
+        $form->submit($request->request->all(), false);
 
         if ($form->isValid()) {
 
@@ -378,12 +391,44 @@ class StatsController extends Controller
 
         if(empty($visiteContenus))
         {
-            return \FOS\RestBundle\View\View::create(['message' => 'VisiteContenu not found'], Response::HTTP_NOT_FOUND);
+
+            $visiteContenus["dateVite"]="01-03-2017";
+            $visiteContenus["dureeTotale"]=0;
+
+            $visiteContenus = array($visiteContenus);
+            //return \FOS\RestBundle\View\View::create(['message' => 'VisiteContenu not found'], Response::HTTP_NOT_FOUND);
         }
 
         return $visiteContenus ;
 
     }
+
+    /**
+     * @Rest\View(serializerGroups={"visiteContenu"})
+     * @Rest\Get("/userContenu/contenu/{contenu_id}")
+     */
+    public function getVisiteursAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
+
+        $userContenus = $em->getRepository('AppBundle:UserContenu')->findVisiteurs($contenu);
+
+        if(empty($userContenus))
+        {
+
+            $userContenus["nom"]="vide";
+            $userContenus["nbreVue"]=0;
+            $userContenus["review"]="";
+            $userContenus = array($userContenus);
+            //return \FOS\RestBundle\View\View::create(['message' => 'VisiteContenu not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $userContenus ;
+
+    }
+
+
 
     private function contenuNotFound()
     {

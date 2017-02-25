@@ -9,7 +9,9 @@
 
                     <td colspan="5">
                         <div style="font-size: 16pt">
-                            2 Questions
+                            {[{questionsEtudiants.length}]}
+                            <span ng-if="questionsEtudiants.length>1">Questions</span>
+                            <span ng-if="questionsEtudiants.length<=1">Question</span>
                         </div>
 
                     </td>
@@ -22,20 +24,23 @@
                     <th>Vu</th>
                     <th>Vote</th>
                 </tr>
-                <tr>
+                <tr ng-repeat="questionsEtudiant in questionsEtudiants | start: (currentPage - 1) * pageSize | limitTo: pageSize">
                     <td>
-                        <div><a style="text-decoration: none; font-size: 13pt;">AngularJS - Can't sorted DateTime with ngRepeat orderBy?</a></div>
-                        <div style="font-size: 9pt; color: grey;"><span>Du contenu: </span><i>Storyteller Sit-downs: Jillian Eugenios12</i></div>
+                        <div><a target="_blank" style="text-decoration: none; font-size: 13pt;" href="http://localhost:8000/lectureContenu/{[{questionsEtudiant.contenuID}]}#!/questions/{[{questionsEtudiant.contenuID}]}">{[{questionsEtudiant.questionLibelle}]}</a></div>
+                        <div style="font-size: 9pt; color: grey;"><span>Le {[{questionsEtudiant.questionDatePublication | date:'dd MMM yyyy à HH:mm'}]}, du contenu: </span><i>"{[{questionsEtudiant.contenuTitre}]}"</i></div>
                     </td>
-                    <td style="text-align: center; font-size: 13pt"><a style="text-decoration: none; "><b style="color: red;">0</b></a></td>
-                    <td><span style="font-size: 9pt; color: grey;">20 Dec 2016 à 08:24 </span><a style="text-decoration: none;">Slava Utesinov</a></td>
-                    <td style="text-align: center; font-size: 13pt; background:ghostwhite; border-bottom: none!important;"><b>200</b></td>
-                    <td style="text-align: center; font-size: 13pt"><b style="color: mediumseagreen;">13</b></td>
+                    <td style="text-align: center; font-size: 13pt"><span style="text-decoration: none; ">
+                            <b ng-class="questionsEtudiant.nbreReponses==0 ? 'nbreReponsesRed' : 'nbreReponsesBlue'">{[{questionsEtudiant.nbreReponses}]}</b></span></td>
+                    <td><a target="_blank" style="text-decoration: none;" href="http://localhost:8000/3il/{[{questionsEtudiant.auteurEmail | substringEmail:questionsEtudiant.auteurEmail}]}"> {[{questionsEtudiant.auteurPrenom}]} {[{questionsEtudiant.auteurNom}]}</a></td>
+                    <td style="text-align: center; font-size: 13pt; border-bottom: none!important;"><b>{[{questionsEtudiant.questionNombreVu}]}</b></td>
+                    <td style="text-align: center; font-size: 13pt"><b style="color: mediumseagreen;">{[{questionsEtudiant.questionNombreVu}]}</b></td>
 
 
                 </tr>
+                <tr><td colspan="5"><ul uib-pagination total-items="questionsEtudiants.length" items-per-page="pageSize" ng-model="currentPage" max-size="10"
+                                        class="pagination-sm"></ul></td></tr>
                {# <tr >
-
+                    Insérer les vus par étudiant au moment venu
                     <td colspan="5" style="background:ghostwhite;
     border-top: none">
                         <div class="panel" >
@@ -43,26 +48,20 @@
                         </div>
                     </td>
                 </tr>#}
-                <tr>
-                    <td>
-                        <div><a style="text-decoration: none; font-size: 13pt;">How to get Webpack, Wordpress, and BrowserSync to work together?</a></div>
-                        <div style="font-size: 9pt; color: grey;"><span>Du contenu: </span><i>There’s Jelly in Your Google0.</i></div>
-                    </td>
-                    <td style="text-align: center; font-size: 13pt"><a style="text-decoration: none; "><b style="color: #1e90fe;">2</b></a></td>
-                    <td><span style="font-size: 9pt; color: grey;">20 Dec 2016 à 08:24 </span><a style="text-decoration: none;">Slava Utesinov</a></td>
-                    <td style="text-align: center; font-size: 13pt"><b>8</b></td>
-                    <td style="text-align: center; font-size: 13pt"><b style="color: mediumseagreen;">3</b></td>
 
-                </tr>
                 <tr>
                     <td colspan="5">
                         <div id="custom-search-input">
                             <div class="input-group col-md-12">
-                                <input type="text" class="form-control input-lg" placeholder="Trouvez les questions d'un autre enseignant" />
+                                <input
+                                        type="text" class="form-control input-lg" placeholder="Trouvez les questions d'un autre enseignant en entrant son pseudo (exemple: duvalet)"
+                                        ng-model="search.username"/>
                                 <span class="input-group-btn">
+                                    <a href="http://localhost:8000/1/dashboard#!/gestionQuestions/{[{search.username}]}">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
+                                        </a>
                     </span>
                             </div>
                         </div>

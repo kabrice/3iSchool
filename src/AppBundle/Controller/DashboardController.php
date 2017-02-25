@@ -121,9 +121,8 @@ class DashboardController extends Controller
         else {
             return $form;
         }
-
-
     }
+
     /**
      * @Rest\View(serializerGroups={"user"})
      * @Rest\Patch("/contenu/{contenu_id}")

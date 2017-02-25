@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <div ng-controller="DashboardCtrl">
+    <div ng-controller="DashboardCtrl" >
 
         <div class="jumbotron" ng-init="getUserID('{{userID}}')"  ng-cloak > 
 
@@ -64,7 +64,7 @@
             <div style="margin-bottom: 3px">
 
 
-                <nav class="navbar navbar-default" style="border: none; background-color: transparent; margin: inherit;">
+                <nav class="navbar navbar-default" style="border: none; background-color: transparent; margin: inherit;" id="anchorContenuStat">
                     <ul class="nav navbar-nav" style="margin: inherit">
                     <li>
                         <a  ng-class="{'tbTitle-active': showPublierContenu}"  href="#!/nouveauContenu" >Publier un contenu</a></li>
@@ -448,12 +448,32 @@
                 </div>
             </div>
             <question-manager
-                    ng-if="showQuestionManager && authToken.user.isPersonnel"></question-manager>
+                    questions-etudiants="questionsEtudiants"
+                    page-size="pageSize"
+                    current-page="currentPage"
+                    ng-if="showQuestionManager && authToken.user.isPersonnel && questionsEtudiants!=undefined"></question-manager>
 
-            <contenus-signales ng-if="showContenusSignales && authToken.user.isPersonnel"></contenus-signales>
+            <contenus-signales
+                    page-size="pageSize"
+                    current-page="currentPage"
+                    sous-rubrique-data="sousRubriqueData"
+                    num-sous-rubrique="numSousRubrique"
+                    ng-if="showContenusSignales && authToken.user.isPersonnel"></contenus-signales>
 
-            <mes-cours ng-if="showMesCours && authToken.user.isPersonnel"
-                       show-option-details="showOptionDetails()"></mes-cours>
+            <mes-cours
+                    series="series"
+                    dataset-override="datasetOverride"
+                    options="options"
+                    labels="labels"
+                    data="data"
+                    contenu="contenuStat"
+                    show-contenu-stat="showContenuStat(index)"
+                    page-size="pageSize"
+                    current-page="currentPage"
+                    sous-rubrique-data="sousRubriqueData"
+                    num-sous-rubrique="numSousRubrique"
+                    ng-if="showMesCours && authToken.user.isPersonnel"
+                    show-option-details="showOptionDetails(option)"></mes-cours>
 
             {#<div class="panel" ng-if="!authToken.user.isPersonnel" ng-cloak>
                 <h3 style="color: red">ACCES INTERDIT :(</h3></div>#}

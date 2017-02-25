@@ -10,23 +10,34 @@ namespace AppBundle\Repository;
  */
 class VisiteContenuRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findLastVisiteContenuByDate($user, $contenu)
+    public function findLastVisiteContenuByDate($user_id, $contenu_id)
     {
-        $qb = $this->createQueryBuilder('vc');;
+        /*$qb = $this->createQueryBuilder('vc');
         $qb->select("vc.id, MAX(vc.dateVisite) as dateMax");
         $qb->where("vc.user=:user");
         $qb->andWhere('vc.contenu = :contenu');
         $qb->setParameter('user', $user);
-        $qb->setParameter('contenu', $contenu);
-        $qb->orderBy('vc.dateVisite' , "DESC");
-        return $qb->getQuery()->getSingleResult();
+        $qb->setParameter('contenu', $contenu);*/
+
+        $sql = 'SELECT * FROM visite_contenu 
+                WHERE visite_contenu.date_visite 
+                IN (SELECT MAX(date_visite) FROM visite_contenu WHERE contenu_id=:contenu_id AND user_id=:user_id)';
+        $params = array(
+            'contenu_id' => $contenu_id,
+            'user_id' => $user_id
+        );
+
+        return $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetch();
+
+
+       // return $qb->getQuery()->getSingleResult();
     }
 
     public function findAllVisiteContenuByDate($contenu)
     {
         $qb = $this->createQueryBuilder('vc');;
-        $qb->select("vc.id, DATE_FORMAT(vc.dateVisite, '%Y%m%d') , SUM(vc.duree)");
-        $qb->groupBy("DATE_FORMAT(vc.dateVisite, '%Y%m%d')");
+        $qb->select("vc.id, DATE_FORMAT(vc.dateVisite, '%Y-%m-%d') as dateVite , SUM(vc.duree) as dureeTotale");
+        $qb->groupBy("dateVite");
         $qb->where('vc.contenu = :contenu');
         $qb->setParameter('contenu', $contenu);
         $qb->orderBy('vc.dateVisite' , "ASC");

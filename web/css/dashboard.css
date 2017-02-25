@@ -131,9 +131,9 @@ tr td:nth-child(2){
     font-size: 23px;
 }
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-    border-left: none;
-}
+/*.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {*/
+    /*border-left: none;*/
+/*}*/
 
 
 .loader {
@@ -174,4 +174,20 @@ question-manager td, th{
 
 .tooltip-inner {
     max-width: 350px !important;
+}
+
+.nbreReponsesRed{
+    color: red;
+}
+
+.nbreReponsesBlue{
+    color: #1e90fe;
+}
+
+.question-manager td{
+    cursor: inherit !important;
+}
+
+.question-manager a{
+    cursor: pointer !important;
 }

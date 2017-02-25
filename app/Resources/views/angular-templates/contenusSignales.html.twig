@@ -6,56 +6,78 @@
         <div class="col-xl-10 col-lg-10 col-md-8 col-sm-8 col-xs-12  panel poster" style="position: inherit">
             <div>
                 <ul class="nav nav-tabs" style=" margin-left: -16px;">
-                    <li class="active"><a href="#">Question</a></li>
-                    <li><a href="#">Réponse</a></li>
-                    <li><a href="#">Commentaire</a></li>
+                    <li ng-class="{active: numSousRubrique==2}"><a href="#!/contenusSignales/questions">Question</a></li>
+                    <li ng-class="{active: numSousRubrique==3}"><a href="#!/contenusSignales/reponses">Réponse</a></li>
+                    <li ng-class="{active: numSousRubrique==4}"><a href="#!/contenusSignales/commentaires">Commentaire</a></li>
                 </ul>
             </div>
             <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;" >
-                <tr >
-
+                <tr>
                     <td colspan="5">
                         <div style="font-size: 16pt">
-                            2 Questions
+                            {[{sousRubriqueData.length}]}
+                            <span ng-if="numSousRubrique==2 && sousRubriqueData.length>1">Questions signalées</span>
+                            <span ng-if="numSousRubrique==2 && sousRubriqueData.length<=1">Question signalée</span>
+                            <span ng-if="numSousRubrique==4 && sousRubriqueData.length>1">Commentaires signalés</span>
+                            <span ng-if="numSousRubrique==4 && sousRubriqueData.length<=1">Commentaire signalé</span>
+
+                            <span ng-if="numSousRubrique==3 && sousRubriqueData.length>1">Réponses signalées</span>
+                            <span ng-if="numSousRubrique==3 && sousRubriqueData.length<=1">Réponse signalée</span>
                         </div>
 
                     </td>
                 </tr>
-                <tr >
+                <tr>
 
-                    <th>Question</th>
+                    <th ng-if="numSousRubrique==2">Question</th>
+                    <th ng-if="numSousRubrique==3">Réponse</th>
+                    <th ng-if="numSousRubrique==4">Commentaire</th>
 
                     <th>Auteur</th>
                     <th>Signalé</th>
 
                 </tr>
-                <tr>
+                <tr ng-repeat="item in sousRubriqueData | start: (currentPage - 1) * pageSize | limitTo: pageSize">
                     <td>
-                        <div><a style="text-decoration: none; font-size: 13pt;">AngularJS - Can't sorted DateTime with ngRepeat orderBy?</a></div>
-                        <div style="font-size: 9pt; color: grey;"><span>Du contenu: </span><i>Storyteller Sit-downs: Jillian Eugenios12</i></div>
+                        <div>
+                            <a
+                                target="_blank"
+                                href="http://localhost:8000/lectureContenu/{[{item.contenuID}]}#!/questions/{[{item.contenuID}]}"
+                                style="text-decoration: none; font-size: 13pt;"
+                                ng-bind-html="(item.libelle | limitTo: 200) + (item.libelle.length > 200 ? '...' : '')">
+                            </a></div>
+                        <div style="font-size: 9pt; color: grey;"><span>Le {[{item.datePublication | date:'dd MMM yyyy à HH:mm'}]}, du contenu: </span><i>"{[{item.contenuTitre}]}"</i></div>
                     </td>
-                   <td><span style="font-size: 9pt; color: grey;">20 Dec 2016 à 08:24 </span><a style="text-decoration: none;">Slava Utesinov</a></td>
-                    <td style="text-align: center; font-size: 13pt; color: red"><b>4</b></td>
+                    <td><a target="_blank" style="text-decoration: none;" href="http://localhost:8000/3il/{[{item.auteurEmail | substringEmail:item.auteurEmail}]}"> {[{item.auteurPrenom}]} {[{item.auteurNom}]}</a></td>
+                    <td style="text-align: center; font-size: 13pt; color: red"><b>{[{item.nbreInutile}]}</b></td>
 
                 </tr>
-                <tr>
-                    <td>
-                        <div><a style="text-decoration: none; font-size: 13pt;">How to get Webpack, Wordpress, and BrowserSync to work together?</a></div>
-                        <div style="font-size: 9pt; color: grey;"><span>Du contenu: </span><i>There’s Jelly in Your Google0.</i></div>
-                    </td>
-                   <td><span style="font-size: 9pt; color: grey;">20 Dec 2016 à 08:24 </span><a style="text-decoration: none;">Slava Utesinov</a></td>
-                    <td style="text-align: center; font-size: 13pt; color: red"><b>8</b></td>
-
-                </tr>
+                <tr><td colspan="3"><ul uib-pagination total-items="sousRubriqueData.length" items-per-page="pageSize" ng-model="currentPage" max-size="10"
+                                        class="pagination-sm"></ul></td></tr>
                 <tr>
                     <td colspan="5">
                         <div id="custom-search-input">
                             <div class="input-group col-md-12">
-                                <input type="text" class="form-control input-lg" placeholder="Trouvez les contenus signalés d'un autre enseignant" />
+                                <input type="text" class="form-control input-lg"
+                                       placeholder="Trouvez les contenus signalés d'un autre enseignant en entrant son pseudo"
+                                       ng-model="search.username"/>
                                 <span class="input-group-btn">
+                       <a href="http://localhost:8000/1/dashboard#!/contenusSignales/questions/{[{search.username}]}"
+                          ng-if="numSousRubrique==2">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
+                                        </a>
+                                    <a href="http://localhost:8000/1/dashboard#!/contenusSignales/reponses/{[{search.username}]}" ng-if="numSousRubrique==3">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                                        </a>
+                                    <a href="http://localhost:8000/1/dashboard#!/contenusSignales/commentaires/{[{search.username}]}" ng-if="numSousRubrique==4">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                                        </a>
                     </span>
                             </div>
                         </div>

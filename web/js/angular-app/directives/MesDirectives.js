@@ -118,11 +118,13 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
 
             $scope.clicPublierQuestion = function () {
                 var libelleQuestion = $scope.newQuestion.libelle;
+                $scope.newQuestion.nombreVu = 1;
                 //$scope.showQuestionError = false;
                 if(!libelleQuestion || !(libelleQuestion.substr(-1) === "?")
                                         || libelleQuestion.length>=150)
                 {
                     $scope.showQuestionError=!$scope.showQuestionError;
+                    //$location.hash(id)
                     $location.hash('bottom');
                     $anchorScroll();
                     return;

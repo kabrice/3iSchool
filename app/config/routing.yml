@@ -106,5 +106,11 @@ app_bundle_mesCours:
         _controller: AppBundle:Template:mesCours
         template:    'AppBundle:Static:mesCours.html.twig'
 
+app_bundle_sousRubriqueDashboard:
+    path: /sousRubriqueDashboard
+    defaults:
+        _controller: AppBundle:Template:sousRubriqueDashboard
+        template:    'AppBundle:Static:sousRubriqueDashboard.html.twig'
+
         
 

@@ -16,7 +16,7 @@ class ContenuRepository extends \Doctrine\ORM\EntityRepository
     {
 
         $qb = $this->createQueryBuilder('c');
-        $qb->select("c.id as contenuId", "c.titre as contenuTitre", "questions.id as questionID","questions.libelle as questionLibelle",
+        $qb->select("c.id as contenuID", "c.titre as contenuTitre", "questions.id as questionID","questions.libelle as questionLibelle",
             "questions.datePublication as questionDatePublication", "questions.nombreLike as questionNombreLike",
             "questions.nombreVu as questionNombreVu","auteur.email as auteurEmail", "auteur.nom as auteurNom", "auteur.prenom as auteurPrenom");
         //Découverte d'une nouvelle notion pour compter une entité associative dans un query builder
@@ -33,10 +33,8 @@ class ContenuRepository extends \Doctrine\ORM\EntityRepository
         $qb->setParameter('enseignant', $user);
         $qb->orderBy('questionDatePublication', 'DESC');
 
-        $result = $qb->getQuery()->getResult();
-        $nbreResults = count($result);
-        $result[] = $nbreResults;
-        return $result;
+        return $qb->getQuery()->getResult();
+
     }
 
 

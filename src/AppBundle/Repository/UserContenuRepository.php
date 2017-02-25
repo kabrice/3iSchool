@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Contenu;
 use AppBundle\Entity\User;
 
 /**
@@ -71,8 +72,8 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
     {
 
         $qb = $this->createQueryBuilder('uc');
-        $qb->select("questions.id as questionID", "questions.libelle as questionLibelle", "questions.datePublication as questionDatePublication",
-                    "questions.nbreInutile as questionNbreInutile", "contenu.id as contenuID", "auteur.id as auteurID",
+        $qb->select("questions.id as questionID", "questions.libelle as libelle", "questions.datePublication as datePublication",
+                    "questions.nbreInutile as nbreInutile", "contenu.id as contenuID", "contenu.titre as contenuTitre", "auteur.id as auteurID",
             "auteur.nom as auteurNom", "auteur.prenom as auteurPrenom", "auteur.email as auteurEmail" );
         $qb->join('uc.contenu', 'contenu');
         $qb->join('uc.user', 'enseignant');
@@ -83,19 +84,17 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
         $qb->where("uc.user=:enseignant AND uc.aPublie=:aPublie AND questions.nbreInutile>0");
         $qb->setParameter('aPublie', true);
         $qb->setParameter('enseignant', $user);
-        $qb->orderBy('questionDatePublication', 'DESC');
+        $qb->orderBy('datePublication', 'DESC');
 
-        $result = $qb->getQuery()->getResult();
-        $result[] = count($result);
-        return $result;
+        return $qb->getQuery()->getResult();
     }
 
     public function findReponsesSignalees(User $user)
     {
 
         $qb = $this->createQueryBuilder('uc');
-        $qb->select("reponses.id as reponseID", "reponses.libelle as reponseLibelle", "reponses.datePublication as reponseDatePublication",
-            "reponses.nbreInutile as reponseNbreInutile", "contenu.id as contenuID", "auteur.id as auteurID",
+        $qb->select("questions.id as questionID", "reponses.id as id", "reponses.libelle as libelle", "reponses.datePublication as datePublication",
+            "reponses.nbreInutile as nbreInutile", "contenu.id as contenuID", "contenu.titre as contenuTitre", "auteur.id as auteurID",
             "auteur.nom as auteurNom", "auteur.prenom as auteurPrenom", "auteur.email as auteurEmail" );
         $qb->join('uc.contenu', 'contenu');
         $qb->join('uc.user', 'enseignant');
@@ -107,19 +106,17 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
         $qb->where("uc.user=:enseignant AND uc.aPublie=:aPublie AND reponses.nbreInutile>0");
         $qb->setParameter('aPublie', true);
         $qb->setParameter('enseignant', $user);
-        $qb->orderBy('reponseDatePublication', 'DESC');
+        $qb->orderBy('datePublication', 'DESC');
 
-        $result = $qb->getQuery()->getResult();
-        $result[] = count($result);
-        return $result;
+        return $qb->getQuery()->getResult();
     }
 
     public function findCommentairesSignales(User $user)
     {
 
         $qb = $this->createQueryBuilder('uc');
-        $qb->select("commentaires.id as commentaireID", "commentaires.libelle as commentaireLibelle",
-            "commentaires.datePublication as commentaireDatePublication", "commentaires.nbreInutile as commentaireNbreInutile", "contenu.id as contenuID", "auteur.id as auteurID",
+        $qb->select("questions.id as questionID", "commentaires.id as id", "commentaires.libelle as libelle",
+            "commentaires.datePublication as datePublication", "commentaires.nbreInutile as nbreInutile", "contenu.id as contenuID", "contenu.titre as contenuTitre", "auteur.id as auteurID",
             "auteur.nom as auteurNom", "auteur.prenom as auteurPrenom", "auteur.email as auteurEmail" );
         $qb->join('uc.contenu', 'contenu');
         $qb->join('uc.user', 'enseignant');
@@ -132,26 +129,27 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
         $qb->where("uc.user=:enseignant AND uc.aPublie=:aPublie AND commentaires.nbreInutile>0");
         $qb->setParameter('aPublie', true);
         $qb->setParameter('enseignant', $user);
-        $qb->orderBy('commentaireDatePublication', 'DESC');
+        $qb->orderBy('datePublication', 'DESC');
 
-        $result = $qb->getQuery()->getResult();
-        $result[] = count($result);
-        return $result;
+        return $qb->getQuery()->getResult();
     }
 
     public function findContenusEnseignant(User $user)
     {
-        $qb = $this->createQueryBuilder('uc');;
-        $qb->select("contenu.id", "contenu.titre", "contenu.description", "contenu.datePublication",
-            "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
-            "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique",
-            "groupeRubrique.libelle as libelle_groupeRubrique", "rubrique.imageRoot as imageRoot_rubrique","user.nom", "user.userProfilRoot", "user.id as user_id", "user.isPersonnel");
+        $qb = $this->createQueryBuilder('uc');
+        $qb->select("contenu.id", "contenu.titre", "contenu.description", "contenu.datePublication", "contenu.note", "contenu.nombreVueTotal",
+            "contenu.contenuRoot","contenu.imageRoot", "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique",
+            "groupeRubrique.libelle as libelle_groupeRubrique", "rubrique.imageRoot as imageRoot_rubrique","user.nom", "user.userProfilRoot",
+            "user.id as user_id", "user.isPersonnel", "annee.libelle as anneeLibelle", "niveau.libelle as niveauLibelle", "groupe.libelle as groupeLibelle");
         $qb->join('uc.contenu', 'contenu');
         $qb->join('uc.user', 'user');
         $qb->join('contenu.rubrique', 'rubrique');
         $qb->leftJoin('rubrique.groupeRubrique', 'groupeRubrique');
         $qb->leftJoin('contenu.sousRubrique', 'sousRubrique');
         $qb->join('contenu.conteneurs', 'conteneurs');
+        $qb->join('conteneurs.annee', 'annee');
+        $qb->join('conteneurs.niveau', 'niveau');
+        $qb->join('conteneurs.groupe', 'groupe');
         $qb->where('user=:enseignant');
         $qb->andWhere('uc.aPublie = true');
         $qb->setParameter('enseignant', $user);
@@ -159,6 +157,23 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+
+    public function findVisiteurs(Contenu $contenu)
+    {
+        $qb = $this->createQueryBuilder('uc');
+        $qb->select('uc.id as ucID', "contenu.id as contenuID", "visiteContenu.id as visiteContenuID", "visiteContenu2.id as visiteContenu2ID", "user.id as userID");
+        $qb->join('uc.contenu', 'contenu');
+        $qb->join('contenu.visiteContenu', 'visiteContenu');
+        $qb->join('uc.user', 'user');
+        $qb->join('user.visiteContenu', 'visiteContenu2');
+        $qb->where('contenu=:contenu');
+        $qb->andWhere('uc.aPublie = false');
+        $qb->setParameter('contenu', $contenu);
+        return $qb->getQuery()->getResult();
+    }
+
+
 
 
 }

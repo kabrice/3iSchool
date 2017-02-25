@@ -65,8 +65,7 @@ class ContenuController extends Controller
         $question = new Question();
         $question->setContenu($contenu)
                  ->setTypeQuestion($typeQuestion)
-                 ->setUser($thisUser)
-                 ->setNombreVu(1);
+                 ->setUser($thisUser);
 
         $thisUser->addQuestion($question)  ;
 

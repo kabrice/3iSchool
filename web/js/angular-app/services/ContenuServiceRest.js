@@ -20,11 +20,13 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 "getIsPasswordEmpty": {method: 'GET', isArray: false, url: "/api/users/checkPW/:useremail"},
                            "getUser": {method: 'GET', isArray: true, url: "/api/users/:email"},
                        "getUserVote": {method: 'GET', isArray: false, url: "/api/vote/:refid/:ref/:userid"},
-              "getRubriqueDashboard": {method: 'GET', isArray: false, url: "/api/user/:userid/:numRubrique/contenus/questions/reponses"},
+              "getRubriqueDashboard": {method: 'GET', isArray: true, url: "/api/user/:userid/:numRubrique/contenus/questions/reponses"},
                      "getUserReview": {method: 'GET', isArray: true, url: "/api/contenu/:contenuid/:userid/review"},
                        "getUserNote": {method: 'GET', isArray: true, url: "/api/contenu/:contenuid/:userid/note"},
                       "getRubriques": {method: 'GET', isArray: true, url: "/api/promotion/rubriques"},
                   "getSousRubriques": {method: 'GET', isArray: true, url: "/api/promotion/sousRubriques"},
+               "getAllVisiteContenu": {method: 'GET', isArray: true, url: "/api/visiteContenu/contenu/:contenuid"},
+                  "getVisiteContenu": {method: 'GET', isArray: true, url: "/api/visiteContenu/user/:userid/contenu/:contenuid"},
 
                          "patchUser": {method: 'PATCH', url: "/api/users/:userid", userid: 'userid'},
                        "patchRating": {method: 'PATCH', url: "/api/rate"},
@@ -39,6 +41,7 @@ angular.module("ContenuServiceRest", ['ngResource'])
                        "postInutile": {method: "POST", url: "/api/inutile"},
                          "postImage": {method: "POST", url: "/api/images"},
                      "postConteneur": {method: "POST", url: "/api/conteneur/:anneeid/:rubriqueid/:sousRubriqueid/:userid"},
+
 
                   "deleteAuthToken": {method: 'DELETE', url: "/api/auth-tokens/:id"}
             });
@@ -79,6 +82,12 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 },
                 getSousRubriques: function () {
                     return apiData.getSousRubriques();
+                },
+                getAllVisiteContenu: function (contenu_id) {
+                    return apiData.getAllVisiteContenu({contenuid: contenu_id});
+                },
+                getVisiteContenu: function (contenu_id, user_id) {
+                    return apiData.getVisiteContenu({contenuid: contenu_id, userid: user_id});
                 },
 
 

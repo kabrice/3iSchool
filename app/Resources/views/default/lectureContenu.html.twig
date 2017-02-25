@@ -301,30 +301,111 @@
            ng-click="displayQuestionOnMobile()">question_answer</i>
 
     </div>
-    <script type="text/javascript" src="{{ asset('bower/timeme.js/timeme.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bower/jquery/dist/jquery.min.js') }}"></script>
     <script type="text/javascript">
-        var startDate = new Date();
-        var elapsedTime = 0;
-        var idleTime = 0;
 
+        $(document).ready(function(){
+        var startDate = new Date();
+        var idleTime = 0;
+        var elapsedTime = 0;
+        var i=0;
         const focus = function() {
             startDate = new Date();
             console.log("focus", startDate);
         };
 
         const blur = function() {
-            const endDate = new Date();
-            const spentTime = endDate.getTime() - startDate.getTime();
-            elapsedTime += spentTime;
-            console.log("blur", elapsedTime);
+
+            i++;
+           // if(i>1){
+                const endDate = new Date();
+                const spentTime = endDate.getTime() - startDate.getTime();
+                elapsedTime += spentTime;
+                console.info("blur endDate", endDate);
+                console.info("blur startDate", startDate);
+                console.log("blur", elapsedTime);
+           // }
+
         };
 
-        const beforeunload = function() {
+            function twoDigits(d) {
+                if(0 <= d && d < 10) return "0" + d.toString();
+                if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+                return d.toString();
+            }
+
+
+            const beforeunload = function() {
             const endDate = new Date();
             const spentTime = endDate.getTime() - startDate.getTime();
             elapsedTime += spentTime;
+
+            console.info("endDate", endDate);
             console.log("beforeunload", elapsedTime);
             // elapsedTime contains the time spent on page in milliseconds
+                var totalTimeSpent = elapsedTime - idleTime;
+                console.log("totalTimeSpent", totalTimeSpent);
+                console.log("sessionStorage.idContenuCourant", sessionStorage.idContenuCourant);
+                if(localStorage.userData != undefined
+                        && sessionStorage.idContenuCourant != undefined
+                                && sessionStorage.nbreVue != undefined
+                                        && totalTimeSpent>120000)
+                {
+                    var dateConversion =new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000)).toISOString().slice(0, 19).replace('T', ' ');
+
+                    var authToken = JSON.parse(localStorage.userData);
+                    console.log("date2", startDate.toISOString().slice(0, 19).replace('T', ' '));
+
+                    //Gestion du nombre de visite
+                    $.ajax({
+                        url: '/api/visiteContenu/'+sessionStorage.idContenuCourant+'/'+authToken.user.id,
+                        contentType : 'application/json',
+                        type: 'post',
+                        data : JSON.stringify({
+                            "dateVisite": {
+                                "date": {
+                                    "year": parseInt(dateConversion.substr(0, 4)),
+                                    "month": parseInt(dateConversion.substr(5, 2)),
+                                    "day": parseInt(dateConversion.substr(8, 2))
+                                },
+                                "time": {
+                                    "hour": parseInt(dateConversion.substr(11, 2)),
+                                    "minute": parseInt(dateConversion.substr(14, 2))
+                                }
+                            },
+                            "stringDate": "\""+dateConversion+"\"",
+                            "duree": parseFloat(totalTimeSpent/60000 ),
+                            "nbreVue":sessionStorage.nbreVue
+                        }),
+                        headers: {
+                            'X-Auth-Token': authToken.value
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log("success !");
+                            console.info(data);
+                        }
+                    });
+
+
+                    //Gestion du nombre de vue
+                    /*$.ajax({
+                        url: '/api/usercontenu/'+authToken.user.id+'/'+sessionStorage.idContenuCourant,
+                        contentType : 'application/json',
+                        type: 'patch',
+                        data : JSON.stringify({
+                            "nbreVue":sessionStorage.nbreVue
+                        }),
+                        headers: {
+                            'X-Auth-Token': authToken.value
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log("success !");
+                            console.info(data);
+                        }
+                    });*/
+                }
         };
 
         var inactivityTime = function() {
@@ -341,21 +422,22 @@
 
             function logout() {
                // console.log("You are now logged out.");
-                idleTime=idleTime+1000;
+                idleTime=idleTime+300000;
                 console.log("idleTime", idleTime);
+
                 //location.href = 'logout.php'
             }
 
             function resetTimer() {
                 clearTimeout(t);
-                t = setTimeout(logout, 1000);
+                t = setTimeout(logout, 300000);
                 // 1000 milisec = 1 sec
             }
         };
-        window.addEventListener('focus', focus);
-        window.addEventListener('blur', blur);
-        window.addEventListener('beforeunload', beforeunload);
+            window.addEventListener('focus', focus);
+            window.addEventListener('blur', blur);
+            window.addEventListener('beforeunload', beforeunload);
        inactivityTime();
-
+        });
     </script>
 {% endblock %}

@@ -28,6 +28,8 @@ class VisiteContenu
      */
     private $dateVisite;
 
+    private $stringDate;
+
     /**
      * @var float
      *
@@ -155,4 +157,22 @@ class VisiteContenu
     {
         return $this->contenu;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStringDate()
+    {
+        return $this->stringDate;
+    }
+
+    /**
+     * @param mixed $stringDate
+     */
+    public function setStringDate($stringDate)
+    {
+        $this->stringDate = $stringDate;
+    }
+
+
 }

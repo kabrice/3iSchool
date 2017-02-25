@@ -1,12 +1,13 @@
 <div>
+<div  class="panel">
     <div class="row">
         <div class="col-xl-1 col-lg-1 col-md-1"></div>
-        <div class="col-xl-3 col-lg-3 col-md-3">
+        <div class="col-xl-3 col-lg-3 col-md-3 ">
             <div class="row">
                 <div class="col-sm-3 "></div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-6 ">
                     <div class="panel panel-default course-pointer">
-                        <a target="_blank" href="/lectureContenu/{[{contenu.id}]}">
+                        <a target="_blank" href="http://localhost:8000/lectureContenu/{[{contenu.id}]}">
                             <div class="panel-heading">
                                 <img ng-src="{{ asset('{[{contenu.imageRoot}]}') }}" class="img-wrapper " />
                             </div>
@@ -23,17 +24,17 @@
                             </div>
                             <div style="display: flex">
                                 <div style="color: orangered;" >
-                                    {#<ng-rate-it
+                                    <ng-rate-it
                                             style="margin-top: 3px; margin-left: -1px;"
                                             read-only="true"
                                             class="custom"
                                             cancel-width="1"
                                             cancel-height="1"
-                                            ng-model="3.5"
-                                            ng-click="rate()"></ng-rate-it>#}
+                                            ng-model="contenu.note">
+                                    </ng-rate-it>
                                 </div>
                                 <div style="margin-left: 18px; color: orangered;">
-                                    {[{contenu.nombreLike}]} j'aime
+                                    {[{contenu.nombreLike}]}
                                 </div>
                             </div>
                             <div class="caption-item-content">
@@ -42,28 +43,25 @@
                             </div>
                         </div>
                     </div>
+                    <div ><b>Promotion: </b>{[{contenu.niveauLibelle}]} / {[{contenu.anneeLibelle}]} / G{[{contenu.groupeLibelle}]}</div>
                 </div>
+
                 <div class="col-sm-3"></div>
            </div>
+
         </div>
         <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12  panel ">
+            <h3 style="text-align: center"><b>Présentation générale des visites</b></h3>
+            <div >
+                <canvas id="line" class="chart chart-line" chart-data="data" height="300"
+                        chart-labels="labels" chart-series="series" chart-options="options"
+                        chart-dataset-override="datasetOverride" chart-click="onClick">
+                </canvas>
+            </div>
             <table class="table vu-detail " cellspacing="pixels"  >
                 <tr>
                     <td colspan="4">
-                        <h5><b>Présentation générale des visites</b></h5>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4" ng-controller="GloabalModalCtrl">
-                        <canvas id="line" class="chart chart-line" chart-data="data" height="70%"
-                                chart-labels="labels" chart-series="series" chart-options="options"
-                                chart-dataset-override="datasetOverride" chart-click="onClick">
-                        </canvas>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <h5><b>Présentation des visites/étudiant</b></h5>
+                        <h3><b>Présentation des visites/étudiant</b></h3>
                     </td>
                 </tr>
                 <tr style="background:ghostwhite;">
@@ -107,7 +105,7 @@
                     <td>6</td>
                     <td
                             style="color: #1e90fe;"
-                            ng-mouseover="showOptionDetails()">2</td>
+                            ng-mouseover="hoverShowOptionDetails({option: 'test'})">2</td>
                     <td></td>
                 </tr>
 
@@ -115,5 +113,74 @@
         </div>
         <div class="col-xl-1 col-lg-1 col-md-1"></div>
     </div>
+</div>
 
+    <div class="container">
+
+        <div class="row questions" >
+            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-2" ></div>
+            <div class="col-xl-10 col-lg-10 col-md-8 col-sm-8 col-xs-12  panel poster question-manager" style="position: inherit">
+
+
+                <table class="table" cellspacing="pixels" style=" overflow-y: auto; height: 100px;" >
+                    <tr>
+                        <td colspan="5">
+                            <div style="font-size: 16pt">
+                                {[{sousRubriqueData.length}]}
+                                <span ng-if="sousRubriqueData.length>1">Cours</span>
+                                <span ng-if="sousRubriqueData.length<=1">Cours</span>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+
+
+                        <th>Titre</th>
+
+                        <th>Année</th>
+                        <th>Section</th>
+                        <th>Groupe</th>
+                    </tr>
+                    <tr ng-repeat="item in sousRubriqueData | start: (currentPage - 1) * pageSize | limitTo: pageSize">
+                        <td>
+                            <div>
+                                  <a    target="_blank"
+                                        ng-click="clicShowContenuStats({index: sousRubriqueData.indexOf(item)})"
+                                        style="text-decoration: none; font-size: 13pt;">
+                                    {[{(item.titre | limitTo: 100) + (item.titre.length > 100 ? '...' : '')}]}
+                                </a></div>
+                            <div style="font-size: 9pt; color: grey;"><i>Publié le {[{item.datePublication | date:'dd MMM yyyy à HH:mm'}]}</i></div>
+                        </td>
+                        <td>{[{item.anneeLibelle}]}</td>
+                        <td>{[{item.niveauLibelle}]}</td>
+                        <td>{[{item.groupeLibelle}]}</td>
+                    </tr>
+                    <tr><td colspan="3"><ul uib-pagination total-items="sousRubriqueData.length" items-per-page="pageSize" ng-model="currentPage" max-size="10"
+                                            class="pagination-sm"></ul></td></tr>
+                    <tr>
+                        <td colspan="5">
+                            <div id="custom-search-input">
+                                <div class="input-group col-md-12">
+                                    <input type="text" class="form-control input-lg"
+                                           placeholder="Trouvez les cours d'un autre enseignant en entrant son pseudo"
+                                           ng-model="search.username"/>
+                                    <span class="input-group-btn">
+                       <a href="http://localhost:8000/1/dashboard#!/mesCours/{[{search.username}]}">
+                        <button class="btn btn-info btn-lg" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                                        </a>
+                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-3 "></div>
+        </div>
+    </div>
 </div>

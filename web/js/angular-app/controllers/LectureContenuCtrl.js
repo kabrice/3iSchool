@@ -196,7 +196,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
 
             $scope.contenuRoot = $scope.conteneurCourant.contenu.contenuRoot;
             $scope.contenuURL = $sce.trustAsResourceUrl("https://docs.google.com/viewer?embedded=true&url=" + $scope.contenuRoot);
-            $scope.sousRubriqueLibelle = $scope.conteneurCourant.contenu.sousRubrique.libelle;
+            $scope.sousRubriqueLibelle = ($scope.conteneurCourant.contenu.sousRubrique!=null)?$scope.conteneurCourant.contenu.sousRubrique.libelle:"contenu";
             $scope.conteneurQuestion = $scope.conteneurCourant.contenu.questions;
 
             if(sessionStorage.idQuestion != undefined){
@@ -220,8 +220,9 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
                 $scope.userVote = data;
 
             });
+            sessionStorage.nbreVue = $scope.userContenuData.nbreVue;
             //console.log("userContenuData", $scope.userContenuData);
-            contenuService.patchUserContenu($scope.userContenuData, $scope.authToken.user.id, $scope.conteneurCourant.contenu.id);
+            //contenuService.patchUserContenu($scope.userContenuData, $scope.authToken.user.id, $scope.conteneurCourant.contenu.id);
 
         });
 

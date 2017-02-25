@@ -133,4 +133,12 @@ class TemplateController extends Controller
     {
         return $this->render('angular-templates/mesCours.html.twig', []);
     }
+
+    /**
+     * @Route("/sousRubriqueDashboard", name="sousRubriqueDashboard")
+     */
+    public function SousRubriqueDashboardAction()
+    {
+        return $this->render('angular-templates/sousRubriqueDashboard.html.twig', []);
+    }
 }
