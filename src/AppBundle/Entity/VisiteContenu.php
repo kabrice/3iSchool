@@ -30,6 +30,8 @@ class VisiteContenu
 
     private $stringDate;
 
+    private $nbreVue;
+
     /**
      * @var float
      *
@@ -173,6 +175,23 @@ class VisiteContenu
     {
         $this->stringDate = $stringDate;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getNbreVue()
+    {
+        return $this->nbreVue;
+    }
+
+    /**
+     * @param mixed $nbreVue
+     */
+    public function setNbreVue($nbreVue)
+    {
+        $this->nbreVue = $nbreVue;
+    }
+
 
 
 }

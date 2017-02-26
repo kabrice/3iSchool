@@ -18,9 +18,10 @@ class VisiteContenuType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('dateVisite', DateTimeType::class);
+        $builder->add('dateVisite');
         $builder->add('stringDate');
         $builder->add('duree');
+        $builder->add('nbreVue');
     }
 
     public function configureOptions(OptionsResolver $resolver)

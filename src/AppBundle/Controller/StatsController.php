@@ -289,6 +289,9 @@ class StatsController extends Controller
         $user = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
         $visiteContenu = $em->getRepository('AppBundle:VisiteContenu')->findLastVisiteContenuByDate($request->get('user_id'), $request->get('contenu_id'));
 
+
+        if($user->getIsPersonnel()) return false;
+
         if (empty($user)) {
             return $this->userNotFound();
         }
@@ -298,6 +301,7 @@ class StatsController extends Controller
         }
 
         $newDate = json_decode($request->get('stringDate'));
+
         $inputDate = date("Y-m-d", strtotime($newDate));
         $lastDate = date("Y-m-d", strtotime($visiteContenu["date_visite"]));
 
@@ -358,7 +362,7 @@ class StatsController extends Controller
     }
 
     /**
-     * @Rest\View(serializerGroups={"visiteContenu"})
+     * @Rest\View(serializerGroups={"visiteContenu", "user"})
      * @Rest\Get("/visiteContenu/user/{user_id}/contenu/{contenu_id}")
      */
     public function getVisiteContenuAction(Request $request)
@@ -367,14 +371,41 @@ class StatsController extends Controller
         $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
         $user = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
 
-        $visiteContenus = $em->getRepository('AppBundle:VisiteContenu')->findBy(array("contenu"=>$contenu, "user"=>$user));
+        $visiteContenus = $em->getRepository('AppBundle:VisiteContenu')->findBy(array("contenu"=>$contenu, "user"=>$user), array('dateVisite' => 'ASC'));
 
         if(empty($visiteContenus))
         {
-            return \FOS\RestBundle\View\View::create(['message' => 'VisiteContenu not found'], Response::HTTP_NOT_FOUND);
+            $visiteContenus["duree"]=0;
+            $visiteContenus = array($visiteContenus);
+           // return \FOS\RestBundle\View\View::create(['message' => 'VisiteContenu not found'], Response::HTTP_NOT_FOUND);
         }
 
         return $visiteContenus ;
+
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"contenu", "user"})
+     * @Rest\Get("/userContenu/user/contenu/{contenu_id}")
+     */
+    public function getUserContenuByContenuAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
+
+        $userContenus = $em->getRepository('AppBundle:UserContenu')->findBy(array("contenu"=>$contenu, "aPublie"=>false));
+
+        if(empty($userContenus))
+        {
+
+            /*$userContenus["user"]=array("email"=>"none@3il.fr");
+            $userContenus["nbreVue"]=0;
+            $userContenus["review"]="";*/
+            $userContenus = null;
+            //return \FOS\RestBundle\View\View::create(['message' => 'VisiteContenu not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        return $userContenus ;
 
     }
 
@@ -403,30 +434,7 @@ class StatsController extends Controller
 
     }
 
-    /**
-     * @Rest\View(serializerGroups={"visiteContenu"})
-     * @Rest\Get("/userContenu/contenu/{contenu_id}")
-     */
-    public function getVisiteursAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
 
-        $userContenus = $em->getRepository('AppBundle:UserContenu')->findVisiteurs($contenu);
-
-        if(empty($userContenus))
-        {
-
-            $userContenus["nom"]="vide";
-            $userContenus["nbreVue"]=0;
-            $userContenus["review"]="";
-            $userContenus = array($userContenus);
-            //return \FOS\RestBundle\View\View::create(['message' => 'VisiteContenu not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        return $userContenus ;
-
-    }
 
 
 

@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     </div>
-                    <div ><b>Promotion: </b>{[{contenu.niveauLibelle}]} / {[{contenu.anneeLibelle}]} / G{[{contenu.groupeLibelle}]}</div>
+                    <div style="color: slategrey;"><b>Promotion: </b>{[{contenu.niveauLibelle}]} / {[{contenu.anneeLibelle}]} / G{[{contenu.groupeLibelle}]}</div>
                 </div>
 
                 <div class="col-sm-3"></div>
@@ -65,51 +65,38 @@
                     </td>
                 </tr>
                 <tr style="background:ghostwhite;">
-                    <th>A vu ce contenu</th>
-                    <th>Nombre de vue</th>
-                    <th>Durée Total (min)</th>
+                    <th>Visiteur</th>
+                    <th>Visité</th>
+                    <th>Durée (min)</th>
                     <th>Avis</th>
+                    <th>Note</th>
                 </tr>
-                <tr>
-                    <td><a style="text-decoration: none;">kamdeme</a></td>
-                    <td>50</td>
-                    <td style="color: #1e90fe;">200</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><a style="text-decoration: none;">mbatkam</a></td>
-                    <td>42</td>
-                    <td style="color: #1e90fe;">180</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><a style="text-decoration: none;">tonglem</a></td>
-                    <td>36</td>
-                    <td style="color: #1e90fe;">150</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><a style="text-decoration: none;">kamdemr</a></td>
-                    <td>32</td>
-                    <td style="color: #1e90fe;">130</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><a style="text-decoration: none;">kouamv</a></td>
-                    <td>24</td>
-                    <td style="color: #1e90fe;">80</td>
-                    <td></td>
-                </tr >
-                <tr>
-                    <td><a style="text-decoration: none;">ngamyou</a></td>
-                    <td>6</td>
-                    <td
+                <tr ng-repeat="userVisiteur  in userContenuByContenu">
+                    <td><a style="text-decoration: none;"
+                           target="_blank"
+                           href="http://localhost:8000/3il/{[{userVisiteur.user.email | substringEmail:userVisiteur.user.email}]}"
+                        >{[{userVisiteur.user.prenom+' '+userVisiteur.user.nom +' ('+(userVisiteur.user.email | substringEmail:userVisiteur.user.email)+')' }]}</a></td>
+                    <td>{[{userVisiteur.nbreVue}]}</td>
+                    <td     ng-if="dureeTotalVisiteur[userVisiteur.user.id]!=undefined"
                             style="color: #1e90fe;"
-                            ng-mouseover="hoverShowOptionDetails({option: 'test'})">2</td>
-                    <td></td>
+                            ng-mouseover="hoverShowOptionDetails({userid: userVisiteur.user.id}, {contenuid: contenu.id}, {titre: contenu.titre}, {nom: userVisiteur.user.prenom+' '+userVisiteur.user.nom })">{[{dureeTotalVisiteur[userVisiteur.user.id]}]}</td>
+                    <td     ng-if="dureeTotalVisiteur[userVisiteur.user.id]==undefined"
+                            style="color: #1e90fe;">0</td>
+                    <td><i ng-if="userVisiteur.review!=null">{[{'\"'+userVisiteur.review+'\"'}]}</i>
+                        <i ng-if="userVisiteur.review==null"></i></td>
+
+                    <td> <ng-rate-it
+                                style="margin-top: 3px; margin-left: -1px; min-width: 90px"
+                                read-only="true"
+                                class="custom"
+                                cancel-width="1"
+                                cancel-height="1"
+                                ng-model="userNote[userVisiteur.user.id]">
+                        </ng-rate-it></td>
                 </tr>
 
             </table>
+            <div><i style="color: grey;">NB: La courbe se déssine lorsqu'il exist au moins de 2 décallages de date</i></div>
         </div>
         <div class="col-xl-1 col-lg-1 col-md-1"></div>
     </div>
@@ -134,10 +121,7 @@
                         </td>
                     </tr>
                     <tr>
-
-
                         <th>Titre</th>
-
                         <th>Année</th>
                         <th>Section</th>
                         <th>Groupe</th>
@@ -145,8 +129,8 @@
                     <tr ng-repeat="item in sousRubriqueData | start: (currentPage - 1) * pageSize | limitTo: pageSize">
                         <td>
                             <div>
-                                  <a    target="_blank"
-                                        ng-click="clicShowContenuStats({index: sousRubriqueData.indexOf(item)})"
+                                  <a
+                                      href='#!/mesCours/{[{item.email | substringEmail:item.email}]}/{[{sousRubriqueData.indexOf(item)}]}'
                                         style="text-decoration: none; font-size: 13pt;">
                                     {[{(item.titre | limitTo: 100) + (item.titre.length > 100 ? '...' : '')}]}
                                 </a></div>

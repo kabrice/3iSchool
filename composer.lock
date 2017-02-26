@@ -4,71 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cefcae737f1cb743274d427e5ab5fd59",
-    "content-hash": "0e17109c2ea25e606cc368ceff078287",
+    "hash": "0f604b32d01e0e22b4f50c7812b42003",
+    "content-hash": "b2af85f8014a34cb12ea9c517390885f",
     "packages": [
-        {
-            "name": "beberlei/DoctrineExtensions",
-            "version": "v1.0.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/beberlei/DoctrineExtensions.git",
-                "reference": "e6ffd1373cb2b9f658a830a5a4a668c716a75f62"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/e6ffd1373cb2b9f658a830a5a4a668c716a75f62",
-                "reference": "e6ffd1373cb2b9f658a830a5a4a668c716a75f62",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "doctrine/orm": "~2.1",
-                "nesbot/carbon": "*",
-                "phpunit/phpunit": "~4.5",
-                "symfony/yaml": "~2.6",
-                "zf1/zend-date": "~1.12",
-                "zf1/zend-registry": "~1.12"
-            },
-            "suggest": {
-                "nesbot/carbon": "Alternative to DateTime",
-                "zf1/zend-date": "Alternative to DateTime"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "DoctrineExtensions\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Steve Lacey",
-                    "email": "steve@stevelacey.net"
-                }
-            ],
-            "description": "A set of extensions to Doctrine 2 that add support for additional query functions available in MySQL and Oracle.",
-            "keywords": [
-                "database",
-                "doctrine",
-                "orm"
-            ],
-            "time": "2017-01-11 07:22:12"
-        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
@@ -1112,6 +1050,53 @@
                 "psr-3"
             ],
             "time": "2016-11-26 00:15:39"
+        },
+        {
+            "name": "nc/elephantio-bundle",
+            "version": "v2.1.0",
+            "target-dir": "Nc/Bundle/ElephantIOBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nchaulet/ElephantIOBundle.git",
+                "reference": "cf641f1c394a1aff2e36990e876a986e6cff90cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nchaulet/ElephantIOBundle/zipball/cf641f1c394a1aff2e36990e876a986e6cff90cb",
+                "reference": "cf641f1c394a1aff2e36990e876a986e6cff90cb",
+                "shasum": ""
+            },
+            "require": {
+                "wisembly/elephant.io": "~3.0"
+            },
+            "require-dev": {
+                "atoum/atoum": "dev-master",
+                "m6web/coke": "~1.2",
+                "m6web/symfony2-coding-standard": "~1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Nc\\Bundle\\ElephantIOBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Chaulet",
+                    "email": "n.chaulet@gmail.com"
+                }
+            ],
+            "description": "Elephant IO integration in Symfony2",
+            "keywords": [
+                "Socket.io",
+                "bundle",
+                "elephant.io"
+            ],
+            "time": "2016-10-14 01:13:29"
         },
         {
             "name": "paragonie/random_compat",
@@ -2214,9 +2199,137 @@
                 "negotiation"
             ],
             "time": "2016-10-14 09:17:47"
+        },
+        {
+            "name": "wisembly/elephant.io",
+            "version": "v3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Wisembly/elephant.io.git",
+                "reference": "e08dfbf261b759e76ebe403aeed0e4a50b613c7e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Wisembly/elephant.io/zipball/e08dfbf261b759e76ebe403aeed0e4a50b613c7e",
+                "reference": "e08dfbf261b759e76ebe403aeed0e4a50b613c7e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ElephantIO\\": [
+                        "src/",
+                        "test/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Baptiste Clavié",
+                    "email": "baptiste@wisembly.com",
+                    "homepage": "http://baptiste.xn--clavi-fsa.net/",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Guillaume Potier",
+                    "email": "guillaume@wisembly.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Ludovic Barreca",
+                    "email": "ludogp2@gmail.com",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Elephant.IO Community",
+                    "role": "Contributors :)"
+                }
+            ],
+            "description": "Send events to a websocket real time engine though PHP",
+            "homepage": "http://elephant.io",
+            "keywords": [
+                "dialog",
+                "nodejs",
+                "real time",
+                "websocket"
+            ],
+            "time": "2016-10-25 07:52:01"
         }
     ],
     "packages-dev": [
+        {
+            "name": "beberlei/DoctrineExtensions",
+            "version": "v1.0.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/DoctrineExtensions.git",
+                "reference": "e6ffd1373cb2b9f658a830a5a4a668c716a75f62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/e6ffd1373cb2b9f658a830a5a4a668c716a75f62",
+                "reference": "e6ffd1373cb2b9f658a830a5a4a668c716a75f62",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "doctrine/orm": "~2.1",
+                "nesbot/carbon": "*",
+                "phpunit/phpunit": "~4.5",
+                "symfony/yaml": "~2.6",
+                "zf1/zend-date": "~1.12",
+                "zf1/zend-registry": "~1.12"
+            },
+            "suggest": {
+                "nesbot/carbon": "Alternative to DateTime",
+                "zf1/zend-date": "Alternative to DateTime"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DoctrineExtensions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Steve Lacey",
+                    "email": "steve@stevelacey.net"
+                }
+            ],
+            "description": "A set of extensions to Doctrine 2 that add support for additional query functions available in MySQL and Oracle.",
+            "keywords": [
+                "database",
+                "doctrine",
+                "orm"
+            ],
+            "time": "2017-01-11 07:22:12"
+        },
         {
             "name": "sensio/generator-bundle",
             "version": "v3.1.1",

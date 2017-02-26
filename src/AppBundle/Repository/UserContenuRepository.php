@@ -139,8 +139,8 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('uc');
         $qb->select("contenu.id", "contenu.titre", "contenu.description", "contenu.datePublication", "contenu.note", "contenu.nombreVueTotal",
             "contenu.contenuRoot","contenu.imageRoot", "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique",
-            "groupeRubrique.libelle as libelle_groupeRubrique", "rubrique.imageRoot as imageRoot_rubrique","user.nom", "user.userProfilRoot",
-            "user.id as user_id", "user.isPersonnel", "annee.libelle as anneeLibelle", "niveau.libelle as niveauLibelle", "groupe.libelle as groupeLibelle");
+            "groupeRubrique.libelle as libelle_groupeRubrique", "rubrique.imageRoot as imageRoot_rubrique","user.email", "user.userProfilRoot",
+            "user.id as userID", "user.isPersonnel", "annee.libelle as anneeLibelle", "niveau.libelle as niveauLibelle", "groupe.libelle as groupeLibelle");
         $qb->join('uc.contenu', 'contenu');
         $qb->join('uc.user', 'user');
         $qb->join('contenu.rubrique', 'rubrique');

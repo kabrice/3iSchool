@@ -62,25 +62,22 @@ angular.module("DashboardDirectives", ['angular.filter', "MesFiltres", "vcRecapt
                 pageSize: "=",
                 sousRubriqueData: "=",
                 numSousRubrique: "=",
+                userContenuByContenu: "=",
+                dureeTotalVisiteur: "=",
+                userNote: "=",
                 contenu: "=",
                 labels: "=",
                 data: "=",
-                showOptionDetails: "&",
-                showContenuStat: "&"
+                showOptionDetails: "&"
             },
-            controller: function ($scope, $location,$uibModal,$uibModalStack, $anchorScroll) {
+            controller: function ($scope, $location,$uibModal,$uibModalStack) {
                 $scope.search = {};
 
-                $scope.clicShowContenuStats = function (index) {
-                    $location.hash("anchorContenuStat");
-                    $anchorScroll();
 
-                    $scope.showContenuStat(index);
-                }
 
-                $scope.hoverShowOptionDetails = function (option) {
-                    console.log(option);
-                    $scope.showOptionDetails({option: option});
+                $scope.hoverShowOptionDetails = function (userid, contenuid, titre, nom) {
+                    console.log(userid, contenuid, titre);
+                    $scope.showOptionDetails({userid: userid, contenuid: contenuid, titre:titre, nom:nom});
                 }
 
                 $scope.series = ['Durée en min'];

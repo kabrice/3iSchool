@@ -21,7 +21,7 @@ class VisiteContenuRepository extends \Doctrine\ORM\EntityRepository
 
         $sql = 'SELECT * FROM visite_contenu 
                 WHERE visite_contenu.date_visite 
-                IN (SELECT MAX(date_visite) FROM visite_contenu WHERE contenu_id=:contenu_id AND user_id=:user_id)';
+                IN (SELECT MAX(date_visite) FROM visite_contenu WHERE contenu_id=:contenu_id AND user_id=:user_id) ORDER BY visite_contenu.date_visite';
         $params = array(
             'contenu_id' => $contenu_id,
             'user_id' => $user_id

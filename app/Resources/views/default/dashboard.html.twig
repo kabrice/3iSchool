@@ -64,7 +64,7 @@
             <div style="margin-bottom: 3px">
 
 
-                <nav class="navbar navbar-default" style="border: none; background-color: transparent; margin: inherit;" id="anchorContenuStat">
+                <nav class="navbar navbar-default" style="border: none; background-color: transparent; margin: inherit;" id="contenuStat">
                     <ul class="nav navbar-nav" style="margin: inherit">
                     <li>
                         <a  ng-class="{'tbTitle-active': showPublierContenu}"  href="#!/nouveauContenu" >Publier un contenu</a></li>
@@ -461,19 +461,18 @@
                     ng-if="showContenusSignales && authToken.user.isPersonnel"></contenus-signales>
 
             <mes-cours
-                    series="series"
-                    dataset-override="datasetOverride"
-                    options="options"
+                    user-note="userNote"
                     labels="labels"
                     data="data"
+                    duree-total-visiteur="dureeTotalVisiteur"
+                    user-contenu-by-contenu="userContenuByContenu"
                     contenu="contenuStat"
-                    show-contenu-stat="showContenuStat(index)"
                     page-size="pageSize"
                     current-page="currentPage"
                     sous-rubrique-data="sousRubriqueData"
                     num-sous-rubrique="numSousRubrique"
                     ng-if="showMesCours && authToken.user.isPersonnel"
-                    show-option-details="showOptionDetails(option)"></mes-cours>
+                    show-option-details="showOptionDetails(userid, contenuid, titre, nom)"></mes-cours>
 
             {#<div class="panel" ng-if="!authToken.user.isPersonnel" ng-cloak>
                 <h3 style="color: red">ACCES INTERDIT :(</h3></div>#}

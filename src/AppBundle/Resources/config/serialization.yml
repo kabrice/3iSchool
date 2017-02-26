@@ -1,7 +1,7 @@
 AppBundle\Entity\Contenu:
     attributes:
         id:
-            groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
+            groups: ['contenu', 'question',  'userContenu', 'visiteContenu', 'rubrique', 'conteneur']
         titre:
             groups: ['contenu', 'question',  'userContenu', 'rubrique', 'conteneur']
         description:
@@ -270,4 +270,8 @@ AppBundle\Entity\VisiteContenu:
         dateVisite:
             groups: ['visiteContenu']
         duree:
+            groups: ['visiteContenu']
+        user:
+            groups: ['visiteContenu']
+        contenu:
             groups: ['visiteContenu']

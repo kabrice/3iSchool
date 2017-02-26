@@ -1,4 +1,4 @@
-app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $scope, $sce, $location,
+app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $scope, $sce, $location, $anchorScroll,
                                              $interval, $timeout, Upload, $uibModal,$uibModalStack, contenuService) {
 
     $scope.showPublierContenu = true;
@@ -221,7 +221,11 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
     $scope.currentPage = 1; // keeps track of the current page
     $scope.pageSize = 10; // holds the number of items per page
-    
+    function isInt(value) {
+        return !isNaN(value) &&
+            parseInt(Number(value)) == value &&
+            !isNaN(parseInt(value, 10));
+    }
     $scope.$watch(function(){
         return $location.path();
     }, function (newPath) {
@@ -231,52 +235,13 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         function clickShowSousRubrique(numSousRubrique, enseignantRecherche) {
             $scope.labels = [];
             $scope.data = [];
+           // $scope.enseignantCourant = enseignantRecherche;
             contenuService.getUser(enseignantRecherche + "@3il.fr").$promise.then(function (data) {
                 console.log(data[0].id);
                 $scope.showQuestionManager = false;
-                contenuService.getRubriqueDashboard(data[0].id, numSousRubrique).$promise.then(function (data) {
-                    $scope.sousRubriqueData = data;
-                    $scope.contenuStat = $scope.sousRubriqueData[0];
-                    $scope.numSousRubrique=numSousRubrique;
-                    console.log("$scope.contenuStat.id", $scope.contenuStat.id);
-                    contenuService.getAllVisiteContenu($scope.contenuStat.id).$promise.then(function (data) {
-                        angular.forEach(data, function(reponse, key) {
-                            $scope.labels.push(reponse.dateVite);
-                            $scope.data.push(parseInt(Math.round(reponse.dureeTotale)));
-
-                        });
-
-                        getAllDays($scope.labels[0], $scope.labels[$scope.labels.length-1]);
-                       // console.log($scope.labels, $scope.data);
-
-                    }, function (error) {
-                        console.log(error);
-                    })
-                    console.log($scope.sousRubriqueData);
-
-                })
+                getStatContenuData(data[0].id, numSousRubrique);
             }, function (error) {
-                contenuService.getRubriqueDashboard($scope.authToken.user.id, numSousRubrique).$promise.then(function (data) {
-                    $scope.sousRubriqueData = data;
-                    $scope.contenuStat = $scope.sousRubriqueData[0];
-                    $scope.numSousRubrique=numSousRubrique;
-                    console.log("$scope.contenuStat.id", $scope.contenuStat.id);
-                    contenuService.getAllVisiteContenu($scope.contenuStat.id).$promise.then(function (data) {
-                        angular.forEach(data, function(reponse, key) {
-                            $scope.labels.push(reponse.dateVite);
-                            $scope.data.push(parseInt(Math.round(reponse.dureeTotale)));
-
-                        });
-
-                        getAllDays($scope.labels[0], $scope.labels[$scope.labels.length-1]);
-                        //console.log("a", a);
-                        //$scope.data= [$scope.data];
-                       // console.log($scope.labels, $scope.data);
-                    }, function (error) {
-                        console.log(error.data);
-                    })
-                    console.log($scope.sousRubriqueData);
-                })
+                getStatContenuData($scope.authToken.user.id, numSousRubrique);
                 console.log(error.data);
             })
         }
@@ -300,6 +265,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             }
             var s = parseTimestamp(start);
             var e = parseTimestamp(end);
+            console.log("s, e", s,e);
             var a = [], d = [];
             var size=Math.round((e-s)/(1000*60*60*24));
             while(size--) d[size] = 0;
@@ -330,29 +296,91 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             return a;
         }
 
-        $scope.showContenuStat = function (index) {
-            console.log("index",index);
-            $scope.contenuStat = $scope.sousRubriqueData[index];
-            $scope.labels = [];
-            $scope.data = [];
-            contenuService.getAllVisiteContenu($scope.contenuStat.id).$promise.then(function (data) {
+        function getVisiteData(contenuID) {
+            contenuService.getAllVisiteContenu(contenuID).$promise.then(function (data) {
+                angular.forEach(data, function(reponse, key) {
+                    $scope.labels.push(reponse.dateVite);
+                    $scope.data.push(parseInt(Math.round(reponse.dureeTotale)));
 
-                    angular.forEach(data, function (reponse, key) {
-                        $scope.labels.push(reponse.dateVite);
-                        $scope.data.push(parseInt(Math.round(reponse.dureeTotale)));
+                });
 
-                    });
-                    console.log("data", data, "$scope.contenuStat.id", $scope.contenuStat.id);
-                    console.log("334",$scope.labels, $scope.data);
-                    getAllDays($scope.labels[0], $scope.labels[$scope.labels.length-1]);
-
-
-
+                getAllDays($scope.labels[0], $scope.labels[$scope.labels.length-1]);
+                //console.log("a", a);
+                //$scope.data= [$scope.data];
                 // console.log($scope.labels, $scope.data);
+            }, function (error) {
+                console.log(error.data);
+            })
+            $scope.dureeTotalVisiteur = [];
+            $scope.userNote=[];
+            contenuService.getUserContenuByContenu(contenuID).$promise.then(function (data) {
+                $scope.userContenuByContenu = data;
 
+                angular.forEach($scope.userContenuByContenu, function(reponse, key) {
+                    var dureeTotalTmp= 0;
+                    contenuService.getVisiteContenu(contenuID, reponse.user.id).$promise.then(function (data) {
+                        angular.forEach(data, function(reponse, key) {
+                            dureeTotalTmp+=reponse.duree;
+                            if(reponse.user!=undefined) $scope.dureeTotalVisiteur[reponse.user.id]= Math.round(dureeTotalTmp);
+                        });
+                        console.log("dureeTotalTmp", dureeTotalTmp);
+
+                    })
+                    if(reponse.user!=undefined)
+                    contenuService.getUserNote(contenuID, reponse.user.id).$promise.then(function (data) {
+
+                            $scope.userNote[reponse.user.id]= data[0].valeur;
+                        console.log("reponse.user.id", reponse.user.id);
+                            console.log("data", data[0].valeur);
+
+                    })
+                    if(reponse.user==undefined) $scope.userNote[reponse.user.id]=0;
+                    console.log(reponse.user.id, dureeTotalTmp)
+
+                    //console.log(reponse);
+                });
+
+                console.log("userContenuByContenu", data);
             }, function (error) {
                 console.log(error);
-            });
+            })
+
+        }
+
+        function getStatContenuData(userID, numSousRubrique) {
+            $scope.userTemp=userID;
+            console.log("$scope.userTemp", $scope.userTemp);
+            contenuService.getRubriqueDashboard(userID, numSousRubrique).$promise.then(function (data) {
+                $scope.sousRubriqueData = data;
+                console.log("$scope.sousRubriqueData = data", $scope.sousRubriqueData = data);
+                console.log("$scope.indexContenu", $scope.indexContenu);
+                if($scope.indexContenu==undefined && numSousRubrique==5)
+                {
+                    $scope.contenuStat = $scope.sousRubriqueData[0];
+                    $scope.numSousRubrique=numSousRubrique;
+                    getVisiteData($scope.contenuStat.id);
+                }else {
+                    showContenuStat($scope.indexContenu);
+                }
+
+                //console.log("$scope.contenuStat.id", $scope.contenuStat.id);
+
+            })
+        }
+
+        function showContenuStat(index) {
+
+            console.log("index",index);
+
+                $scope.contenuStat = $scope.sousRubriqueData[index];
+                console.log("test", $scope.sousRubriqueData[index]);
+                $scope.labels = [];
+                $scope.data = [];
+                getVisiteData($scope.contenuStat.id);
+                $location.hash("contenuStat");
+                $anchorScroll();
+
+
         }
 
         if(tabPath.length>1)
@@ -429,7 +457,8 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                     console.log(enseignantRecherche);
                     $scope.clickShowRubrique(false, false, false, true);
                     clickShowSousRubrique(5, enseignantRecherche);
-
+                    $scope.indexContenu = tabPath[3];
+                    //if(isInt(indexContenu)) showContenuStat(indexContenu);
                     break;
 
                 default:
@@ -693,10 +722,16 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         name: 'Name (hover over for more details)',
         longDescription: 'This is my detailed description...  lots of text here'
     }*/
-    $scope.showOptionDetails = function(option) {
+    $scope.showOptionDetails = function(userid, contenuid, titre, nom) {
         //console.log("Yeah");
-        $scope.option = option;
-        console.info("option", option);
+        $scope.option = {
+            userid: userid.userid,
+            contenuid: contenuid.contenuid,
+            titre: titre.titre,
+            nom: nom.nom
+        };
+        console.info("option", $scope.option);
+        //console.info("contenuid", contenuid);
         $scope.optionModal = $uibModal.open({
             templateUrl: '/chart',
             controller: 'ModalCtrl',
@@ -720,7 +755,9 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         $http.defaults.headers.common["X-Auth-Token"] =  $scope.authToken.value;
         if(!$scope.authToken.user.isPersonnel) $window.location.href = '/';
         var userEmail = $scope.authToken.user.email;
+
         $scope.username= userEmail.substr(0, userEmail.indexOf('@'));
+        //$scope.enseignantCourant=$scope.username;
         $scope.logged = true;
 
 
@@ -744,13 +781,85 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 })
 
 app.controller("ModalCtrl", function ($uibModal,$uibModalStack, $scope, contenuService, option) {
+    $scope.labels = [];
+    $scope.data = [];
+    $scope.option=option;
+    contenuService.getVisiteContenu(option.contenuid, option.userid).$promise.then(function (data) {
+        console.log(data);
+        angular.forEach(data, function(reponse, key) {
+            $scope.labels.push(formatDate(reponse.dateVisite));
+            $scope.data.push(reponse.duree);
+        });
+        getAllDays($scope.labels[0], $scope.labels[$scope.labels.length-1]);
+    }, function (error) {
+        console.log(error);
+    })
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + (d.getDate()-1),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+    function parseTimestamp(timestampStr) {
+        //if(timestampStr==0) return new Date(new Date(timestampStr).getTime());
+        return new Date(new Date(timestampStr).getTime() + (new Date().getTimezoneOffset() * 60 * 1000*24));
+    }
+    function convertDate(inputFormat) {
+        function pad(s) { return (s < 10) ? '0' + s : s; }
+        var d = new Date(inputFormat);
+        return [pad(d.getDate()+1), pad(d.getMonth()+1), d.getFullYear()].join('/');
+    }
+    function getAllDays(start, end) {
+        console.log("s==e", start,end);
+        if(start==end)
+        {
+            console.log("s==e", $scope.labels,$scope.data );
+            a = $scope.labels;
+            $scope.data = [$scope.data];
+            return
+        }
+        var s = parseTimestamp(start);
+        var e = parseTimestamp(end);
+        console.log("s, e", s,e);
+        var a = [], d = [];
+        var size=Math.round((e-s)/(1000*60*60*24));
+        console.log("size",size);
+        while(size--) d[size] = 0;
+        var i, p=0;
+
+        while(s <= e) {
+            a.push(convertDate(s));
+            i=0;
+            angular.forEach($scope.labels, function(reponse, key) {
+
+                if(s.getTime() == parseTimestamp(reponse).getTime())
+                {
+                    d[p] = $scope.data[i];
+                }
+                i++;
+            });
+            s = new Date(s.setDate(
+                s.getDate() + 1
+            ))
+            p++;
+        }
 
 
-    console.info(option);
-    $scope.option = option;
-    $scope.labels = [option.option];
+
+        if(a.length == 0) console.log(start, end);
+        $scope.labels = a;
+        $scope.data = [d];
+        // console.log( a, d);
+        return a;
+    }
+
+
     $scope.series = ['durée en min'];
-    $scope.data = [[0]];
     $scope.onClick = function (points, evt) {
         console.log(points, evt);
     };

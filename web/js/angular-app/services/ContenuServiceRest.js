@@ -27,6 +27,7 @@ angular.module("ContenuServiceRest", ['ngResource'])
                   "getSousRubriques": {method: 'GET', isArray: true, url: "/api/promotion/sousRubriques"},
                "getAllVisiteContenu": {method: 'GET', isArray: true, url: "/api/visiteContenu/contenu/:contenuid"},
                   "getVisiteContenu": {method: 'GET', isArray: true, url: "/api/visiteContenu/user/:userid/contenu/:contenuid"},
+           "getUserContenuByContenu": {method: 'GET', isArray: true, url: "/api/userContenu/user/contenu/:contenuid"},
 
                          "patchUser": {method: 'PATCH', url: "/api/users/:userid", userid: 'userid'},
                        "patchRating": {method: 'PATCH', url: "/api/rate"},
@@ -88,6 +89,9 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 },
                 getVisiteContenu: function (contenu_id, user_id) {
                     return apiData.getVisiteContenu({contenuid: contenu_id, userid: user_id});
+                },
+                getUserContenuByContenu: function (contenu_id) {
+                    return apiData.getUserContenuByContenu({contenuid: contenu_id});
                 },
 
 
