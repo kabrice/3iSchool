@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\AuthToken;
 use AppBundle\Entity\Credentials;
+use AppBundle\Entity\User;
 use AppBundle\Form\Type\CredentialsType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -43,6 +44,10 @@ class AuthTokenController extends Controller
         if (!$user) { // L'utilisateur n'existe pas
             return $this->invalidCredentials();
         }
+
+        /*if (!$user->getActive()) { // L'utilisateur n'a pas activé son compte
+            return $this->accountNotActivated();
+        }*/
 
 
 
@@ -127,5 +132,10 @@ class AuthTokenController extends Controller
     private function invalidCredentials()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'Invalid credentials'], Response::HTTP_BAD_REQUEST);
+    }
+
+    private function accountNotActivated()
+    {
+        return \FOS\RestBundle\View\View::create(['message' => 'Account not activated'], Response::HTTP_BAD_REQUEST);
     }
 }

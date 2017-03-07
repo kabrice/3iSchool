@@ -184,7 +184,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
                 showImageUpload: '=',
 
            showCredentialsError: '=',
-             showErrorSameEmail: '=',
+                   showErrorNom: '=',
                 showImageSubmit: '=',
                  showAlmostDone: '=',
                   showConnexion: '=',
@@ -213,8 +213,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
 
                 };
                 $scope.user = {
-                    plainPassword:null,
-                    emailPersonnel:null
+                    plainPassword:null
                 }
                 $scope.clicSuivant= function () {
 
@@ -245,19 +244,22 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
                         $scope.showErrorLongPassword = true;
                         return;
                     }
-                    if($scope.user.emailPersonnel != null && angular.equals($scope.user.emailPersonnel, $scope.temp.email))
-                    {
-                        $scope.showErrorSameEmail = true;
-                        return;
+                    if(!$scope.isPersonnel) {
+                        if ($scope.user.nom.length < 4 || $scope.user.nom.length > 20 || $scope.user.prenom.length < 4 || $scope.user.prenom.length > 20) {
+                            $scope.showErrorNom = true;
+                            return;
+                        }
+                        $scope.user.nom = ($scope.user.nom).toUpperCase();
+                        $scope.user.prenom = ($scope.user.prenom).capitalizeFirstLetter();
                     }
-
-
                     console.log($scope.user);
                     //
                     $scope.showAlmostDone = true;
                     $scope.showMAJPassword = false;
                 }
-
+                String.prototype.capitalizeFirstLetter = function() {
+                    return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+                }
                 $scope.closeError = function () {
                     $scope.showErrorShortPassword = false;
                     $scope.showErrorLongPassword = false;
@@ -406,6 +408,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
         scope: {
             comment: "=",
              answer: "=",
+           hasVoted: "=",
            checkRef: '&',
        checkInutile: '&',
       posterComment: '&'

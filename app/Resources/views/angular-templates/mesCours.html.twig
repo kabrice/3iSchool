@@ -9,7 +9,9 @@
                     <div class="panel panel-default course-pointer">
                         <a target="_blank" href="http://localhost:8000/lectureContenu/{[{contenu.id}]}">
                             <div class="panel-heading">
+                                <div class="panel-heading image" data-content="{[{contenu.description}]}">
                                 <img ng-src="{{ asset('{[{contenu.imageRoot}]}') }}" class="img-wrapper " />
+                                    </div>
                             </div>
                         </a>
                         <div class="caption-wrapper">
@@ -51,7 +53,7 @@
 
         </div>
         <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12  panel ">
-            <h3 style="text-align: center"><b>Présentation générale des visites</b></h3>
+            <h3 style="text-align: center"><b>Rapport Global des visites</b></h3>
             <div >
                 <canvas id="line" class="chart chart-line" chart-data="data" height="300"
                         chart-labels="labels" chart-series="series" chart-options="options"
@@ -61,7 +63,7 @@
             <table class="table vu-detail " cellspacing="pixels"  >
                 <tr>
                     <td colspan="4">
-                        <h3><b>Présentation des visites/étudiant</b></h3>
+                        <h3><b>Rapport des visites par étudiant</b></h3>
                     </td>
                 </tr>
                 <tr style="background:ghostwhite;">
@@ -74,8 +76,8 @@
                 <tr ng-repeat="userVisiteur  in userContenuByContenu">
                     <td><a style="text-decoration: none;"
                            target="_blank"
-                           href="http://localhost:8000/3il/{[{userVisiteur.user.email | substringEmail:userVisiteur.user.email}]}"
-                        >{[{userVisiteur.user.prenom+' '+userVisiteur.user.nom +' ('+(userVisiteur.user.email | substringEmail:userVisiteur.user.email)+')' }]}</a></td>
+                           href="http://localhost:8000/3il/{[{userVisiteur.user.email | substringEmail:userVisiteur.user.email}]}">
+                            {[{userVisiteur.user.email}]}</a></td>
                     <td>{[{userVisiteur.nbreVue}]}</td>
                     <td     ng-if="dureeTotalVisiteur[userVisiteur.user.id]!=undefined"
                             style="color: #1e90fe;"
@@ -96,7 +98,7 @@
                 </tr>
 
             </table>
-            <div><i style="color: grey;">NB: La courbe se déssine lorsqu'il exist au moins de 2 décallages de date</i></div>
+            <div><i style="color: grey;">NB: La courbe se déssine lorsqu'il existe au moins de 2 décallages de date</i></div>
         </div>
         <div class="col-xl-1 col-lg-1 col-md-1"></div>
     </div>

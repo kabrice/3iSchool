@@ -32,9 +32,9 @@ class StatsController extends Controller
     public function postCheckAction(Request $request)
     {
 
-        $myfile = fopen("testfile.txt", "w");
+      /*  $myfile = fopen("testfile.txt", "w");
         fwrite($myfile, $request->get('timeSpentOnPage'));
-        return print_r($request->get('timeSpentOnPage'));
+        return print_r($request->get('timeSpentOnPage'));*/
 
         $form = true;
         $em = $this->getDoctrine()->getEntityManager();
@@ -53,7 +53,8 @@ class StatsController extends Controller
             $refEntity->setNombreLike($nbreLike-1);
             $em->persist($refEntity);
             $em->flush();
-            return $refEntity;
+            $refEntity->vote = 0;
+            return array("refEntity"=>$refEntity, "voteValeur"=>0);
 
         }else{
             $vote = new Vote();
@@ -69,7 +70,8 @@ class StatsController extends Controller
                 $em->persist($refEntity);
                 $em->persist($vote);
                 $em->flush();
-                return $refEntity;
+
+                return array("refEntity"=>$refEntity, "voteValeur"=>$vote->getValeur());
 
             } else {
                 return $form;
@@ -239,7 +241,7 @@ class StatsController extends Controller
      * @Rest\View(serializerGroups={"vote"})
      * @Rest\Get("/vote/{ref_id}/{ref}/{user_id}")
      */
-    public function getVoteAction(Request $request)
+    public function getUserVoteAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
 

@@ -139,9 +139,6 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
     }
 
 
-    $scope.getUserID = function (userID) {
-        sessionStorage.userID = userID;
-    }
 
     function previewFile() {
         var preview = document.querySelector('img');
@@ -186,7 +183,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         console.log()
         contenu.listeGroupes = $scope.selectedGroupe.selected;
         contenu.listeNiveaux = $scope.selectedNiveau.selected;
-        //$window.location.reload();
+        $window.location.reload();
         contenuService.postConteneur(contenu, selectedDashBoardValue.anneeid, selectedRubrique.selected.id, selectedSousRubrique.selected.id, $scope.authToken.user.id).$promise.then(function (data) {
             sessionStorage.success = true;
             var previousData = {
@@ -328,10 +325,11 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                     })
                     if(reponse.user!=undefined)
                     contenuService.getUserNote(contenuID, reponse.user.id).$promise.then(function (data) {
-
-                            $scope.userNote[reponse.user.id]= data[0].valeur;
-                        console.log("reponse.user.id", reponse.user.id);
-                            console.log("data", data[0].valeur);
+                            if(data[0] != undefined) {
+                                $scope.userNote[reponse.user.id] = data[0].valeur;
+                                console.log("reponse.user.id", reponse.user.id);
+                                console.log("data", data[0].valeur);
+                            }
 
                     })
                     if(reponse.user==undefined) $scope.userNote[reponse.user.id]=0;
@@ -360,6 +358,8 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                     $scope.numSousRubrique=numSousRubrique;
                     getVisiteData($scope.contenuStat.id);
                 }else {
+                    $scope.numSousRubrique=numSousRubrique;
+                    //console.log("$scope.indexContenu", $scope.indexContenu);
                     showContenuStat($scope.indexContenu);
                 }
 
@@ -376,10 +376,16 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                 console.log("test", $scope.sousRubriqueData[index]);
                 $scope.labels = [];
                 $scope.data = [];
+                if(index!=undefined)
                 getVisiteData($scope.contenuStat.id);
                 $location.hash("contenuStat");
                 $anchorScroll();
 
+
+        }
+        $scope.getUserID = function (userID) {
+
+            sessionStorage.userID = userID;
 
         }
 
@@ -767,9 +773,9 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             $scope.sendSuccess = sessionStorage.success;
             delete sessionStorage.success;
         }
+
         if(localStorage.previousData != undefined)
         {
-
             console.log(angular.fromJson(localStorage.previousData));
             var previousData = angular.fromJson(localStorage.previousData);
         }
@@ -839,7 +845,7 @@ app.controller("ModalCtrl", function ($uibModal,$uibModalStack, $scope, contenuS
 
                 if(s.getTime() == parseTimestamp(reponse).getTime())
                 {
-                    d[p] = $scope.data[i];
+                    d[p] = parseInt(Math.round($scope.data[i]));
                 }
                 i++;
             });

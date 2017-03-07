@@ -235,6 +235,8 @@ class ContenuController extends Controller
         $entity = $em->getRepository("AppBundle:$entityName")
             ->find($request->get('id'));
 
+
+
         if(strcmp($entityName,"Question")==0)
         {
             $entity->setNombreVu(1+$entity->getNombreVu());

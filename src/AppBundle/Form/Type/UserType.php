@@ -21,7 +21,8 @@ class UserType extends AbstractType
         $builder->add('croppedDataUrl');
         $builder->add('gRecaptchaResponse');
         $builder->add('picFileName');
-        $builder->add('emailPersonnel');
+        $builder->add('nom');
+        $builder->add('prenom');
     }
 
     public function configureOptions(OptionsResolver $resolver)

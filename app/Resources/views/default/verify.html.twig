@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div ng-controller="VerifyCtrl" >
+        <div ng-init="activateAccount({{ userID }}, '{{ validationCode | json_encode()  }}')" ></div>
+    </div>
+    {#End Authentification#}
+
+{% endblock %}
+
+
+

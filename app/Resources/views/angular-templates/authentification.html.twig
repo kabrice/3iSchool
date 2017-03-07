@@ -4,13 +4,13 @@
     <form class="form-signin" id="formAuthentification" name="formAuthentification">
         <div ng-if="showSuivant">
             <input type="email" id="inputEmail" name="email" ng-model="temp.email" class="form-control"
-                   autocomplete="on" placeholder="Email scolaire (exemple@ecole.fr)" required>
+                   autocomplete="on" placeholder="Email 3il (exemple@3il.fr)" required>
             <div class="alert alert-danger" role="alert" ng-if="showEmailError">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
 
-                    <span>Ce mail n'existe dans aucune école.</span>
+                    <span>Ce email n'est pas du type exemple@3il.fr.</span>
             </div>
             <button class="btn btn-lg btn-primary btn-block btn-signin "
                     ng-class="{draw: chargementEnCours}"
@@ -21,7 +21,7 @@
         </div>
         <div ng-if="showMAJPassword">
             <div class="input-append">
-                {[{showErrorShortPassword}]}
+               {# {[{showErrorShortPassword}]}#}
                 <input type="email" id="inputPassword" class="form-control" ng-model="temp.email" disabled>
 
                 <div class="alert alert-danger" role="alert" ng-if="(showErrorShortPassword || showErrorLongPassword)">
@@ -32,32 +32,37 @@
                     <span ng-if="showErrorShortPassword">Le mot de passe est trop court.</span>
                     <span ng-if="showErrorLongPassword">Le mot de passe est trop long.</span>
                 </div>
+                <div class="form-group">
+                    <input type="text" id="inputPassword"  class="form-control" placeholder="nom" ng-model="user.nom" ng-if="!isPersonnel" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="inputPassword"  class="form-control" placeholder="prenom" ng-model="user.prenom" ng-if="!isPersonnel" required>
+                </div>
 
-                <input type="email" id="inputPassword"  class="form-control" placeholder="Email personnel" ng-model="user.emailPersonnel" ng-if="!isPersonnel">
-
-                <div class="alert alert-danger" role="alert" ng-if="showErrorSameEmail">
+                <div class="alert alert-danger" role="alert" ng-if="showErrorNom">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="closeSameEmail()">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <span>L'email scolaire doit être différent de l'email personnel.</span>
+                    <span>Le nom ou le prénom est invalide</span>
                 </div>
 
                 <input type="password" id="inputPassword" name="plainPassword" ng-model="user.plainPassword"
-                       class="form-control" placeholder="Nouveau mot de passe" required>
+                       class="form-control" placeholder="Mot de passe" required>
             </div>
             <button class="btn btn-lg btn-primary btn-block btn-signin"
                     ng-class="{draw: chargementEnCours}"
                     ng-click="clicMAJPassword()"
-                    type="submit">
+                    type="submit" ng-disabled="formAuthentification.$pristine">
                 Créer un mot de passe
             </button>
-            <div class="forgot-password" >
+            {#<div class="forgot-password" >
                 <a href=""
                    ng-if="!isPersonnel"
                    uib-tooltip="Vous permettre d'accéder aux différents contenus même si votre école désactive votre compte"
                    style="font-size: 12px">
-                    Pourquoi nous demandons votre email personnel ? </a></div>
-
+                    Pourquoi nous demandons votre email personnel ?
+                </a>
+            </div>#}
         </div>
 
         <div ng-if="showConnexion">
@@ -183,12 +188,12 @@
                     Pourquoi nous demandons une photo ? </a>
                 </div>
         </div>
-
+    </div>
     </form>
 
-    <div style="font-size: 13pt; text-align: center " ng-show="showEnd">
+    <div style="font-size: 13pt; text-align: center " ng-if="showEnd">
         <h5>Dernière chose :)</h5>
-        <p>Vérifiez votre identité en cliquant sur le lien que nous avons envoyé à votre adresse personnelle.</p>
+        <p>Vérifiez votre identité en cliquant sur le lien que nous avons envoyé à votre adresse email.</p>
     </div>
 
 

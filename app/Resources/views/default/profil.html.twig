@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div class="jumbotron" ng-init="getUserID('{{ email | json_encode()  }}')" ng-cloak> 
+    <div class="jumbotron" ng-init="getUser('{{ email | json_encode() }}')" ng-cloak> 
 
         <div>
 
@@ -17,31 +17,18 @@
                 <div class="container-fluid" >
                     <div class="navbar-header">
 
+                        <button style="background-color: #e84e0f; border:none" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+
                         <div  class="navbar-brand">
-                            <a ng-href="/"><img ng-src="{{ asset('img/3ischool_logo.png') }}" height="30" width="130" style="margin-top: -4px">   </a>
+                            <a ng-href="/"><img ng-src="{{ asset('img/3ilCours_logo.png') }}" height="30" width="110" style="margin-top: -4px">   </a>
                         </div>
                     </div>
 
                     <div id="navbar" class="collapse navbar-collapse" style="border-top: none">
-                        <ul class="nav navbar-nav navbar-justified">
-                            <li>
-                                <form id="custom-search-input" role="search">
-
-                                    <div class="input-group col-md-12">
-                                        <input type="search"
-                                               ng-model="data.rechercheContenu"
-                                               class="search-query form-control"
-                                               placeholder="Recherchez un cours, un TD, un TP et plus dans cette promotion"
-                                               ng-keydown="showSearch()"/>
-                                        <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" >
-                                        <span class=" glyphicon glyphicon-search"></span>
-                                    </button>
-                                </span>
-                                    </div>
-                                </form>
-                            </li>
-                        </ul>
                         <ul class="nav navbar-nav navbar-right" style="margin-top: -6px">
 
                             <li id="notification_li" >
@@ -65,7 +52,7 @@
                                     {[{authToken.user.prenom}]}<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/3il/{[{username}]}">Profil</a></li>
-                                    <li><a href='?controller=profil&action=suggestion'>Tableau de Bord</a></li>
+                                    <li><a href="/{[{authToken.user.id}]}/dashboard">Tableau de Bord</a></li>
                                     <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
                                 </ul>
                             </li>
@@ -119,7 +106,10 @@
         <div class="row">
 <div class="col-xl-2 col-lg-3 col-md-2 col-sm-2"></div>
             <div class="col-xl-8 col-lg-6 col-md-8 col-sm-8 col-xs-12 panel send-email" ng-show="!chargementEnCours" ng-cloak>
-                <h3 class="display-3"><img ng-src="{{ asset('{[{userProfil[0].userProfilRoot}]}') }}" height="150" width="150">
+                <h3 class="display-3">
+                    <div class="img-holder" style="display: inline-block">
+                    <img ng-src="{{ asset('{[{userProfil[0].userProfilRoot}]}') }}" height="150" width="150">
+                    </div>
                     <span>{[{userProfil[0].prenom}]} {[{userProfil[0].nom}]}</br>
                         <a href="mailto:{[{userProfil[0].email}]}" style="text-decoration: none">
                         <button class="btn btn-lg btn-primary btn-block" style="width: 300px">

@@ -32,27 +32,21 @@ class User implements UserInterface
      */
     protected $email;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email_personnel", type="string", length=255, nullable=false)
-     */
-    protected $emailPersonnel;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string")
+     * @ORM\Column(name="nom", type="string", length=255)
      */
-    protected $nom;
+    protected $nom="";
 
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prenom", type="string")
+     * @ORM\Column(name="prenom", type="string", length=255)
      */
-    protected $prenom;
+    protected $prenom="";
 
     /**
      * @var string
@@ -60,7 +54,9 @@ class User implements UserInterface
      * @ORM\Column(name="user_profil_root", type="string", nullable=true)
      *
      */
-    protected $userProfilRoot;
+    protected $userProfilRoot="";
+
+
     /**
      * @var \DateTime
      *
@@ -85,7 +81,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string")
      */
-    protected $password;
+    protected $password="";
 
     protected $plainPassword;
 
@@ -98,13 +94,13 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string")
      */
-    protected $validationCode;
+    protected $validationCode="";
 
     /**
      * @var bool
      * @ORM\Column(name="active", type="boolean")
      */
-    protected $active;
+    protected $active=0;
 
 
 
@@ -152,23 +148,6 @@ class User implements UserInterface
 
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getEmailPersonnel()
-    {
-        return $this->emailPersonnel;
-    }
-
-    /**
-     * @param string $emailPersonnel
-     */
-    public function setEmailPersonnel($emailPersonnel)
-    {
-        $this->emailPersonnel = $emailPersonnel;
-    }
-
 
 
     /**
@@ -280,6 +259,9 @@ class User implements UserInterface
      */
     public function __construct()
     {
+        $this->dateCreation  = new DateTime();
+        $this->isBDE = false;
+        $this->isPersonnel = false;
         $this->userCommentaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userReponses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userQuestions = new \Doctrine\Common\Collections\ArrayCollection();

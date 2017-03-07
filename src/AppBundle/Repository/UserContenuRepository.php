@@ -43,7 +43,7 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findConteneurs($criteres)
+    public function findRubriqueConteneurs($criteres)
     {
         $qb = $this->createQueryBuilder('uc');;
         $qb->select("conteneurs.id as conteneurID", "contenu.id", "contenu.titre", "contenu.description", "contenu.datePublication",
@@ -59,6 +59,43 @@ class UserContenuRepository extends \Doctrine\ORM\EntityRepository
         $qb->where('conteneurs.annee=:critereAnnee');
         $qb->andWhere('conteneurs.niveau=:critereNiveau');
         $qb->andWhere('conteneurs.groupe=:critereGroupe');
+        $qb->andWhere('uc.aPublie = true');
+        $qb->setParameter('critereAnnee', $criteres["annee"]);
+        $qb->setParameter('critereNiveau', $criteres["niveau"]);
+        $qb->setParameter('critereGroupe', $criteres["groupe"]);
+        $qb->orderBy('contenu.datePublication' , "DESC");
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findConteneurByRubrique($criteres)
+    {
+        $qb = $this->createQueryBuilder('uc');;
+        $qb->select("conteneurs.id as conteneurID", "contenu.id", "contenu.titre", "contenu.description", "contenu.datePublication",
+            "contenu.note", "contenu.nombreVueTotal", "contenu.contenuRoot","contenu.imageRoot",
+            "rubrique.libelle as libelle_rubrique", "sousRubrique.libelle as libelle_sousRubrique",
+            "groupeRubrique.libelle as libelle_groupeRubrique", "rubrique.imageRoot as imageRoot_rubrique","user.nom", "user.userProfilRoot", "user.id as user_id", "user.isPersonnel");
+        $qb->join('uc.contenu', 'contenu');
+        $qb->join('uc.user', 'user');
+        $qb->join('contenu.rubrique', 'rubrique');
+        $qb->leftJoin('rubrique.groupeRubrique', 'groupeRubrique');
+        $qb->leftJoin('contenu.sousRubrique', 'sousRubrique');
+        $qb->join('contenu.conteneurs', 'conteneurs');
+        $qb->where('conteneurs.annee=:critereAnnee');
+        $qb->andWhere('conteneurs.niveau=:critereNiveau');
+        $qb->andWhere('conteneurs.groupe=:critereGroupe');
+
+        if($criteres["isEnseignant"])
+        {
+            $qb->andWhere('user=:user');
+            $qb->setParameter('user', $criteres["rubriqueClient"]);
+            $qb->andWhere('rubrique.libelle=:rubriqueLibelle');
+            $qb->setParameter('rubriqueLibelle', 'Enseignant');
+        }else{
+            $qb->andWhere('rubrique=:rubrique');
+            $qb->setParameter('rubrique', $criteres["rubriqueClient"]);
+        }
+
         $qb->andWhere('uc.aPublie = true');
         $qb->setParameter('critereAnnee', $criteres["annee"]);
         $qb->setParameter('critereNiveau', $criteres["niveau"]);

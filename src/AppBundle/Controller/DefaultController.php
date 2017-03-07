@@ -42,12 +42,11 @@ class DefaultController extends Controller
     /**
      *  Activation du mail
      *
-     * @Route("/verify/{activationCode}", name="verifyEmail")
+     * @Route("/verify/{userID}/{validationCode}", name="verifyEmail")
      */
-    public function verifyAction()
+    public function verifyAction($userID, $validationCode)
     {
-
-        return $this->render('default/lectureContenu.html.twig', []);
+        return $this->render('default/verify.html.twig', ['validationCode' => $validationCode, 'userID'=>$userID]);
     }
 
     /**
@@ -61,13 +60,12 @@ class DefaultController extends Controller
     /**
      *
      *
-     * @Route("/resetPassword/{validationCode}", name="resetPassword")
+     * @Route("/resetPassword/{userID}/{validationCode}", name="resetPassword")
      */
-    public function resetPasswordAction()
+    public function resetPasswordAction($userID, $validationCode)
     {
-        //Gérer avec un cookie
 
-        return $this->render('default/resetPassword.html.twig', []);
+        return $this->render('default/resetPassword.html.twig', ['validationCode' => $validationCode, 'userID'=>$userID]);
     }
 
 

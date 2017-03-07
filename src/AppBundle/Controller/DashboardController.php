@@ -50,7 +50,6 @@ class DashboardController extends Controller
     public function postConteneurAction(Request $request)
     {
         $tab["test"] = true;
-        return $tab;
         $em = $this->getDoctrine()->getEntityManager();
         $annee      = $em->getRepository('AppBundle:Annee')->find($request->get('annee_id'));
         $rubrique   = $em->getRepository('AppBundle:Rubrique')->find($request->get('rubrique_id'));
@@ -164,7 +163,6 @@ class DashboardController extends Controller
         $contenusEnseignant = $em->getRepository('AppBundle:UserContenu')->findContenusEnseignant($user);
         $reponsesSignalees = $em->getRepository('AppBundle:UserContenu')->findReponsesSignalees($user);
         $commentairesSignales = $em->getRepository('AppBundle:UserContenu')->findCommentairesSignales($user);
-
 
 
         switch ($request->get('num_rubrique')) {

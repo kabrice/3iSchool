@@ -2,6 +2,19 @@
 
 {% block body %}
     <div  ng-controller="3ischoolCtrl">
+        <div class="alert alert-success" role="alert"
+             style="position: absolute; z-index: 100000; right: 0; left: 0;"
+             ng-if="validationSuccess"
+             ng-cloak>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Félicitation  <i class="fa fa-smile-o fa-lg" aria-hidden="true"></i></strong>
+
+            <p>Votre compte a été activé. Vous pouvez maintenant vous connecter.</p>
+
+        </div>
     <div class="preloader" ng-show="chargementEnCours && showHome" ng-cloak>
         <div class="msg-preloader">
             <img ng-src="{{ asset('img/preloader.gif') }}"/>
@@ -15,18 +28,17 @@
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
                 <div class="container-fluid" >
                     <div class="navbar-header">
-                        <button style="background-color: red" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
+                        <button style="background-color: #e84e0f; border:none" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
                         <div  class="navbar-brand">
                             <a id="menu-toggle" href="#"  toggle-class="active"
-                               class="glyphicon glyphicon-align-justify btn-menu toggle" style="color: red">
+                               class="glyphicon glyphicon-align-justify btn-menu toggle" style="color: #e84e0f">
 
                             </a>
-                            <a ng-href="/"><img ng-src="{{ asset('img/3ischool_logo.png') }}" height="30" width="130" style="margin-top: -4px">   </a>
+                            <a ng-href="/"><img ng-src="{{ asset('img/3ilCours_logo.png') }}" height="30" width="110" style="margin-top: -4px">   </a>
                         </div>
                     </div>
 
@@ -72,7 +84,7 @@
                                     {[{authToken.user.prenom}]}<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/3il/{[{username}]}">Profil</a></li>
-                                    <li><a href="/1/dashboard">Tableau de Bord</a></li>
+                                    <li><a href="/{[{authToken.user.id}]}/dashboard">Tableau de Bord</a></li>
                                     <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
                                 </ul>
                             </li>
@@ -174,24 +186,58 @@
                             <div class="span12">
                                 {#Début Affichage de contenus courant concernant une rubrique cliquée#}
                                 <div>
+                                    <div class="loader" ng-if="chargementRubrique">
+                                        <img src="{{ asset('img/preloader.gif') }}" class="ajax-loader" height="70" width="70"/>
+                                    </div>
 
-                    <contenus-rubrique
-                            ng-repeat="unConteneur in conteneurs "
-                            ng-if="(unConteneur.libelle_rubrique==rubriqueCourante && unConteneur.libelle_rubrique!='Enseignant') && hideSearch"
-                            contenu="unConteneur"></contenus-rubrique>
+                        <div>
+                            <div>
+                        <contenus-rubrique
+                            ng-repeat="unConteneur in conteneurs | start: (currentPage - 1) * pageSize | limitTo: pageSize "
+                            ng-if="hideSearch && rubriqueCourante!=null"
+                            contenu="unConteneur"></contenus-rubrique></div>
 
-                    <contenus-rubrique
-                            ng-repeat="unConteneur in conteneurs "
-                            ng-if="(unConteneur.libelle_rubrique=='Enseignant' && (unConteneur.nom==rubriqueCourante) && hideSearch)"
-                            contenu="unConteneur"></contenus-rubrique>
+                            <div style="clear: both"></div>
+
+                            <div>
+                                <ul    ng-show="hideSearch && (rubriqueCourante!=null && rubriqueCourante!='Tous')"
+                                        uib-pagination total-items="conteneurs.length"
+                                        items-per-page="pageSize"
+                                        ng-model="currentPage"
+                                        max-size="10"
+                                        class="pagination-sm"></ul>
+                            </div>
+                        </div>
+                                    {#<contenus-rubrique
+                                            ng-repeat="unConteneur in conteneurs "
+                                            ng-if="(unConteneur.libelle_rubrique=='Enseignant'
+                                                        && (unConteneur.nom==rubriqueCourante))"
+
+                                            contenu="unConteneur"></contenus-rubrique>#}
 
                     <administration ng-if="showAnnoncesImportantes"></administration>
                                     {#Exclusivily for the search#}
-                    <contenus-rubrique
-                            ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: data.rechercheContenu) "
-                            ng-if="!hideSearch"
-                            contenu="unConteneur"
-                            recherche="data.rechercheContenu"></contenus-rubrique>
+
+                                    <div>
+                                        <div>
+                                            <contenus-rubrique
+                                                    ng-repeat="unConteneur in contenusFiltres = (groupesContenus.CONTENEUR | filter: data.rechercheContenu) | start: (currentPage - 1) * pageSize | limitTo: pageSize  "
+                                                    ng-if="!hideSearch"
+                                                    contenu="unConteneur"
+                                                    recherche="data.rechercheContenu"></contenus-rubrique>
+                                        </div>
+
+                                        <div style="clear: both"></div>
+
+                                        <div >
+                                            <ul     ng-show="!hideSearch && rubriqueCourante!='Tous'"
+                                                    uib-pagination total-items="contenusFiltres.length"
+                                                    items-per-page="pageSize"
+                                                    ng-model="currentPage"
+                                                    max-size="10"
+                                                    class="pagination-sm"></ul>
+                                        </div>
+                                    </div>
                                     {#End of the search#}
 
                                 </div>
@@ -237,7 +283,7 @@
     </div>
 
     <!-- Page Authentification -->
-<div class="authentification" ng-show="!showHome && !logged" ng-cloak>
+<div class="authentification" ng-show="!showHome && !logged" ng-cloak >
     <header >
 
         <nav class="navbar navbar-inverse">
@@ -245,10 +291,10 @@
 
 
                 <ul class="nav navbar-nav">
-                    <li><a class="navbar-brand" href=''><img src="{{ asset('img/happystudent.png') }}" height="30" width="40" style="margin-top:-2px; margin-right: -30px;"></a></li>
-                    <li>
+                    <li><a class="navbar-brand" href=''><img src="{{ asset('img/3ilCours_logo.png') }}" height="60" width="210" style="margin-top:-2px; margin-right: -30px;"></a></li>
+                    {#<li>
                         <a href=''>A propos</a>
-                    </li>
+                    </li>#}
 
                 </ul>
             </div>
@@ -264,11 +310,12 @@
                     <div class="col-md-10">
 
                         <div id="titreBienvenue">
-                            <h1><strong>Bienvenue sur 3iCours</strong></h1>
+                            <h1><strong>Bienvenue sur 3ilCours</strong></h1>
                             <h3 id="sstitreBienveue"><i>Réseau social de collaboration entre étudiants et enseignants</i></h3>
                         </div>
 
                         <authentification
+
                                 suivant="suivant(userEmail)"
                                 sign-up="signUp(user)"
                                 upload="upload(imgData)"
@@ -280,7 +327,7 @@
                                 show-image-upload="showImageUpload"
                                 show-image-submit="showImageSubmit"
                                 show-credentials-error="showCredentialsError"
-                                show-error-same-email="showErrorSameEmail"
+                                show-error-nom="showErrorNom"
                                 count-click-connexion="countClickConnexion"
                                 show-almost-done="showAlmostDone"
                                 show-image-cropped="showImageCropped"
@@ -293,15 +340,30 @@
                                 image="image"
                                 import-photo="importPhoto"
                                 ajout-photo="ajoutPhoto"></authentification>
-                    </div>
 
+
+
+                    </div>
+                    <div style="width: 100%;
+height: 28px;
+position: absolute;
+bottom: 0px;
+left: 0px;
+text-align: center;
+font-size: 13pt;
+font-weight: 300 !important;
+
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif"><a href="mailto:kamdeme@3il.fr" style="text-decoration: none;">By Edgar KAMDEM </a></div>
 
                     <div class="col-md-1"></div>
                 </div>
             </div>
         </main>
+
     </div>
+
 </div>
+
     </div>
     {#End Authentification#}
 

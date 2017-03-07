@@ -1,4 +1,4 @@
-app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,contenuService, ngDialog, $rootScope, $location, $window) {
+app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,contenuService, ngDialog, $rootScope, $location, $window, $anchorScroll) {
 
     $rootScope.chargementEnCours =false;
 
@@ -11,7 +11,8 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     $scope.questionFullscreen = false;
     $scope.questionDetailFullscreen = null;
 
-    $scope.backToQuestion = function () {
+    $scope.backToQuestion = function()
+    {
         $scope.questionDetailFullscreen = null;
         $scope.afficherNewQuestion = false;
         console.log($scope.afficherNewQuestion);
@@ -20,6 +21,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
 
     $scope.displayQuestionDetail = function(id)
     {
+        $rootScope.blockLoading=true;
         //if($scope.conteneurCourant==null) return;
         console.log("displayQuestionDetail", $scope.conteneurCourant);
         $scope.questionDetailFullscreen = $scope.questionFullscreen;
@@ -142,6 +144,13 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
         });
 
     }
+    $scope.questionIsVoted = false;
+   /* $scope.userHasVoted = function (ref_id, ref) {
+
+       return(contenuService.getUserVote(ref_id, ref, $scope.authToken.user.id))
+
+
+    }*/
 
     $scope.showTinyMceReponse = function (idQuestion) {
         console.log(idQuestion);
@@ -211,6 +220,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
 
                 return data.user.id === $scope.authToken.user.id;
             })[0];
+
             // var nbreVue = userContenuCourant.nbreVue;
 
             ($scope.userContenuCourant == undefined)?$scope.userContenuData.nbreVue=1:$scope.userContenuData.nbreVue=$scope.userContenuCourant.nbreVue+1;
@@ -246,6 +256,26 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
             Prism.highlightAll();
             return d.id === idQuestion;
         })[0];
+        console.log("$scope.questionSelectionnee", $scope.questionSelectionnee);
+
+        if( $scope.questionSelectionnee == undefined)
+        {
+            $location.path("/");
+            $window.location.reload();
+        }else{
+            contenuService.getUserVote($scope.questionSelectionnee.id, "Question", $scope.authToken.user.id).$promise.then(function (data) {
+
+                $scope.questionSelectionnee.hasVoted = (data.valeur!=0);
+            },function (error) {
+                console.log(error);
+            })
+
+            /*angular.forEach($scope.questionSelectionnee.reponses, function(reponse, key) {
+                angular.forEach(reponse.commentaires, function(comment, key) {
+                    if(comment.id == refID) comment.nombreLike = data.nombreLike;
+                });
+            });*/
+        }
         //});
 
 
@@ -272,6 +302,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
 
 
     $scope.clickToOpen = function () {
+        $rootScope.blockLoading=true;
         var newScope = $scope.$new();
         newScope.data = $scope.userContenuCourant;
         if($scope.userContenuCourant.review != undefined)
@@ -295,9 +326,10 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     //Default values
 
 
-    $scope.content = {}
+    $scope.content = {};
 
     $scope.rate = function () {
+        $rootScope.blockLoading=true;
         $scope.content.ref = "Contenu";
         $scope.content.refID = $scope.conteneurCourant.contenu.id;
         $scope.content.userID = $scope.authToken.user.id;
@@ -305,12 +337,187 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
         contenuService.patchRating($scope.content);
         // console.log($scope.content);
     }
+    $scope.showEditQuestionBox = false;
+
+    var tempQuestion = {};
+    $scope.clickIconEditQuestion = function (questionSelectionnee) {
+        console.log("questionSelectionnee", questionSelectionnee);
+
+        tempQuestion = {
+            id: questionSelectionnee.id,
+            libelle: questionSelectionnee.libelle,
+            page: questionSelectionnee.page,
+            ligne: questionSelectionnee.ligne,
+            description: questionSelectionnee.description
+        };
+        $scope.idTempQuestion= tempQuestion.id;
+        console.log($scope.idQuestionSelectionnee);
+        $scope.showEditQuestionBox = true;
+
+    }
+
+    $scope.clickIconDeleteQuestion = function (idQuestion) {
+        if (window.confirm("Êtes-vous certain de vouloir supprimer cette question ?\nCette opération est irréversible !")) {
+            contenuService.removeQuestion(idQuestion).$promise.then(function () {
+                $location.path("/");
+                $window.location.reload();
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    }
+
+    $scope.validateEditQuestion = function (questionSelectionnee) {
+
+
+        var questionEditedID = questionSelectionnee.id;
+        var questionEdited = {
+            libelle: questionSelectionnee.libelle,
+            page: questionSelectionnee.page,
+            ligne: questionSelectionnee.ligne,
+            description: questionSelectionnee.description
+        };
+
+        console.log("questionEdited", questionEdited);
+
+        var libelleQuestion = questionEdited.libelle;
+
+        if(!libelleQuestion || !(libelleQuestion.substr(-1) === "?")
+            || libelleQuestion.length>=150)
+        {
+            $scope.showQuestionError=!$scope.showQuestionError;
+            //$location.hash(id)
+            $location.hash('bottom');
+            $anchorScroll();
+            return;
+        }
+        if(!questionEdited.description)
+        {
+            if (!window.confirm("Êtes-vous certain de vouloir publier une question sans description ?")) {
+                return;
+            }
+        }
+        var tempDescription = htmlToPlaintext(questionEdited.description);
+
+        if(tempDescription.length<50)
+        {
+            alert("Decription de la question trop courte !");
+            return
+        }
+
+        if(questionEdited.page<999 && questionEdited.page>=1 && questionEdited.ligne<999 && questionEdited.ligne>=1)
+        {
+
+            contenuService.patchQuestion(questionEdited, questionEditedID).$promise.then(function () {
+                $scope.showEditQuestionBox = false;
+            }, function (error) {
+                console.log(error);
+            })
+
+        }else{
+            window.alert("Veuillez renseigner un numéro de page ou de ligne valide (entre 1 et 999) !");
+            return;
+        }
+    };
+
+    function htmlToPlaintext(text) {
+        return text ? String(text).replace(/<[^>]+>/gm, '') : '';
+    }
+
+    $scope.cancelEditQuestion = function () {
+        console.log("tempQuestion", tempQuestion);
+        $scope.questionSelectionnee.libelle = tempQuestion.libelle;
+        $scope.questionSelectionnee.page = tempQuestion.page;
+        $scope.questionSelectionnee.ligne = tempQuestion.ligne;
+        $scope.questionSelectionnee.description = tempQuestion.description;
+        $scope.showEditQuestionBox = false;
+    }
+
+    //***Edit reponse operation
+    $scope.showDetails = false;
+    $scope.showComments = function () {
+        $scope.showDetails = !$scope.showDetails;
+    }
+    $scope.tempReponse = {};
+    $scope.clickIconEditReponse = function (reponseSelectionnee) {
+        console.log("reponseSelectionnee", reponseSelectionnee);
+        $scope.tempReponse = {
+            id: reponseSelectionnee.id,
+            libelle: reponseSelectionnee.libelle
+        };
+       // $scope.showEditReponseBox = true;
+    }
+
+    $scope.clickIconDeleteReponse = function(idReponse){
+
+        if (window.confirm("Êtes-vous certain de vouloir supprimer cette reponse ?\nCette opération est irréversible !")) {
+            contenuService.removeReponse(idReponse).$promise.then(function () {
+                $window.location.reload();
+            }, function (error) {
+                console.log(error);
+            });
+        }
+
+    }
+
+    $scope.validateEditReponse = function (reponseSelectionnee) {
+        console.log(reponseSelectionnee);
+        if(reponseSelectionnee.libelle==undefined || reponseSelectionnee.libelle.length<=30){
+            alert("Une réponse doit contenir au minimum 30 caractères !");
+            return;
+        }
+        var reponseData = {
+            libelle: reponseSelectionnee.libelle
+        }
+
+        contenuService.patchReponse(reponseData, reponseSelectionnee.id).$promise.then(function () {
+            $scope.tempReponse.id = 0;
+        }, function (error) {
+            console.log(error);
+        })
+
+
+    }
+    $scope.cancelEditReponse = function () {
+        angular.forEach($scope.questionSelectionnee.reponses, function(reponse, key) {
+            if(reponse.id == $scope.tempReponse.id) {
+                reponse.libelle = $scope.tempReponse.libelle;
+                $scope.tempReponse.id= 0;
+            }
+        });
+        //tinyMCE.activeEditor.setContent("");
+    }
+
+    //****Operation on comments
+    $scope.clickIconEditCommenaitaire = function (commentaireSelectionne) {
+
+    }
+
+    $scope.clickIconDeleteCommentaire= function(idCommentaire){
+
+    }
+
+    $scope.validateEditCommentaire = function (commentaireSelectionne) {
+
+    }
+
+    $scope.cancelEditCommentaire = function () {
+
+    }
+
+
+    
+
+    $scope.prism = function () {
+        Prism.highlightAll();
+        return true;
+    }
 
     $scope.checkRef = function (ref, refID)
     {
 
         //console.log(ref, refID);
-
+        $rootScope.blockLoading=true;
         if(ref.ref != undefined && ref.ref == "Commentaire")
         {
             ref = 'Commentaire';
@@ -326,7 +533,11 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
             "valeur": 1
         };
 
-        contenuService.postCheck(voteData).$promise.then(function(data){
+        contenuService.postCheck(voteData).$promise.then(function(dataReturned){
+            var data = dataReturned["refEntity"];
+            console.log("voteValeur", dataReturned["voteValeur"]);
+
+            $scope.questionSelectionnee.hasVoted = (dataReturned["voteValeur"]==0);
 
             if(angular.equals(ref, "Question")) $scope.questionSelectionnee.nombreLike = data.nombreLike;
 
@@ -356,7 +567,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     {
 
         //console.log(ref, refID);
-
+        $rootScope.blockLoading=true;
         if(ref.ref != undefined && ref.ref == "Commentaire")
         {
             ref = 'Commentaire';
@@ -433,6 +644,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
                     }
                     break;
                 case "back":
+                    $scope.showEditQuestionBox = false;
                     $scope.backToQuestion();
                     break;
                 case "newQuestion":

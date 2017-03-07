@@ -181,6 +181,25 @@
     animation-duration: 10s;
 }
 
+.cancel-btn
+{
+
+    height:43px;
+
+    margin-top: 10px;
+    text-align: center;
+    background-color: lightslategrey;
+    border:  lightslategrey;
+    animation-name: example;
+    animation-duration: 10s;
+}
+
+.cancel-btn:hover{
+    background: #52606f;
+    border-color:#52606f;
+    color: whitesmoke;
+}
+
 .changer-image{
     text-decoration: none;
     color: #0078a1;

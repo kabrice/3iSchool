@@ -46,3 +46,13 @@ textarea{
 
 }
 
+
+.img-holder {
+    width: auto;
+    display: inline-block;
+}
+
+.img-holder img {
+    width: 5%; /* Will shrink image to 30% of its original width */
+    height: auto;
+}​

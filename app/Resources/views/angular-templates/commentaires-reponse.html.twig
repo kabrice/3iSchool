@@ -11,17 +11,19 @@
                                             padding-bottom: 5px;border-radius: 5px;
                                             margin-bottom: -10px;
                                             margin-top:-9px;  ">
+            <div style="float: right"><i class="material-icons edit-data" uib-tooltip="Editer">mode_edit</i><i class="material-icons delete-data" uib-tooltip="Supprimer">delete</i></div>
             <div class="panel-body noborder" ng-if="answer.commentaires.length>0">
                 <div class="date-publication"><a
                             href="/3il/{[{comment.user.email | substringEmail:comment.user.email}]}" class="href"> {[{comment.user.prenom}]} {[{comment.user.nom}]}</a>,
                     le {[{comment.datePublication | date:'dd MMM yyyy à HH : mm'}]}
                 </div>
                 <div style="display: flex;">
-                    <div class="check-btn-commentaire" ng-click="clickCheckComment({ref: 'Commentaire'}, {refID: comment.id  })"
+                    <div ng-class="hasVoted?'is-checked':'check-btn-commentaire'"
+                             ng-click="clickCheckComment({ref: 'Commentaire'}, {refID: comment.id  })"
                          title="Ce commentaire montre un effort de recherche. Il est utile et clair.">
                         <div class="check-vote"><i class="fa fa-check-circle fa-lg"
                                                    aria-hidden="true"></i></div>
-                        <div id="check-count">{[{comment.nombreLike}]}</div>
+                        <div id="check-count" style="font-size: 8pt">{[{comment.nombreLike}]}</div>
                     </div>
                     <div class="libelle-commentaire "
                          ng-bind-html="comment.libelle"

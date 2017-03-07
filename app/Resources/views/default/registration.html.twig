@@ -1,12 +1,19 @@
-{# app/Resources/views/Emails/registration.html.twig #}
+
 <h3>Vous l'avez fait! Vous êtes inscrit!</h3>
 
 Bonjour {{ name }}! Juste besoin de vérifier que c'est votre adresse e-mail. Est-ce vous?
 
-{# example, assuming you have a route named "login" #}
-<a href="{{ url('verifyEmail') }}">C'est bien moi</a>.
 
+<h2>
+<a  href="https://www.3icours.fr/verify/{{userID}}/{{validationCode}}"  style="display:inline-block;width:100%;
+    background-color:#eaf3ff;
+    text-decoration:none;
+    color:#5486c6;
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;padding:15px 0px 15px 0px;border-radius:2px">C'est bien moi</a>.
+</h2>
 Merci :)
 
 {# Makes an absolute URL to the /images/logo.png file #}
-<img src="{{ absolute_url(asset('img/libre_logo.png')) }}">
+<img src="{{ absolute_url(asset('img/happystudent.png')) }}" height="100" width="120">

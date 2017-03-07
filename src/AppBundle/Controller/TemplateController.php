@@ -46,13 +46,7 @@ class TemplateController extends Controller
         return $this->render('angular-templates/liste-questions.html.twig', []);
     }
 
-    /**
-     * @Route("/questionSelectionnee", name="questionSelectionnee")
-     */
-    public function questionSelectionneeAction()
-    {
-        return $this->render('angular-templates/question-selectionnee.html.twig', []);
-    }
+
 
     /**
      * @Route("/reponsesQuestion", name="reponsesQuestion")

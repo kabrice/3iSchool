@@ -2,11 +2,11 @@
 
 {% block body %}
 
-    {#<div class="preloader" ng-show="chargementEnCours" ng-controller="lectureContenuCtrl" ng-cloak >
+    <div class="preloader" ng-show="chargementEnCours" ng-controller="LectureContenuCtrl" ng-cloak >
         <div class="msg-preloader">
             <img ng-src="{{ asset('img/preloader.gif') }}"/>
         </div>
-    </div>#}
+    </div>
     <div class="container-fluid" ng-controller="LectureContenuCtrl" ng-cloak>
         <div ng-init="init({{ idConteneur }})" ></div>
 
@@ -69,8 +69,8 @@
                                  class="panel-body noborder " style="box-shadow: none !important;">{##}
                                 <table class="table" cellspacing="pixels" style=" overflow-y: auto;">
                                     <thead>
-                                    <tr>
-                                        <th colspan="2">
+                                    <tr ng-if="!showEditQuestionBox">
+                                        <th colspan="2" >
 
 
                                             <div class="date-publication" ng-if="!questionSelectionnee.anonyme"><img
@@ -87,21 +87,91 @@
                                             <div class="question-page"
                                                  ng-if="questionSelectionnee.page != null && questionSelectionnee.ligne!=null">page
                                                 {[{questionSelectionnee.page}]} - à partir de la ligne {[{questionSelectionnee.ligne}]}
-                                            </div>
+                                            </div><div style="float: right"><i class="material-icons edit-data" uib-tooltip="Editer cette question" ng-click="clickIconEditQuestion(questionSelectionnee)">mode_edit</i>
+                                                                            <i class="material-icons delete-data" uib-tooltip="Supprimer cette question" ng-click="clickIconDeleteQuestion(questionSelectionnee.id)">delete</i></div>
                                             <div class="question-title">
                                                 {[{questionSelectionnee.libelle}]}
                                             </div>
+
                                         </th>
+
+
                                     </tr>
+                                    <tr ng-if="showEditQuestionBox && idTempQuestion==questionSelectionnee.id">
+
+                                        <td colspan="2">
+                                            <div class="alert alert-danger" id="question-error" role="alert" ng-if="showQuestionError" >
+
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="showQuestionError=false">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <strong>Erreur ! Merci de vérifier que le titre de la question : </strong>
+                                                <ul >
+                                                    <li>Se termnine par un point d'interrogation (?).</li>
+                                                    <li>Ne dépasse pas 150 caractères.</li>
+                                                    <li>Et n'est pas vide.</li>
+                                                </ul>
+                                            </div>
+
+                                            <form>
+                                                <div class="input-group" ng-class="{shake:showQuestionError}">
+                                                    <span class="input-group-addon label-champ-newQuestion">Titre</span>
+                                                    <input type="text"
+                                                           class="form-control question-title"
+                                                           style="font-size: 11pt"
+                                                           name="libelle"
+                                                           ng-model="questionSelectionnee.libelle" required/>
+                                                </div>
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon label-champ-newQuestion">Page</span>
+                                                    <input type="number" class="form-control" name="page" min="0" max="1000"  ng-model="questionSelectionnee.page"/>
+                                                    <span class="input-group-addon label-champ-newQuestion">Ligne</span>
+                                                    <input type="number" class="form-control" name="ligne" min="0" max="1000" ng-model="questionSelectionnee.ligne"/>
+                                                </div >
+                                                <div class="spacer " >
+                                                    <textarea ui-tinymce="optionTinyMCE" class="contenu-newQuestion form-control" name="description" rows="10" ng-model="questionSelectionnee.description" required></textarea>
+                                                    <input name="image" type="file" id="upload" class="hidden" onchange="" accept="image/x-png,image/jpeg,image/jpg"/>
+                                                </div>
+
+                                                <div class="col-sm-9  padding-question-search" style="display: inline-block; float: right" >
+                                                    <button ng-click="validateEditQuestion(questionSelectionnee)" class="btn btn-lg btn-primary  review" style="float: right" >
+                                                        <span >Mettre à jour</span>
+                                                    </button>
+                                                    <button ng-click="cancelEditQuestion()" class="btn btn-lg btn-primary  cancel-btn" style="float: right"  >
+                                                        <span >Annuler</span>
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                        </td>
+
+                                    </tr>
+                                    <tr ng-if="showEditQuestionBox && idTempQuestion==questionSelectionnee.id">
+                                        <td><h3 style="color: grey">Aperçu</h3></td>
+                                    </tr>
+                                    <tr ng-if="showEditQuestionBox && idTempQuestion==questionSelectionnee.id">
+                                        <p></p>
+
+                                        <td class="post-text" colspan="2" ng-if="prism()"
+                                            ng-bind-html="questionSelectionnee.description" style="border: none">
+                                        </td>
+                                    </tr>
+
+
+
+
                                     </thead>
                                     <tbody>
-                                    <tr>
+                                    <tr ng-if="!showEditQuestionBox">
                                         <td class="votecell" style="vertical-align: top; ">
 
 
                                             <div class="vote" style="margin-right: -30px">
 
-                                                <div class="check-btn-contribution" ng-click="checkRef('Question', questionSelectionnee.id )">
+                                                <div
+                                                     ng-class="questionSelectionnee.hasVoted?'is-checked':'check-btn-contribution'"
+                                                     ng-click="checkRef('Question', questionSelectionnee.id )">
                                                     <div class="check-vote"
                                                          title="Cette question montre l'effort de recherche. Elle est utile et claire.">
                                                         <i class="fa fa-check-circle fa-2x" style="font-size: 30pt"
@@ -122,7 +192,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr ng-if="!showEditQuestionBox">
                                         <td style="border: none; " colspan="2" ng-click="checkInutile('Question', questionSelectionnee.id )">
                                             <div style="float: right; ">
 
@@ -149,32 +219,36 @@
                                     {#Debut reponse#}
                                     <tbody ng-repeat="uneReponse in questionSelectionnee.reponses"
                                            class="reponse"
-                                           ng-class="{'reponse-light': showDetails}">
-                                    <tr>
+                                           ng-class="{'reponse-light': showDetails}" >
+                                     <tr ng-if="uneReponse.id != tempReponse.id">
                                         <th colspan="2"  ng-class="{'reponse-enseignant': uneReponse.user.isPersonnel}">
-
+                                            <div style="float: right"><i class="material-icons edit-data" uib-tooltip="Editer cette reponse" ng-click="clickIconEditReponse(uneReponse)">mode_edit</i>
+                                                <i class="material-icons delete-data" uib-tooltip="Supprimer cette reponse" ng-click="clickIconDeleteReponse(uneReponse.id)">delete</i></div>
 
                                             <div class="date-publication" ng-if="!uneReponse.anonyme"><img
                                                         ng-src="{{ asset('{[{uneReponse.user.userProfilRoot}]}')}}"> <a
                                                         href="/3il/{[{uneReponse.user.email | substringEmail:uneReponse.user.email}]}" class="href">{[{uneReponse.user.prenom}]} {[{uneReponse.user.nom}]}</a>,
                                                 le {[{uneReponse.datePublication | date:'dd MMM yyyy à HH : mm'}]}
                                             </div>
+
                                             <div class="date-publication" ng-if="uneReponse.anonyme" style="margin-left: -5px"><img
                                                         ng-src="{{ asset('img/happystudent.png')}}"> <a
                                                         class="href">Anonyme</a>,
                                                 le {[{uneReponse.datePublication | date:'dd MMM yyyy à HH : mm'}]}
                                             </div>
+
                                             <div style="color: #17aa1c; font-size: 13pt" ng-if="uneReponse.user.isPersonnel">Réponse enseignant</div>
 
                                         </th>
-                                    </tr>
-                                    <tr ng-class="{'reponse-enseignant': uneReponse.user.isPersonnel}">
+                                     </tr>
+                                     <tr ng-class="{'reponse-enseignant': uneReponse.user.isPersonnel}" ng-if="uneReponse.id != tempReponse.id">
                                         <td class="votecell" style="vertical-align: top; border: none">
 
 
                                             <div class="vote" style="margin-right: -30px">
 
-                                                <div class="check-btn-contribution" ng-click="checkRef('Reponse', uneReponse.id )">
+                                                <div ng-class="questionSelectionnee.hasVoted?'is-checked':'check-btn-contribution'"
+                                                     ng-click="checkRef('Reponse', uneReponse.id )">
                                                     <div class="check-vote"
                                                          title="Cette question montre l'effort de recherche. Elle est utile et claire.">
                                                         <i class="fa fa-check-circle fa-2x" style="font-size: 30pt"
@@ -190,11 +264,11 @@
                                             ng-bind-html="uneReponse.libelle" style="border: none">
                                         </td>
 
-                                    </tr>
-                                    <tr ng-class="{'reponse-enseignant': uneReponse.user.isPersonnel}">
+                                     </tr>
+                                     <tr ng-class="{'reponse-enseignant': uneReponse.user.isPersonnel}" ng-if="uneReponse.id != tempReponse.id">
                                         <td style="border: none; "></td>
                                         <td style="border: none; ">
-                                            <div style="float: left" ng-click="showDetails = !showDetails">
+                                            <div style="float: left" ng-click="showComments()">
                                                 <a  class="-Ed2" ng-if="uneReponse.commentaires.length>1">
                                                     Commentaires ({[{uneReponse.commentaires.length}]})
                                                 </a>
@@ -211,14 +285,48 @@
                                                 </a>
                                             </div>
                                         </td>
+                                     </tr>
+                                     <tr ng-if="uneReponse.id == tempReponse.id">
+
+                                        <td colspan="2">
+
+                                            <form novalidate>
+
+                                                <div class="spacer ">
+                                                    <textarea ui-tinymce="optionTinyMCE" class="contenu-newQuestion form-control" name="description" rows="10" ng-model="uneReponse.libelle" required></textarea>
+                                                    <input name="image" type="file" id="upload" class="hidden" onchange="" accept="image/x-png,image/jpeg,image/jpg"/>
+                                                </div>
+
+                                                <div class="col-sm-9  padding-question-search" style="display: inline-block; float: right" >
+                                                    <button ng-click="validateEditReponse(uneReponse)" class="btn btn-lg btn-primary  review" style="float: right" >
+                                                        <span >Mettre à jour</span>
+                                                    </button>
+                                                    <button ng-click="cancelEditReponse()" class="btn btn-lg btn-primary  cancel-btn" style="float: right"  >
+                                                        <span>Annuler</span>
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                        </td>
+
                                     </tr>
-                                    {#Début commentaire #}
+                                     <tr ng-if="uneReponse.id == tempReponse.id">
+                                         <td colspan="2"><h3 style="color: grey">Aperçu</h3></td>
+                                     </tr>
+                                     <tr ng-if="uneReponse.id == tempReponse.id">
+                                         <td class="post-text" colspan="2"
+                                             ng-bind-html="uneReponse.libelle" style="border: none">
+                                         </td>
+                                     </tr>
+
+                                     {#Début commentaire #}
 
                                     <tr commentaires-reponse
                                         ng-repeat="unCommentaire in uneReponse.commentaires"
                                         ng-show="showDetails"
                                         poster-comment="posterComment(newComment, answerID)"
                                         comment="unCommentaire"
+                                        has-voted="questionSelectionnee.hasVoted"
                                         answer="uneReponse"
                                         check-ref="checkRef(ref, refID)"
                                         check-inutile="checkInutile(ref, refID)">
@@ -227,6 +335,7 @@
                                         ng-show="showDetails && uneReponse.commentaires.length==0"
                                         poster-comment="posterComment(newComment, answerID)"
                                         answer="uneReponse"
+                                        has-voted="questionSelectionnee.hasVoted"
                                         check-ref="checkRef(ref, refID)"
                                         check-inutile="checkInutile(ref, refID)">
                                     </tr>
@@ -267,7 +376,7 @@
                                         </td>
                                     </tr>
 
-                                    </tbody>
+
                                 </table>
 
                             </div>

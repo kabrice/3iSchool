@@ -20,6 +20,7 @@ class CredentialsType extends AbstractType
         $builder->add('login');
         $builder->add('password');
         $builder->add('gRecaptchaResponse');
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

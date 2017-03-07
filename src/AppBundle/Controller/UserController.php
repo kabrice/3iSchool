@@ -9,18 +9,15 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Conteneur;
-use AppBundle\Entity\Contenu;
-use AppBundle\Entity\Rubrique;
+use AppBundle\Entity\User;
 use AppBundle\Entity\UserContenu;
 use AppBundle\Form\Type\UserType;
 use DateTime;
-use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\User;
 
 class UserController extends Controller
 {
@@ -49,8 +46,25 @@ class UserController extends Controller
     public function getIsPasswordEmptyAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
         $user = $em->getRepository('AppBundle:User')->findOneByEmail($request->get('user_email'));
+
+        if(!preg_match("/@3il\.fr$/", $request->get('user_email'), $t))
+        {
+            $tab["isPasswordEmpty"] = "incorrect";
+            return $tab;
+
+        }else{
+
+            if(empty($user))
+            {
+                $user = new User();
+                //return true;
+                $user->setEmail($request->get('user_email'));
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+
 
         $tab["isPasswordEmpty"] = (!empty($user)) ? $this->get("app.user_service")->isPasswordEmpty($user) : "incorrect" ;
         if(!empty($user)) $tab["isPersonnel"] = $user->getIsPersonnel();
@@ -74,7 +88,7 @@ class UserController extends Controller
 
 
 
-        if (empty($annee) || empty($groupe) | empty($niveau)) {
+        if (empty($annee) || empty($groupe) || empty($niveau)) {
             return new JsonResponse(['message' => 'Conteneur introuvable'], Response::HTTP_NOT_FOUND);
         }
 
@@ -89,17 +103,112 @@ class UserController extends Controller
                            'groupe'=>$groupe,
                            'niveau'=>$niveau), "nombreVueTotal");
         $tousLesContenusPromotion = $em->getRepository('AppBundle:UserContenu')
-            ->findConteneurs(array('annee'=>$annee,
+            ->findRubriqueConteneurs(array('annee'=>$annee,
                 'groupe'=>$groupe,
-                'niveau'=>$niveau));;
-
-
-
-
+                'niveau'=>$niveau));
 
         return array("FAVORIS"=>$contenuFavoris, "RECENTS"=>$contenuRecents,
                     "AUSSICONSULTES"=>$contenuAussiConsultes, "CONTENEUR"=>$tousLesContenusPromotion);
 
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"conteneur", "rubrique", "contenu", "user"})
+     * @Rest\Get("/rubrique/{is_enseignant}/{libelle_rubrique_client}/{annee_id}/{groupe_id}/{niveau_id}")
+     */
+    public function getConteneurByRubriqueAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $annee = $em->getRepository("AppBundle:Annee")->find($request->get('annee_id'));
+        $groupe = $em->getRepository("AppBundle:Groupe")->find($request->get('groupe_id'));
+        $niveau = $em->getRepository("AppBundle:Niveau")->find($request->get('niveau_id'));
+        $isEnseignant = json_decode($request->get('is_enseignant'));
+
+        if($isEnseignant)
+        {
+            $rubriqueClient = $em->getRepository("AppBundle:User")->findByNom($request->get('libelle_rubrique_client'));
+        }else{
+            $rubriqueClient = $em->getRepository("AppBundle:Rubrique")->findByLibelle($request->get('libelle_rubrique_client'));
+        }
+
+
+        
+        $criteresRubrique = array('annee'=>$annee,
+            'groupe'=>$groupe,
+            'niveau'=>$niveau,
+            'rubriqueClient'=>$rubriqueClient,
+            'isEnseignant'=>$isEnseignant);
+        
+
+        if (empty($annee) || empty($groupe) || empty($niveau) || empty($rubriqueClient)) {
+            return new JsonResponse(['message' => 'Conteneur introuvable'], Response::HTTP_NOT_FOUND);
+        }
+
+
+        $tousLesContenusPromotion = $em->getRepository('AppBundle:UserContenu')
+            ->findConteneurByRubrique($criteresRubrique);
+
+
+        return $tousLesContenusPromotion;
+    }
+
+
+    /**
+     * @Rest\View(serializerGroups={"user"})
+     * @Rest\Patch("/user/validationCode")
+     */
+    public function patchUserActivationAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('AppBundle:User')->findOneBy(array("id"=>$request->get('userID'), "validationCode"=>$request->get('validationCode')));
+
+        if (empty($user)) {
+            return $this->userNotFound();
+        }
+
+        $user->setActive(1);
+        $user->setValidationCode(0);
+
+        $em->merge($user);
+        $em->flush();
+        return $user;
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"user"})
+     * @Rest\Get("/user/{userID}/{validationCode}")
+     */
+    public function getUserByCodeAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('AppBundle:User')->findOneBy(array("id"=>$request->get('userID'), "validationCode"=>$request->get('validationCode')));
+
+        if (empty($user)) {
+            return $this->userNotFound();
+        }
+        return $user;
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"user"})
+     * @Rest\Patch("/user/validationCode/{email}")
+     */
+    public function patchResetPasswordAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('AppBundle:User')->findOneByEmail($request->get('email'));
+
+        if (empty($user)) {
+            return $this->userNotFound();
+        }
+       // $user->setActive(1);
+        $validationCode = $this->hash($user->getEmail());
+        $user->setValidationCode($validationCode);
+        $em->merge($user);
+        $em->flush();
+        $this->sendEmailResetPassword($user->getEmail(), $user->getId(), $validationCode);
+        return $user;
     }
 
     /**
@@ -113,8 +222,6 @@ class UserController extends Controller
 
     private function updateUser(Request $request, $clearMissing)
     {
-
-
 
             $user = $this->getDoctrine()->getEntityManager()
                 ->getRepository('AppBundle:User')
@@ -183,17 +290,17 @@ class UserController extends Controller
                 if (!empty($user->getPlainPassword())) {
                     $encoder = $this->get('security.password_encoder');
                     $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
-                    $validationCode = base64_encode(random_bytes(64));
+                    $validationCode = $this->hash($user->getEmail());
                     $user->setValidationCode($validationCode);
                     $user->setPassword($encoded);
-                    $this->sendEmailActivation($user->getPrenom(), $validationCode);
+                    $this->sendEmailActivation($user->getEmail(), $user->getPrenom(), $user->getId(), $validationCode);
                 }
                 $em = $this->get('doctrine.orm.entity_manager');
 
                 if(!empty($user->getCroppedDataUrl()))
                 {
                     $data = $request->get('croppedDataUrl');
-                    $file_name = $request->get('id')."_".date("Y_m_d")."_".date("h_i_sa")."_".$request->get('picFileName');
+                    $file_name = $request->get('id').date("Ymd").date("hisa").$request->get('picFileName');
                     list($type, $data) = explode(';', $data);
                     list(, $data)      = explode(',', $data);
                     $data = base64_decode($data);
@@ -232,32 +339,66 @@ class UserController extends Controller
         return \FOS\RestBundle\View\View::create(['message' => 'Access Forbidden'], Response::HTTP_FORBIDDEN);
     }
 
-    private function sendEmailActivation($name, $validationCode)
+    private function  hash($code){
+        return hash('sha256',  hash('sha256', date('Y-m-d H:i:s')).$code);
+    }
+
+    private function sendEmailActivation($email, $name, $userID, $validationCode)
     {
-     /*   $message = \Swift_Message::newInstance()
-            ->setSubject('Hello Email')
-            ->setFrom('send@example.com')
-            ->setTo('recipient@example.com')
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Verification de compte 3iCours')
+            ->setFrom('noreply@3icours.fr')
+            ->setTo($email)
             ->setBody(
                 $this->renderView(
                 // app/Resources/views/Emails/registration.html.twig
                     'default/registration.html.twig',
-                    array('name' => $name, 'activationCode' =>$validationCode)
+                    array('name' => $name, 'userID'=>$userID, 'validationCode' =>$validationCode)
                 ),
                 'text/html'
-            )*/
-            /*
-             * If you also want to include a plaintext version of the message
-            ->addPart(
+            )
+
+             //If you also want to include a plaintext version of the message
+          /*  ->addPart(
                 $this->renderView(
                     'Emails/registration.txt.twig',
                     array('name' => $name)
                 ),
                 'text/plain'
-            )
-            */
+            )*/
+
         ;
-       // $this->get('mailer')->send($message);
+        $this->get('mailer')->send($message);
+
+        //return $this->render(...);
+    }
+
+    private function sendEmailResetPassword($email, $userID, $validationCode)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Réinitialisation de Mot de passe 3iCours')
+            ->setFrom('noreply@3icours.fr')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                    'default/resetEmail.html.twig',
+                    array('userID'=>$userID, 'validationCode' =>$validationCode)
+                ),
+                'text/html'
+            )
+
+            //If you also want to include a plaintext version of the message
+            /*  ->addPart(
+                  $this->renderView(
+                      'Emails/registration.txt.twig',
+                      array('name' => $name)
+                  ),
+                  'text/plain'
+              )*/
+
+        ;
+        $this->get('mailer')->send($message);
 
         //return $this->render(...);
     }

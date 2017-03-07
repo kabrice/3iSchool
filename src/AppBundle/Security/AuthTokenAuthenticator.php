@@ -37,8 +37,11 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
     public function createToken(Request $request, $providerKey)
     {
         $targetUrl = 'post_auth_tokens';
-        $targetUrlCheckPW = 'get_is_password_empty';
         $targetPatchUser  = 'patch_user';
+        $targetUrlCheckPW = 'get_is_password_empty';
+        $targetpatchUserActivation  = 'patch_user_activation';
+        $targetpatchResetPassword = 'patch_reset_password';
+        $targetgetUserByCode = 'get_user_by_code';
 
         // Si la requête est une création de token, aucune vérification n'est effectuée
         if ($request->getMethod() === "POST"  && $this->httpUtils->checkRequestPath($request, $targetUrl)) {
@@ -48,10 +51,20 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
         if ($request->getMethod() === "GET"  && $this->httpUtils->checkRequestPath($request, $targetUrlCheckPW)) {
             return;
         }
+        if ($request->getMethod() === "GET"  && $this->httpUtils->checkRequestPath($request, $targetgetUserByCode)) {
+            return;
+        }
 
         if ($request->getMethod() === "PATCH"  && $this->httpUtils->checkRequestPath($request, $targetPatchUser)) {
             return;
         }
+        if ($request->getMethod() === "PATCH"  && $this->httpUtils->checkRequestPath($request, $targetpatchUserActivation)) {
+            return;
+        }
+        if ($request->getMethod() === "PATCH"  && $this->httpUtils->checkRequestPath($request, $targetpatchResetPassword)) {
+            return;
+        }
+
 
         $authTokenHeader = $request->headers->get('X-Auth-Token');
 

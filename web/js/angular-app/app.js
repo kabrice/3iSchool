@@ -16,9 +16,9 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
 
                     if($rootScope.blockLoading != undefined && $rootScope.blockLoading)
                     {
-                        console.log("ok");
                         $rootScope.chargementEnCours = false;
                         $rootScope.chargementNouveauContenu = false;
+                        $rootScope.chargementRubrique = true;
                     }else {
                         $rootScope.chargementEnCours = true;
                         $rootScope.chargementNouveauContenu = true;
@@ -32,6 +32,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
                     if(--nbreReqs == 0){
                         $rootScope.chargementEnCours = false;
                         $rootScope.chargementNouveauContenu = false;
+                        $rootScope.chargementRubrique = false;
                     }
                     return reponse;
                 },
@@ -42,6 +43,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
                     if(--nbreReqs == 0){
                         $rootScope.chargementEnCours = false;
                         $rootScope.chargementNouveauContenu = false;
+                        $rootScope.chargementRubrique = false;
                     }
 
                     return $q.reject(motifRejet);
@@ -58,7 +60,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
         $rootScope.chargementEnCours =false;
         $rootScope.blockLoading = false;
         $rootScope.headers = null;
-
+        $rootScope.chargementRubrique = false;
         $scope.rubriqueCourante = 'Tous';
         $scope.conteneurs = null;
 
@@ -104,14 +106,23 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
             rechercheContenu:null
         };
 
-
+        $scope.isEnseignant = false;
         $scope.selectionRubrique = function (rubriqueLibelle) {
             $scope.hideSearch = true;
             $scope.showAnnoncesImportantes = false;
+
             $scope.rubriqueCourante = rubriqueLibelle;
             if($scope.rubriqueCourante != 'Tous') {
 
-                $scope.conteneurs = $scope.groupesContenus.CONTENEUR;
+                $rootScope.chargementRubrique = true;
+                $rootScope.blockLoading = true;
+
+                contenuService.getConteneurByRubrique($scope.isEnseignant, rubriqueLibelle,
+                    $scope.ecole.anneeid, $scope.ecole.groupeid, $scope.ecole.niveauid).$promise.then(function (data) {
+                    $scope.conteneurs = data;
+                }, function (error) {
+                    console.log(error);
+                })
 
             }else{
                 $scope.conteneurs = null;
@@ -213,9 +224,12 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
         $scope.countClickConnexion = 0;
         $scope.show=false;
         $scope.showEnd = false;
-        $scope.showErrorSameEmail = false;
+        $scope.showErrorNom = false;
         $scope.isPersonnel = false;
         $scope.showAnnoncesImportantes = false;
+
+        $scope.currentPage = 1; // keeps track of the current page
+        $scope.pageSize = 15; // holds the number of items per page
 
         $scope.loadHomePage = function (userid, anneeid, groupeid, niveauid) {
             //console.log("loadHomePage() showProfil", $scope.showProfil);
@@ -350,27 +364,29 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
 
                 switch(categorie) {
                     case 'rubriques':
+                        $scope.isEnseignant = false;
                         var rubrique = tabPath[2];
-
-                        $scope.groupesContenus.$promise.then(function(){
+                        $scope.selectionRubrique(rubrique);
+                       /* $scope.groupesContenus.$promise.then(function(){
                             $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
                                 if(unConteneur.libelle_rubrique==rubrique){
                                     $scope.selectionRubrique(rubrique);
                                 }
                             })
-                        });
+                        });*/
                         break;
 
                     case 'enseignants':
                         var enseignantNom = tabPath[2];
-
-                        $scope.groupesContenus.$promise.then(function(){
+                        $scope.isEnseignant = true;
+                        $scope.selectionRubrique(enseignantNom);
+                        /*$scope.groupesContenus.$promise.then(function(){
                             $scope.groupesContenus.CONTENEUR.forEach(function (unConteneur) {
                                 if(unConteneur.nom==enseignantNom){
                                     $scope.selectionRubrique(enseignantNom);
                                 }
                             })
-                        });
+                        });*/
                         break;
 
                     case "underConstruction":
@@ -385,7 +401,11 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
 
         });
 
-
+        if(sessionStorage.validationSuccess != undefined)
+        {
+            $scope.validationSuccess = angular.fromJson(sessionStorage.validationSuccess);
+            delete sessionStorage.validationSuccess;
+        }
 
         if(localStorage.userData != undefined)
         {
@@ -454,7 +474,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
     }])
 
 
-    .controller("forgotPasswordCtrl", function ($scope, contenuService) {
+    .controller("forgotPasswordCtrl", function ($scope, contenuService, $window) {
 
         $scope.showEmailError = false;
         $scope.showReset = true;
@@ -468,14 +488,113 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
                 if(angular.equals(data.isPasswordEmpty, "incorrect")) {
                     $scope.showEmailError = true;
                 }else{
-
+                    contenuService.patchResetPassword(userEmail).$promise.then(function (data) {
+                        console.log("success");
+                    }, function (error) {
+                        $window.location.href = '/';
+                    })
                     $scope.showEnd = true;
                     $scope.showReset = false;
                 }
             });
         }
 
+        $scope.showErrorShortPassword = false;
+        $scope.showErrorLongPassword = false;
+        $scope.showErrorNotSame = false;
+        $scope.temp = {
+            email: null,
+            confirmPlainPassword:null
+        };
+        $scope.user = {
+            plainPassword:null
+
+        }
+
+        $scope.validationCode = null;
+        $scope.majPassword = function(){
+
+
+            if($scope.user.plainPassword.length<8) {
+                // if($scope.i<2)
+                $scope.showErrorShortPassword = true;
+                console.log($scope.showErrorShortPassword);
+                return;
+            }else if($scope.user.plainPassword.length>50) {
+                $scope.showErrorLongPassword = true;
+                return;
+            }
+
+            if(!angular.equals($scope.user.plainPassword, $scope.temp.confirmPlainPassword))
+            {
+               $scope.showErrorNotSame = true;
+                return;
+            }
+           // console.log($scope.user, $scope.temp.userID);
+            contenuService.patchUser($scope.user, $scope.temp.userID).$promise.then(function () {
+
+                var validationData = {
+                    userID: $scope.temp.userID,
+                    validationCode: $scope.validationCode
+                }
+
+                contenuService.patchUserActivation(validationData).$promise.then(function (data) {
+
+                    sessionStorage.validationSuccess = true;
+
+                }, function (error) {
+                    $window.location.href = '/';
+                    console.log(error);
+                })
+
+                $window.location.href = '/';
+            }, function () {
+                $window.location.href = '/';
+            })
+            //console.log($scope.user);
+
+
+        }
+
+        $scope.rightToReset = function (userID, validationCode) {
+            contenuService.getUserByCode(userID, angular.fromJson(validationCode)).$promise.then(function (data) {
+                $scope.temp.email = data.email;
+                $scope.temp.userID = data.id;
+                $scope.validationCode = angular.fromJson(validationCode);
+                delete localStorage.userData;
+            }, function (error) {
+                console.log(error);
+                $window.location.href = '/';
+            })
+        }
+
     })
+
+    .controller("VerifyCtrl", function ($scope, $window, contenuService) {
+
+
+
+        $scope.activateAccount = function(userID, validationCode)
+        {
+            console.log(userID, angular.fromJson(validationCode));
+            var validationData = {
+                userID: userID,
+                validationCode: angular.fromJson(validationCode)
+            }
+            contenuService.patchUserActivation(validationData).$promise.then(function (data) {
+
+                delete localStorage.userData;
+                sessionStorage.validationSuccess = true;
+                $window.location.href = '/';
+
+            }, function (error) {
+                $window.location.href = '/';
+                console.log(error);
+            })
+        }
+
+    })
+
     .filter('start', function () {
         return function (input, start) {
             if (!input || !input.length) { return; }

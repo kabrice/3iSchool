@@ -28,22 +28,30 @@ angular.module("ContenuServiceRest", ['ngResource'])
                "getAllVisiteContenu": {method: 'GET', isArray: true, url: "/api/visiteContenu/contenu/:contenuid"},
                   "getVisiteContenu": {method: 'GET', isArray: true, url: "/api/visiteContenu/user/:userid/contenu/:contenuid"},
            "getUserContenuByContenu": {method: 'GET', isArray: true, url: "/api/userContenu/user/contenu/:contenuid"},
+                     "getUserByCode": {method: 'GET', isArray: false, url: "/api/user/:userid/:validationCode"},
+            "getConteneurByRubrique": {method: 'GET', isArray: true, url: "/api/rubrique/:isEnseignant/:libelleRubrique/:anneeid/:groupeid/:niveauid"},
+
 
                          "patchUser": {method: 'PATCH', url: "/api/users/:userid", userid: 'userid'},
                        "patchRating": {method: 'PATCH', url: "/api/rate"},
                   "patchUserContenu": {method: 'PATCH',  url: "/api/usercontenu/:userid/:contenuid"},
+               "patchUserActivation": {method: 'PATCH',  url: "/api/user/validationCode"},
+                "patchResetPassword": {method: 'PATCH',  url: "/api/user/validationCode/:email"},
                      "patchQuestion": {method: 'PATCH',  url: "/api/lectureContenu/Questions/:questionid"},
+                      "patchReponse": {method: 'PATCH',  url: "/api/lectureContenu/Question/Reponses/:reponseid"},
 
                     "postAuthTokens": {method: 'POST', url: "/api/auth-tokens/:countClick"},
                       "postQuestion": {method: "POST", url: "/api/lectureContenu/:contenuid/:userid/:typequestionid/Questions"},
                        "postReponse": {method: "POST", url: "/api/lectureContenu/Question/:questionid/:userid/Reponses"},
                    "postCommentaire": {method: "POST", url: "/api/lectureContenu/Question/Reponse/:reponseid/:userid/Commentaires"},
-                         "postCheck": {method: "POST", url: "/api/vote"},
+                         "postCheck": {method: "POST", isArray: false, url: "/api/vote"},
                        "postInutile": {method: "POST", url: "/api/inutile"},
                          "postImage": {method: "POST", url: "/api/images"},
-                     "postConteneur": {method: "POST", url: "/api/conteneur/:anneeid/:rubriqueid/:sousRubriqueid/:userid"},
+                     "postConteneur": {method: "POST", isArray: true, url: "/api/conteneur/:anneeid/:rubriqueid/:sousRubriqueid/:userid"},
 
 
+                  "removeQuestion": {method: 'DELETE', url: "/api/lectureContenu/Questions/:questionid"},
+                   "removeReponse": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponses/:reponseid"},
                   "deleteAuthToken": {method: 'DELETE', url: "/api/auth-tokens/:id"}
             });
 
@@ -93,13 +101,20 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 getUserContenuByContenu: function (contenu_id) {
                     return apiData.getUserContenuByContenu({contenuid: contenu_id});
                 },
+                getUserByCode: function (user_id, validation_code) {
+                    return apiData.getUserByCode({userid: user_id, validationCode: validation_code});
+                },
+                getConteneurByRubrique: function (is_enseignant, libelle_rubrique, annee_id, groupe_id, niveau_id) {
+                    return apiData.getConteneurByRubrique({isEnseignant: is_enseignant, libelleRubrique: libelle_rubrique,
+                                                            anneeid: annee_id, groupeid: groupe_id, niveauid: niveau_id});
+                },
 
 
                 isPasswordEmpty: function (user_email) {
                     return apiData.getIsPasswordEmpty({useremail: user_email});
                 },
                 patchUser: function (userData, user_id) {
-                    apiData.patchUser({userid: user_id}, userData, function() {
+                    return apiData.patchUser({userid: user_id}, userData, function() {
                         console.log("Success !");
                         return true;
                     }, function(error) {
@@ -122,14 +137,35 @@ angular.module("ContenuServiceRest", ['ngResource'])
                         console.log(error.data);
                     });
                 },
-                patchQuestion: function (questionData, question_id) {
-                    return apiData.patchQuestion({questionid: question_id}, questionData, function() {
+                patchUserActivation: function (validationData) {
+                    return apiData.patchUserActivation(validationData, function() {
                         console.log("Success !");
-                        return true;
                     }, function(error) {
                         console.log(error.data);
                     });
                 },
+                patchResetPassword: function (email) {
+                    return apiData.patchResetPassword({email: email}, {}, function() {
+                        console.log("Success !");
+                    }, function(error) {
+                        console.log(error.data);
+                    });
+                },
+                patchQuestion: function (questionData, question_id) {
+                    return apiData.patchQuestion({questionid: question_id}, questionData, function() {
+                        console.log("Success !");
+                    }, function(error) {
+                        console.log(error.data);
+                    });
+                },
+                patchReponse: function (reponseData, reponse_id) {
+                    return apiData.patchReponse({reponseid: reponse_id}, reponseData, function() {
+                        console.log("Success !");
+                    }, function(error) {
+                        console.log(error.data);
+                    });
+                },
+
 
                 postAuthTokens: function(userData, countClick) {
                     return apiData.postAuthTokens({countClick: countClick}, userData, function() {
@@ -207,18 +243,32 @@ angular.module("ContenuServiceRest", ['ngResource'])
                         return apiData.postConteneur( {anneeid: annee_id,  rubriqueid: rubrique_id, sousRubriqueid: sousRubrique_id, userid: user_id }, contenu, function() {
                             console.log("Success !");
                         }, function(error) {
-                            console.log(error.data);
+                            console.log(error);
                         });
                     },
-
-                deleteAuthToken: function(id) {
+              deleteAuthToken: function(id) {
                     apiData.deleteAuthToken({id: id}, function() {
                         console.log("Sucsess !");
                     }, function(error) {
                         console.log("Error " + error.status + " when sending request : " + error.data);
                     });
-
+                },
+                removeQuestion: function(question_id) {
+                    return apiData.removeQuestion({questionid: question_id}, function() {
+                        console.log("Sucsess !");
+                    }, function(error) {
+                        console.log("Error " + error.status + " when sending request : " + error.data);
+                    });
+                },
+                removeReponse: function(reponse_id) {
+                    return apiData.removeReponse({reponseid: reponse_id}, function() {
+                        console.log("Sucsess !");
+                    }, function(error) {
+                        console.log("Error " + error.status + " when sending request : " + error.data);
+                    });
                 }
+
+
 
         }
     });
