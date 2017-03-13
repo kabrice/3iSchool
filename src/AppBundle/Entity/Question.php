@@ -120,7 +120,7 @@ class Question
     protected $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="question")
      * @var Notification[]
      */
     protected $notifications;

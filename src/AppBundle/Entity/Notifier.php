@@ -56,6 +56,17 @@ class Notifier
      */
     private $dateNotifier;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Notification", inversedBy="notifiers")
+     * @var Notification
+     */
+    protected $notification;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="notifiers")
+     * @var User
+     */
+    protected $user;
 
     /**
      * Get id

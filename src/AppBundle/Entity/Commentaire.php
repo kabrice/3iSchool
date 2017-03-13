@@ -94,7 +94,11 @@ class Commentaire
      */
     protected $user;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="commentaire")
+     * @var Notification[]
+     */
+    protected $notifications;
 
     /**
      * Constructor

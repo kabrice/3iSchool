@@ -91,6 +91,12 @@ class Reponse
      */
     protected $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="reponse")
+     * @var Notification[]
+     */
+    protected $notifications;
+
 
     /**
      * Constructor

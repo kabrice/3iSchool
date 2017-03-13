@@ -65,6 +65,11 @@ class Notification
     protected $commentaire;
 
     /**
+     * @ORM\OneToMany(targetEntity="Notifier", mappedBy="notification")
+     * @var Notifier[]
+     */
+    protected $notifiers;
+    /**
      * Get id
      *
      * @return int

@@ -146,6 +146,11 @@ class User implements UserInterface
      */
     protected $notifications;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Notifier", mappedBy="user")
+     * @var Notifier[]
+     */
+    protected $notifiers;
 
     /**
      * Set isPersonnel
