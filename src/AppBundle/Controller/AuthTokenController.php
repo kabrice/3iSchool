@@ -45,11 +45,10 @@ class AuthTokenController extends Controller
             return $this->invalidCredentials();
         }
 
-        /*if (!$user->getActive()) { // L'utilisateur n'a pas activé son compte
-            return $this->accountNotActivated();
-        }*/
-
-
+        if (!$user->getActive()) { // L'utilisateur n'a pas activé son compte
+            $tab['activated']= false;
+            return $tab;
+        }
 
         $encoder = $this->get('security.password_encoder');
         $isPasswordValid = $encoder->isPasswordValid($user, $credentials->getPassword());
@@ -134,8 +133,5 @@ class AuthTokenController extends Controller
         return \FOS\RestBundle\View\View::create(['message' => 'Invalid credentials'], Response::HTTP_BAD_REQUEST);
     }
 
-    private function accountNotActivated()
-    {
-        return \FOS\RestBundle\View\View::create(['message' => 'Account not activated'], Response::HTTP_BAD_REQUEST);
-    }
+
 }

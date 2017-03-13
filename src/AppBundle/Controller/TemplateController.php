@@ -135,4 +135,13 @@ class TemplateController extends Controller
     {
         return $this->render('angular-templates/sousRubriqueDashboard.html.twig', []);
     }
+
+    /**
+     * @Route("/modalPromotionNotification", name="modalPromotionNotification")
+     */
+    public function modalPromotionNotificationAction()
+    {
+        return $this->render('angular-templates/modalPromotionNotification.html.twig');
+    }
+
 }

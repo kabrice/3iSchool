@@ -48,6 +48,8 @@ AppBundle\Entity\Question:
             groups: ['contenu', 'question', 'reponse',  'user']
         anonyme:
             groups: ['contenu', 'question', 'reponse',  'user']
+        hasVoted:
+            groups: ['contenu', 'question', 'reponse',  'user']
         user:
             groups: ['question', 'reponse', 'user']
         typeQuestion:
@@ -95,6 +97,8 @@ AppBundle\Entity\Reponse:
             groups: ['reponse', 'commentaire',  'user', 'question']
         anonyme:
             groups: ['reponse', 'commentaire',  'user', 'question']
+        hasVoted:
+            groups: ['reponse', 'commentaire',  'user', 'question']
         user:
             groups: ['reponse', 'question']
         question:
@@ -120,6 +124,8 @@ AppBundle\Entity\Commentaire:
         nbreInutile:
             groups: ['reponse', 'commentaire',  'user', 'question']
         anonyme:
+            groups: ['reponse', 'commentaire',  'user', 'question']
+        hasVoted:
             groups: ['reponse', 'commentaire',  'user', 'question']
         user:
             groups: ['reponse', 'commentaire', 'question']
@@ -275,3 +281,16 @@ AppBundle\Entity\VisiteContenu:
             groups: ['visiteContenu']
         contenu:
             groups: ['visiteContenu']
+
+AppBundle\Entity\PromotionNotification:
+    attributes:
+        id:
+            groups: ['annee', 'groupe', 'niveau' , 'user', 'promotionNotification']
+        annee:
+            groups: ['promotionNotification']
+        groupe:
+            groups: ['promotionNotification']
+        niveau:
+            groups: ['promotionNotification']
+        user:
+            groups: ['promotionNotification']

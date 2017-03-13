@@ -34,6 +34,13 @@ class Niveau
      */
     protected $conteneurs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="PromotionNotification", mappedBy="niveau")
+     * @var PromotionNotification[]
+     */
+    protected $promotionNotifications;
+
+
 
     /**
      * Constructor
@@ -109,5 +116,39 @@ class Niveau
     public function getConteneurs()
     {
         return $this->conteneurs;
+    }
+
+    /**
+     * Add promotionNotification
+     *
+     * @param \AppBundle\Entity\PromotionNotification $promotionNotification
+     *
+     * @return Niveau
+     */
+    public function addPromotionNotification(\AppBundle\Entity\PromotionNotification $promotionNotification)
+    {
+        $this->promotionNotifications[] = $promotionNotification;
+
+        return $this;
+    }
+
+    /**
+     * Remove promotionNotification
+     *
+     * @param \AppBundle\Entity\PromotionNotification $promotionNotification
+     */
+    public function removePromotionNotification(\AppBundle\Entity\PromotionNotification $promotionNotification)
+    {
+        $this->promotionNotifications->removeElement($promotionNotification);
+    }
+
+    /**
+     * Get promotionNotifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPromotionNotifications()
+    {
+        return $this->promotionNotifications;
     }
 }

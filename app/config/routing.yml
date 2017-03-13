@@ -112,5 +112,11 @@ app_bundle_sousRubriqueDashboard:
         _controller: AppBundle:Template:sousRubriqueDashboard
         template:    'AppBundle:Static:sousRubriqueDashboard.html.twig'
 
+app_bundle_modalPromotionNotification:
+    path: /modalPromotionNotification
+    defaults:
+        _controller: AppBundle:Template:modalPromotionNotification
+        template:    'AppBundle:Static:modalPromotionNotification.html.twig'
+
         
 

@@ -27,18 +27,51 @@ class ContenuController extends Controller
 {
     /**
      * @Rest\View(serializerGroups={"conteneur", "contenu", "question"})
-     * @Rest\Get("/lectureConteneur/{id}")
+     * @Rest\Get("/lectureConteneur/{conteneur_id}/{user_id}")
      */
     public function getConteneurAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $conteneur = $em->getRepository('AppBundle:Conteneur')->find($request->get('id'));
+        $conteneur = $em->getRepository('AppBundle:Conteneur')->find($request->get('conteneur_id'));
+
+        $questions =  $conteneur->getContenu()->getQuestions();
+
+        foreach ($questions as &$question)
+        {
+
+            if($this->isVoteExist("Question", $question->getId(), $request->get('user_id'))) $question->setHasVoted(true);
+
+            foreach ($question->getReponses() as &$reponse)
+            {
+                if($this->isVoteExist("Reponse", $reponse->getId(), $request->get('user_id'))) $reponse->setHasVoted(true);
+
+                foreach ($reponse->getCommentaires() as &$commentaire)
+                {
+                    if($this->isVoteExist("Commentaire", $commentaire->getId(), $request->get('user_id'))) $commentaire->setHasVoted(true);
+                }
+            }
+        }
+        //return $questions;
 
         if (empty($conteneur)) {
             return \FOS\RestBundle\View\View::create(['message' => 'Conteneur introuvable'], Response::HTTP_NOT_FOUND);
         }
 
         return $conteneur;
+    }
+
+    private function isVoteExist($ref, $ref_id, $user_id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $vote = $em->getRepository('AppBundle:Vote')->findOneBy(array("ref"=>$ref, "refID"=>$ref_id, "userID"=>$user_id));
+
+        if(empty($vote))
+        {
+            return false;
+        }
+        return true ;
+
     }
 
 

@@ -13,7 +13,7 @@ angular.module("ContenuServiceRest", ['ngResource'])
             "/api", {},
             {
                      "getConteneurs": {method: 'GET', isArray: false, url: "/api/users/:userid/:anneeid/:groupeid/:niveauid"},
-                      "getConteneur": {method: 'GET', isArray: false, url: "/api/lectureConteneur/:conteneurid"},
+                      "getConteneur": {method: 'GET', isArray: false, url: "/api/lectureConteneur/:conteneurid/:userid"},
                           "getAnnee": {method: 'GET', isArray: true, url: "/api/promotion/annees"},
                          "getGroupe": {method: 'GET', isArray: true, url: "/api/promotion/groupes"},
                          "getNiveau": {method: 'GET', isArray: true, url: "/api/promotion/niveaux"},
@@ -30,6 +30,7 @@ angular.module("ContenuServiceRest", ['ngResource'])
            "getUserContenuByContenu": {method: 'GET', isArray: true, url: "/api/userContenu/user/contenu/:contenuid"},
                      "getUserByCode": {method: 'GET', isArray: false, url: "/api/user/:userid/:validationCode"},
             "getConteneurByRubrique": {method: 'GET', isArray: true, url: "/api/rubrique/:isEnseignant/:libelleRubrique/:anneeid/:groupeid/:niveauid"},
+          "getPromotionNotification": {method: 'GET', isArray: false, url: "/api/promotionNotification/:userid"},
 
 
                          "patchUser": {method: 'PATCH', url: "/api/users/:userid", userid: 'userid'},
@@ -39,6 +40,8 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 "patchResetPassword": {method: 'PATCH',  url: "/api/user/validationCode/:email"},
                      "patchQuestion": {method: 'PATCH',  url: "/api/lectureContenu/Questions/:questionid"},
                       "patchReponse": {method: 'PATCH',  url: "/api/lectureContenu/Question/Reponses/:reponseid"},
+        "patchPromotionNotification": {method: 'PATCH',  url: "/api/promotionNotification/:promotionNotificationid/:anneeid/:groupeid/:niveauid/:userid"},
+
 
                     "postAuthTokens": {method: 'POST', url: "/api/auth-tokens/:countClick"},
                       "postQuestion": {method: "POST", url: "/api/lectureContenu/:contenuid/:userid/:typequestionid/Questions"},
@@ -48,10 +51,11 @@ angular.module("ContenuServiceRest", ['ngResource'])
                        "postInutile": {method: "POST", url: "/api/inutile"},
                          "postImage": {method: "POST", url: "/api/images"},
                      "postConteneur": {method: "POST", isArray: true, url: "/api/conteneur/:anneeid/:rubriqueid/:sousRubriqueid/:userid"},
+         "postPromotionNotification": {method: 'POST',  url: "/api/promotionNotification/:anneeid/:groupeid/:niveauid/:userid"},
 
-
-                  "removeQuestion": {method: 'DELETE', url: "/api/lectureContenu/Questions/:questionid"},
-                   "removeReponse": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponses/:reponseid"},
+                   "removeQuestion": {method: 'DELETE', url: "/api/lectureContenu/Questions/:questionid"},
+                    "removeReponse": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponses/:reponseid"},
+                "removeCommentaire": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponse/Commentaires/:commentaireid"},
                   "deleteAuthToken": {method: 'DELETE', url: "/api/auth-tokens/:id"}
             });
 
@@ -59,8 +63,8 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 getGroupesContenus: function (user_id, annee_id, groupe_id, niveau_id) {
                     return apiData.getConteneurs({userid: user_id, anneeid: annee_id, groupeid: groupe_id, niveauid: niveau_id});
                 },
-                getConteneur: function (conteneur_id) {
-                    return apiData.getConteneur({conteneurid: conteneur_id});
+                getConteneur: function (conteneur_id, user_id) {
+                    return apiData.getConteneur({conteneurid: conteneur_id, userid: user_id});
                 },
                 getAnnee: function () {
                     return apiData.getAnnee();
@@ -107,6 +111,9 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 getConteneurByRubrique: function (is_enseignant, libelle_rubrique, annee_id, groupe_id, niveau_id) {
                     return apiData.getConteneurByRubrique({isEnseignant: is_enseignant, libelleRubrique: libelle_rubrique,
                                                             anneeid: annee_id, groupeid: groupe_id, niveauid: niveau_id});
+                },
+                getPromotionNotification: function (user_id) {
+                    return apiData.getPromotionNotification({userid: user_id});
                 },
 
 
@@ -165,6 +172,14 @@ angular.module("ContenuServiceRest", ['ngResource'])
                         console.log(error.data);
                     });
                 },
+                patchPromotionNotification: function (promotionNotificationData, promotionNotification_id, annee_id, groupe_id, niveau_id, user_id) {
+                    return apiData.patchPromotionNotification({promotionNotificationid: promotionNotification_id, anneeid: annee_id, groupeid: groupe_id, niveauid: niveau_id, userid:user_id }, promotionNotificationData, function() {
+                        console.log("Success !");
+                    }, function(error) {
+                        console.log(error.data);
+                    });
+                },
+
 
 
                 postAuthTokens: function(userData, countClick) {
@@ -246,6 +261,16 @@ angular.module("ContenuServiceRest", ['ngResource'])
                             console.log(error);
                         });
                     },
+              postPromotionNotification: function (promotionNotificationData, annee_id, groupe_id, niveau_id, user_id) {
+                  console.log(annee_id, groupe_id, niveau_id, user_id);
+                    return apiData.postPromotionNotification({anneeid: annee_id, groupeid: groupe_id, niveauid: niveau_id, userid:user_id }, promotionNotificationData, function() {
+                        console.log("Success !");
+                    }, function(error) {
+                        console.log(error.data);
+                    });
+                },
+
+
               deleteAuthToken: function(id) {
                     apiData.deleteAuthToken({id: id}, function() {
                         console.log("Sucsess !");
@@ -262,6 +287,13 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 },
                 removeReponse: function(reponse_id) {
                     return apiData.removeReponse({reponseid: reponse_id}, function() {
+                        console.log("Sucsess !");
+                    }, function(error) {
+                        console.log("Error " + error.status + " when sending request : " + error.data);
+                    });
+                },
+                removeCommentaire: function(commentaire_id) {
+                    return apiData.removeCommentaire({commentaireid: commentaire_id}, function() {
                         console.log("Sucsess !");
                     }, function(error) {
                         console.log("Error " + error.status + " when sending request : " + error.data);

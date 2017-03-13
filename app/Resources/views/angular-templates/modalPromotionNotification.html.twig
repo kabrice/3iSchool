@@ -1,0 +1,58 @@
+<div class="preloader" ng-show="chargementEnCours" ng-cloak>
+    <div class="msg-preloader">
+        <img ng-src="{{ asset('img/preloader.gif') }}"/>
+    </div>
+</div>
+<div class="modal-header" ng-if="!chargementEnCours">
+    <h5 class="modal-title">Sélectionnez votre promotion pour continuer</h5>
+</div>
+
+<div class="modal-body" ng-if="!chargementEnCours">
+
+        <div style="display: flex; justify-content: center;">
+            <div style="width: 100%; margin: 8px 2px 8px 8px">
+                <b>Niveau</b>
+                <div >
+                    <select class="form-control"
+                            ng-model="selectedValue.niveauid"
+                            uib-tooltip="Niveau de promotion">
+
+                        <option value="{[{niveau.id}]}"
+                                ng-repeat="niveau in niveaux">
+                            {[{niveau.libelle}]}</option>
+                    </select>
+                </div>
+            </div>
+            <div style="width: 50%; margin: 8px 2px 2px 8px" >
+                <b  style="white-space: nowrap; overflow: hidden;">Année scolaire</b>
+                <div>
+                    <select class="form-control"
+                            ng-model="selectedValue.anneeid"
+                            uib-tooltip="Année scolaire">
+
+                        <option value="{[{annee.id}]}"
+                                ng-repeat="annee in annees" >
+                            {[{annee.libelle}]}</option>
+                    </select>
+                </div>
+            </div>
+            <div  style="width: 30%; margin: 8px 8px 2px 8px">
+                <b>Groupe</b>
+                <div>
+                    <select class="form-control"
+                            ng-model="selectedValue.groupeid"
+                            uib-tooltip="Groupe de promotion">
+
+                        <option value="{[{groupe.id}]}"
+                                ng-repeat="groupe in groupes">
+                            {[{groupe.libelle}]}</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+    <div ng-if="!chargementEnCours">
+        <button class="btn btn-lg btn-primary btn-block btn-signin review" type="submit" ng-click="valider()">Valider</button>
+    </div>
+</div>

@@ -16,7 +16,21 @@
 
         <div class="row rowLectureContenu" ng-show="!chargementEnCours">
             <div class="col-sm-12 col-md-8 col-lg-8 no-float" style="padding: 0 !important; border: 1px solid lightgrey" ng-show="!questionFullscreen" >{#change made#}
-                <iframe ng-src="{[{contenuURL}]}" style="border: none;" id="myIframe"></iframe>
+                <iframe ng-if="(familleFichier == 'document') || (familleFichier == 'spreadsheet')
+                                    || (familleFichier == 'presentation') || (familleFichier == 'pdf')" ng-src="{[{contenuURL}]}" class="myIframe"></iframe>
+
+                <iframe ng-if="(familleFichier == 'video') || (familleFichier == 'image') " ng-src="{[{contenuRootTrusted}]}" class="myIframe"></iframe>
+
+                <div ng-if="(familleFichier == 'zip') || (familleFichier == 'unknown')" class="container-img" >
+                    <a href="{[{contenuRoot}]}" uib-tooltip="Télecharger le fichier" download><img ng-src="{[{imageRootTrusted}]}" class=" content-img" /><div class=" content-img" style="font-size: 50px;
+                                                                       color:limegreen;
+                                                                 margin-left: -45px;
+                                                                  margin-top: 180px;
+                                                                      height: 100px;">
+                    <i class="fa fa-arrow-down"
+                                                            aria-hidden="true"
+                                                            ></i></div></a>
+                </div>
 
             </div>
             <div ng-class="{'hidden-sm hidden-xs col-md-4 col-lg-4  no-float': !questionFullscreen}" style=" padding:0; border: 1px solid lightgrey; height: 100%">{#change made here class="hidden-sm hidden-xs col-md-4 col-lg-4  no-float"#}
@@ -87,7 +101,7 @@
                                             <div class="question-page"
                                                  ng-if="questionSelectionnee.page != null && questionSelectionnee.ligne!=null">page
                                                 {[{questionSelectionnee.page}]} - à partir de la ligne {[{questionSelectionnee.ligne}]}
-                                            </div><div style="float: right"><i class="material-icons edit-data" uib-tooltip="Editer cette question" ng-click="clickIconEditQuestion(questionSelectionnee)">mode_edit</i>
+                                            </div><div style="float: right" ng-if="authToken.user.isPersonnel"><i class="material-icons edit-data" uib-tooltip="Editer cette question" ng-click="clickIconEditQuestion(questionSelectionnee)">mode_edit</i>
                                                                             <i class="material-icons delete-data" uib-tooltip="Supprimer cette question" ng-click="clickIconDeleteQuestion(questionSelectionnee.id)">delete</i></div>
                                             <div class="question-title">
                                                 {[{questionSelectionnee.libelle}]}
@@ -222,7 +236,7 @@
                                            ng-class="{'reponse-light': showDetails}" >
                                      <tr ng-if="uneReponse.id != tempReponse.id">
                                         <th colspan="2"  ng-class="{'reponse-enseignant': uneReponse.user.isPersonnel}">
-                                            <div style="float: right"><i class="material-icons edit-data" uib-tooltip="Editer cette reponse" ng-click="clickIconEditReponse(uneReponse)">mode_edit</i>
+                                            <div style="float: right" ng-if="authToken.user.isPersonnel"><i class="material-icons edit-data" uib-tooltip="Editer cette reponse" ng-click="clickIconEditReponse(uneReponse)">mode_edit</i>
                                                 <i class="material-icons delete-data" uib-tooltip="Supprimer cette reponse" ng-click="clickIconDeleteReponse(uneReponse.id)">delete</i></div>
 
                                             <div class="date-publication" ng-if="!uneReponse.anonyme"><img
@@ -247,7 +261,7 @@
 
                                             <div class="vote" style="margin-right: -30px">
 
-                                                <div ng-class="questionSelectionnee.hasVoted?'is-checked':'check-btn-contribution'"
+                                                <div ng-class="uneReponse.hasVoted?'is-checked':'check-btn-contribution'"
                                                      ng-click="checkRef('Reponse', uneReponse.id )">
                                                     <div class="check-vote"
                                                          title="Cette question montre l'effort de recherche. Elle est utile et claire.">
@@ -324,10 +338,11 @@
                                     <tr commentaires-reponse
                                         ng-repeat="unCommentaire in uneReponse.commentaires"
                                         ng-show="showDetails"
+                                        is-personnel = "authToken.user.isPersonnel"
                                         poster-comment="posterComment(newComment, answerID)"
                                         comment="unCommentaire"
-                                        has-voted="questionSelectionnee.hasVoted"
                                         answer="uneReponse"
+                                        delete-commentaire="deleteCommentaire(commentaireid)"
                                         check-ref="checkRef(ref, refID)"
                                         check-inutile="checkInutile(ref, refID)">
                                     </tr>
@@ -335,7 +350,8 @@
                                         ng-show="showDetails && uneReponse.commentaires.length==0"
                                         poster-comment="posterComment(newComment, answerID)"
                                         answer="uneReponse"
-                                        has-voted="questionSelectionnee.hasVoted"
+                                        is-personnel = "authToken.user.isPersonnel"
+                                        delete-commentaire="deleteCommentaire(commentaireid)"
                                         check-ref="checkRef(ref, refID)"
                                         check-inutile="checkInutile(ref, refID)">
                                     </tr>

@@ -53,7 +53,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
 
     })
     .controller("3ischoolCtrl", function ($filter, $http,$rootScope , $window, $scope, $sce, $location,
-                                          $interval, Upload, contenuService, vcRecaptchaService) {
+                                          $interval, Upload, contenuService, vcRecaptchaService, $uibModal,$uibModalStack) {
 
 
         //Chargement En cours
@@ -94,9 +94,27 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
         };
 
         $scope.reload = function (){
-            localStorage.promotion= angular.toJson($scope.selectedValue);
-            console.log("test", $scope.ecole.anneeid);
-            $window.location.href = '/'
+
+            if($scope.authToken.user.isPersonnel)
+            {
+                localStorage.promotion = angular.toJson($scope.selectedValue);
+                $window.location.href = '/'
+            }else {
+
+                contenuService.patchPromotionNotification({}, localStorage.promotionNotificationID, $scope.selectedValue.anneeid,
+                    $scope.selectedValue.groupeid,
+                    $scope.selectedValue.niveauid,
+                    angular.fromJson(localStorage.userData).user.id).$promise.then(function () {
+
+
+                    localStorage.promotion = angular.toJson($scope.selectedValue);
+                    $window.location.href = '/'
+
+                }, function (error) {
+                    console.log(error);
+                });
+            }
+
         };
 
         // Recheche Contenu
@@ -232,8 +250,14 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
         $scope.pageSize = 15; // holds the number of items per page
 
         $scope.loadHomePage = function (userid, anneeid, groupeid, niveauid) {
-            //console.log("loadHomePage() showProfil", $scope.showProfil);
 
+
+            if(sessionStorage.goToDashboard != undefined)
+            {
+                console.log("ok");
+                $window.location.href = 'http://localhost:8000/dashboard';
+                delete sessionStorage.goToDashboard;
+            }
 
             $scope.showHome = true;
             $scope.showConnexion = false;
@@ -244,15 +268,16 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
                 anneeid = parseInt($scope.promotion.anneeid);
                 groupeid = parseInt($scope.promotion.groupeid);
                 niveauid = parseInt($scope.promotion.niveauid);
-            }
-
+            }/*else {
+                return;
+            }*/
             console.log(userid, anneeid, groupeid, niveauid);
 
-            //if(isNaN(anneeid) || isNaN(groupeid) || isNaN(niveauid)) return;
             $scope.groupesContenus = contenuService.getGroupesContenus(userid, anneeid, groupeid, niveauid);
             $scope.annees = contenuService.getAnnee();
             $scope.groupes = contenuService.getGroupe();
             $scope.niveaux = contenuService.getNiveau();
+
 
         }
 
@@ -300,12 +325,64 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
                     return;
                 }
 
+                if($scope.authToken.activated===false)
+                {
+
+                    $scope.showNoActivatedError = true;
+                    $scope.countClickConnexion++;
+                    return;
+                }
+
                 console.log($scope.authToken);
                 localStorage.userData= angular.toJson($scope.authToken);
                 $scope.authToken = angular.fromJson(localStorage.userData);
                 $http.defaults.headers.common["X-Auth-Token"] = $scope.authToken.value;
+                console.log("localStorage.userData", localStorage.userData);
+                if($scope.authToken.user.isPersonnel)
+                {
+                    sessionStorage.goToDashboard = true;
+                    $window.location.href = 'http://localhost:8000//dashboard';
 
-                $scope.loadHomePage($scope.authToken.user.id ,$scope.ecole.anneeid, $scope.ecole.groupeid, $scope.ecole.niveauid);
+                }else{
+
+                    contenuService.getPromotionNotification($scope.authToken.user.id).$promise.then(function (data) {
+                        if(data.id==0)
+                        {
+                            $scope.optionModal = $uibModal.open({
+                             backdrop  : 'static',
+                             keyboard  : false,
+                             templateUrl: '/modalPromotionNotification',
+                             controller: 'ModalPromotionNotification'
+                             });
+
+                        }else{
+
+                            $scope.ecole = {
+                                anneeid: parseInt(data.annee.id),
+                                groupeid: parseInt(data.groupe.id),
+                                niveauid: parseInt(data.niveau.id)
+                            };
+                            console.log(data.id);
+                            localStorage.promotionNotificationID = data.id;
+                            console.log("ecole", $scope.ecole);
+
+                        }
+
+                        $scope.selectedValue = {
+                            userid: localStorage.userData,
+                            niveauid: $scope.ecole.niveauid.toString(),
+                            groupeid: $scope.ecole.groupeid.toString(),
+                            anneeid: $scope.ecole.anneeid.toString()
+
+                        };
+                        console.log($scope.authToken.user.id ,$scope.ecole.anneeid, $scope.ecole.groupeid, $scope.ecole.niveauid);
+                        $scope.loadHomePage($scope.authToken.user.id ,$scope.ecole.anneeid, $scope.ecole.groupeid, $scope.ecole.niveauid);
+
+                    }, function (error) {
+                        console.log(error)
+                    })
+
+                }
 
             });
         }
@@ -325,7 +402,9 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
             contenuService.deleteAuthToken($scope.authToken.id);
             delete localStorage.userData;
             delete localStorage.promotion;
+            delete localStorage.promotionNotificationID;
             $window.location.href = '/';
+
         }
 
 
@@ -401,14 +480,16 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
 
         });
 
+
         if(sessionStorage.validationSuccess != undefined)
         {
             $scope.validationSuccess = angular.fromJson(sessionStorage.validationSuccess);
             delete sessionStorage.validationSuccess;
         }
-
+        //console.log(localStorage.userData);
         if(localStorage.userData != undefined)
         {
+            console.log(localStorage.userData != undefined);
             $scope.authToken = angular.fromJson(localStorage.userData);
             $http.defaults.headers.common["X-Auth-Token"] =  $scope.authToken.value;
             var userEmail = $scope.authToken.user.email;
@@ -423,6 +504,48 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
         //console.log($scope.conteneurCourant2.contenu);
 
     })
+
+app.controller("ModalPromotionNotification", function ($uibModal,$uibModalStack, $scope, contenuService, $window) {
+
+    $scope.ecole = {
+        anneeid: 2,
+        groupeid: 2,
+        niveauid: 2
+    };
+
+    $scope.annees = contenuService.getAnnee();
+    $scope.groupes = contenuService.getGroupe();
+    $scope.niveaux = contenuService.getNiveau();
+
+    $scope.selectedValue = {
+        userid: localStorage.userData,
+        niveauid: $scope.ecole.niveauid.toString(),
+        groupeid: $scope.ecole.groupeid.toString(),
+        anneeid: $scope.ecole.anneeid.toString()
+
+    };
+
+
+
+
+     $scope.valider = function() {
+     contenuService.postPromotionNotification({}, $scope.selectedValue.anneeid,
+     $scope.selectedValue.groupeid,
+     $scope.selectedValue.niveauid,
+     angular.fromJson($scope.selectedValue.userid).user.id).$promise.then(function (data) {
+         localStorage.promotionNotificationID = data.id;
+         localStorage.promotion= angular.toJson($scope.selectedValue);
+         $window.location.href = '/'
+
+     }, function (error) {
+     console.log(error);
+     });
+         $uibModalStack.dismissAll();
+
+     }
+
+})
+
 
     .directive("owlCarousel", function() {
         return {
@@ -631,32 +754,9 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
         }
     }])
 
-    // .directive("fileread", [function () {
-    //     return {
-    //         scope: {
-    //             fileread: "="
-    //         },
-    //         link: function (scope, element, attributes) {
-    //             element.bind("change", function (changeEvent) {
-    //
-    //                 var reader = new FileReader();
-    //                 reader.onload = function (loadEvent) {
-    //                     scope.$apply(function () {
-    //
-    //                         scope.fileread = loadEvent.target.result;
-    //
-    //                     });
-    //                 }
-    //                 reader.readAsDataURL(changeEvent.target.files[0]);
-    //             });
-    //         }
-    //
-    //     }
-    // }])
 
 
-
-.directive('ngPrism',['$interpolate', function ($interpolate) {
+    .directive('ngPrism',['$interpolate', function ($interpolate) {
     "use strict";
     return {
         restrict: 'E',

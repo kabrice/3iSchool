@@ -59,6 +59,13 @@ class Reponse
     protected $anonyme=false;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="has_voted", type="boolean")
+     */
+    protected $hasVoted=0;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="nbre_inutile", type="integer")
@@ -341,5 +348,29 @@ class Reponse
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set hasVoted
+     *
+     * @param boolean $hasVoted
+     *
+     * @return Reponse
+     */
+    public function setHasVoted($hasVoted)
+    {
+        $this->hasVoted = $hasVoted;
+
+        return $this;
+    }
+
+    /**
+     * Get hasVoted
+     *
+     * @return boolean
+     */
+    public function getHasVoted()
+    {
+        return $this->hasVoted;
     }
 }

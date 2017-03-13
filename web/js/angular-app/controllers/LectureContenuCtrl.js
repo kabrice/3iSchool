@@ -200,10 +200,16 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
 
         $scope.idConteneurSelectionne = id;
 
-        contenuService.getConteneur(id).$promise.then(function(data){
+        contenuService.getConteneur(id, $scope.authToken.user.id).$promise.then(function(data){
             $scope.conteneurCourant = data;
 
             $scope.contenuRoot = $scope.conteneurCourant.contenu.contenuRoot;
+            $scope.imageRoot = $scope.conteneurCourant.contenu.imageRoot;
+            $scope.familleFichier = fileFamily($scope.contenuRoot);
+            console.log("$scope.contenuRoot", $scope.contenuRoot);
+            $scope.contenuRootTrusted = $sce.trustAsResourceUrl($scope.contenuRoot);
+            $scope.imageRootTrusted = $sce.trustAsResourceUrl("http://localhost:8000/"+$scope.imageRoot);
+            console.log("$scope.imageRootTrusted", $scope.imageRootTrusted);
             $scope.contenuURL = $sce.trustAsResourceUrl("https://docs.google.com/viewer?embedded=true&url=" + $scope.contenuRoot);
             $scope.sousRubriqueLibelle = ($scope.conteneurCourant.contenu.sousRubrique!=null)?$scope.conteneurCourant.contenu.sousRubrique.libelle:"contenu";
             $scope.conteneurQuestion = $scope.conteneurCourant.contenu.questions;
@@ -219,6 +225,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
             $scope.userContenuCourant = $filter('filter')($scope.conteneurCourant.contenu.userContenus, function (data) {
 
                 return data.user.id === $scope.authToken.user.id;
+
             })[0];
 
             // var nbreVue = userContenuCourant.nbreVue;
@@ -235,6 +242,65 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
             //contenuService.patchUserContenu($scope.userContenuData, $scope.authToken.user.id, $scope.conteneurCourant.contenu.id);
 
         });
+
+    }
+
+
+    function fileFamily(file) {
+        var fileExtension = file.substr(file.lastIndexOf('.')+1);
+        var result = 'unknown';
+        console.log($scope.ileExtension);
+
+
+        switch(fileExtension) {
+            case 'doc': case 'docx': case 'docm': case 'dot'||  'dotx': case 'dotm': case 'html': case 'plain': case 'txt': case 'rtf'  :
+
+            result = 'document';
+
+            break;
+
+            case 'xls': case 'xlsx': case 'xlsm': case 'xlt': case 'xltx': case 'xltm': case 'ods': case 'csv': case 'tsv': case 'tab':
+
+            result = 'spreadsheet';
+
+            break;
+
+            case 'ppt': case 'pptx': case 'pptm': case 'pps': case 'ppsx'|| 'ppsm': case 'pot': case 'potx': case 'potm' :
+
+            result = 'presentation';
+
+            break;
+
+            case 'mp4':
+
+                result = 'video';
+
+                break;
+
+            case 'zip':
+
+                result = 'zip';
+
+                break;
+
+            case 'pdf':
+
+                result = 'pdf';
+
+                break;
+
+            case 'jpg': case 'gif': case 'png' :
+
+            result = 'image';
+
+            break;
+
+            default:
+                result = 'unknown';
+
+        }
+
+        return result;
 
     }
 
@@ -262,21 +328,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
         {
             $location.path("/");
             $window.location.reload();
-        }else{
-            contenuService.getUserVote($scope.questionSelectionnee.id, "Question", $scope.authToken.user.id).$promise.then(function (data) {
-
-                $scope.questionSelectionnee.hasVoted = (data.valeur!=0);
-            },function (error) {
-                console.log(error);
-            })
-
-            /*angular.forEach($scope.questionSelectionnee.reponses, function(reponse, key) {
-                angular.forEach(reponse.commentaires, function(comment, key) {
-                    if(comment.id == refID) comment.nombreLike = data.nombreLike;
-                });
-            });*/
         }
-        //});
 
 
         //console.log("getQuestionByID "+$scope.questionSelectionnee);
@@ -489,21 +541,20 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     }
 
     //****Operation on comments
-    $scope.clickIconEditCommenaitaire = function (commentaireSelectionne) {
 
+
+    $scope.deleteCommentaire= function(commentaireid){
+        console.log(commentaireid.commentaireid);
+        if (window.confirm("Êtes-vous certain de vouloir supprimer ce commentaire ?\nCette opération est irréversible !")) {
+            contenuService.removeCommentaire(commentaireid.commentaireid).$promise.then(function () {
+                $window.location.reload();
+            }, function (error) {
+                console.log(error);
+            });
+        }
     }
 
-    $scope.clickIconDeleteCommentaire= function(idCommentaire){
 
-    }
-
-    $scope.validateEditCommentaire = function (commentaireSelectionne) {
-
-    }
-
-    $scope.cancelEditCommentaire = function () {
-
-    }
 
 
     
@@ -537,14 +588,18 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
             var data = dataReturned["refEntity"];
             console.log("voteValeur", dataReturned["voteValeur"]);
 
-            $scope.questionSelectionnee.hasVoted = (dataReturned["voteValeur"]==0);
+            $scope.questionSelectionnee.hasVoted = (!dataReturned["voteValeur"]==0);
 
             if(angular.equals(ref, "Question")) $scope.questionSelectionnee.nombreLike = data.nombreLike;
 
             if(angular.equals(ref, "Reponse")){
 
                 angular.forEach($scope.questionSelectionnee.reponses, function(reponse, key) {
-                    if(reponse.id == refID) reponse.nombreLike = data.nombreLike;
+                    if(reponse.id == refID)
+                    {
+                        reponse.nombreLike = data.nombreLike;
+                        reponse.hasVoted = (!dataReturned["voteValeur"]==0);
+                    }
                 });
 
             }
@@ -553,7 +608,11 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
 
                 angular.forEach($scope.questionSelectionnee.reponses, function(reponse, key) {
                     angular.forEach(reponse.commentaires, function(comment, key) {
-                        if(comment.id == refID) comment.nombreLike = data.nombreLike;
+                        if(comment.id == refID)
+                        {
+                            comment.nombreLike = data.nombreLike;
+                            comment.hasVoted = (!dataReturned["voteValeur"]==0);
+                        }
                     });
                 });
 

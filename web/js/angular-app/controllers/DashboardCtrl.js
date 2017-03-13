@@ -383,11 +383,11 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
 
         }
-        $scope.getUserID = function (userID) {
+       /* $scope.getUserID = function (userID) {
 
             sessionStorage.userID = userID;
 
-        }
+        }*/
 
         if(tabPath.length>1)
         {

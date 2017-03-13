@@ -134,6 +134,18 @@ class User implements UserInterface
      */
     protected $visiteContenus;
 
+    /**
+     * @ORM\OneToMany(targetEntity="PromotionNotification", mappedBy="user")
+     * @var PromotionNotification[]
+     */
+    protected $promotionNotifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+     * @var Notification[]
+     */
+    protected $notifications;
+
 
     /**
      * Set isPersonnel
@@ -692,5 +704,39 @@ class User implements UserInterface
     public function getVisiteContenus()
     {
         return $this->visiteContenus;
+    }
+
+    /**
+     * Add promotionNotification
+     *
+     * @param \AppBundle\Entity\PromotionNotification $promotionNotification
+     *
+     * @return User
+     */
+    public function addPromotionNotification(\AppBundle\Entity\PromotionNotification $promotionNotification)
+    {
+        $this->promotionNotifications[] = $promotionNotification;
+
+        return $this;
+    }
+
+    /**
+     * Remove promotionNotification
+     *
+     * @param \AppBundle\Entity\PromotionNotification $promotionNotification
+     */
+    public function removePromotionNotification(\AppBundle\Entity\PromotionNotification $promotionNotification)
+    {
+        $this->promotionNotifications->removeElement($promotionNotification);
+    }
+
+    /**
+     * Get promotionNotifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPromotionNotifications()
+    {
+        return $this->promotionNotifications;
     }
 }

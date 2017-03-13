@@ -37,11 +37,7 @@
             <link rel="stylesheet" href="{{ asset('bower/Croppie/croppie.css') }}"  type="text/css">
         <style>
 
-            #myIframe {
-                height: 100% !important;
-                width: 100% !important;
-                overflow: hidden
-            }
+
             .cropArea {
                 background: #E4E4E4;
                 overflow: hidden;
@@ -118,31 +114,8 @@
             <script type="text/javascript" src="{{ asset('js/countLimit.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/showmore.js') }}"></script>
             <script type="text/javascript" src="{{ asset('js/sidebar.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('js/notification.js') }}"></script>
 
-            {#<script type="text/javascript" src="{{ asset('js/bootstrap-filestyle/bootstrap-filestyle.min.js') }}"></script>
-            #}<script type="text/javascript">
-
-                /*$('#input01').filestyle()
-
-                $('#input001').filestyle({
-                    'placeholder' : 'Uploader des fichiers pdf, ppt, word et autres'
-                });*/
-                // Initialize tooltip component
-              /*  $(function () {
-                    $('[data-toggle="tooltip"]').tooltip()
-                })
-
-                // Initialize popover component
-                $(function () {
-                    $('[data-toggle="popover"]').popover()
-                })
-
-                $('[data-toggle="popover"]').popover({
-                    placement: "auto",
-                    trigger: "hover"
-                })*/
-
-            </script>
             {% endblock %}
     </body>
 </html>

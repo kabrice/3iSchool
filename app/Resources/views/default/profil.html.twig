@@ -52,7 +52,7 @@
                                     {[{authToken.user.prenom}]}<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/3il/{[{username}]}">Profil</a></li>
-                                    <li><a href="/{[{authToken.user.id}]}/dashboard">Tableau de Bord</a></li>
+                                    <li ng-if="authToken.user.isPersonnel"><a href="/{[{authToken.user.id}]}/dashboard">Tableau de Bord</a></li>
                                     <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
                                 </ul>
                             </li>

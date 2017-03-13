@@ -185,6 +185,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
 
            showCredentialsError: '=',
                    showErrorNom: '=',
+           showNoActivatedError: '=',
                 showImageSubmit: '=',
                  showAlmostDone: '=',
                   showConnexion: '=',
@@ -319,7 +320,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
                     $scope.userData.password = $scope.user.plainPassword;
 
                     $scope.showCredentialsError = false;
-
+                    $scope.showNoActivatedError = false;
 
                     if($scope.widgetId>=1 && $scope.response === null){ //if string is empty
                         alert("Please resolve the captcha and submit!");
@@ -407,10 +408,11 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
         replace: true,
         scope: {
             comment: "=",
+        isPersonnel: "=",
              answer: "=",
-           hasVoted: "=",
            checkRef: '&',
        checkInutile: '&',
+  deleteCommentaire: '&',
       posterComment: '&'
         },
 
@@ -433,6 +435,10 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
                     return;
                 }
                 $scope.posterComment({newComment:libelle , answerID: reponseID});
+            }
+
+            $scope.clickIconDeleteCommentaire = function (commentaireid) {
+                $scope.deleteCommentaire({commentaireid:commentaireid})
             }
 
         }

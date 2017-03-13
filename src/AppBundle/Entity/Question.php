@@ -105,12 +105,25 @@ class Question
      */
     protected $reponses;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="has_voted", type="boolean")
+     */
+    protected $hasVoted=0;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="questions")
      * @var User
      */
     protected $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+     * @var Notification[]
+     */
+    protected $notifications;
 
 
     /**
@@ -457,5 +470,29 @@ class Question
     public function getNombreVu()
     {
         return $this->nombreVu;
+    }
+
+    /**
+     * Set hasVoted
+     *
+     * @param boolean $hasVoted
+     *
+     * @return Question
+     */
+    public function setHasVoted($hasVoted)
+    {
+        $this->hasVoted = $hasVoted;
+
+        return $this;
+    }
+
+    /**
+     * Get hasVoted
+     *
+     * @return boolean
+     */
+    public function getHasVoted()
+    {
+        return $this->hasVoted;
     }
 }

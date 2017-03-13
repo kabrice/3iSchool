@@ -64,17 +64,18 @@ class DefaultController extends Controller
      */
     public function resetPasswordAction($userID, $validationCode)
     {
-
         return $this->render('default/resetPassword.html.twig', ['validationCode' => $validationCode, 'userID'=>$userID]);
     }
 
 
     /**
-     * @Route("/{userID}/dashboard", name="dashboard")
+     * @Route("/dashboard", name="dashboard")
      */
-    public function dashboardAction($userID)
+    public function dashboardAction()
     {
-        return $this->render('default/dashboard.html.twig', ["userID"=>$userID]);
+        return $this->render('default/dashboard.html.twig');
     }
+
+
 
 }

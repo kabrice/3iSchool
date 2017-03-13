@@ -52,6 +52,14 @@ class Commentaire
     protected $depth;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="has_voted", type="boolean")
+     */
+    protected $hasVoted=0;
+
+
+    /**
      * @var int
      *
      * @ORM\Column(name="nombre_like", type="integer")
@@ -333,5 +341,29 @@ class Commentaire
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set hasVoted
+     *
+     * @param boolean $hasVoted
+     *
+     * @return Commentaire
+     */
+    public function setHasVoted($hasVoted)
+    {
+        $this->hasVoted = $hasVoted;
+
+        return $this;
+    }
+
+    /**
+     * Get hasVoted
+     *
+     * @return boolean
+     */
+    public function getHasVoted()
+    {
+        return $this->hasVoted;
     }
 }

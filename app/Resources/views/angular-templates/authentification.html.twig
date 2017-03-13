@@ -12,9 +12,10 @@
 
                     <span>Ce email n'est pas du type exemple@3il.fr.</span>
             </div>
+
             <button class="btn btn-lg btn-primary btn-block btn-signin "
                     ng-class="{draw: chargementEnCours}"
-                    title="Cliquez sur Suivant pour vous connecter"
+                    uib-tooltip="Cliquez sur Suivant pour vous connecter"
                     type="submit"
                     ng-click="clicSuivant()">Suivant
             </button>
@@ -74,6 +75,13 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <span>Email ou mot de passe incorrect.</span>
+                </div>
+                <div class="alert alert-danger" role="alert" ng-if="showNoActivatedError">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                    <span>Ce compte existe, mais n'est pas vérifié.</span>
                 </div>
                 <input type="password" id="inputPassword" name="plainPassword" ng-model="user.plainPassword"
                        class="form-control" placeholder="Mot de passe" required>
