@@ -63,56 +63,112 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right pull-right" style="margin-top: -6px">
-                            <li id="notification_li" ng-controller="NotifCtrl">
-                                <span id="notification_count">3</span>
-                                <a href='?controller=utilisateur&action=posterpensee' class="header-text" id="notificationLink"><i class="material-icons">notifications</i></a>
+                            <li id="notification_li" ng-controller="NotifCtrl" ng-show="!chargementEnCours">
+                                <span id="notification_count" ng-hide="notificationCount<1">{[{notificationCount}]}</span>
+                                <a href='' class="header-text" id="notificationLink" ng-click="notficationHasBeenSeen()">
+                                    <i class="material-icons">notifications</i>
+                                </a>
                                 <div id="notificationContainer">
                                     <div id="notificationTitle">Notifications</div>
-                                    <div id="notificationsBody" class="notifications scroll">
-                                        <ul class="nav" id="notifications-ul"><li class="notifications-li  notif">
-                                                <a href="" class="notif-link">
+                                    <div id="" class="no-notif1 notifications" ng-if="notifications[0].id==0">Aucune notification pour l'instant.</div>
+                                    <div id="notificationsBody" class="notifications scroll" ng-if="notifications[0].id!=0">
+
+                                        <ul class="nav" id="notifications-ul">
+                                            <li  ng-class="{'notifications-li': notification.lu==false}" class="notif" ng-repeat="notification in notifications">
+
+                                                <a href="/dashboard#!/contenusSignales/questions" class="notif-link" ng-if="notification.code=='Sq'" ng-click="notificationHasBeenRead(notification.id)">
                                                     <div class="notif-row">
-                                                        <div class="notif-symbols">S</div>
-                                                        <div class="notif-content"><b>2 utilisateurs </b> on signalé la question : <b>Pensez vous aussi quesfsfsd?</b> <br><span class="notif-date">18-09-2016  13:38</span></div>
+                                                        <div class="notif-symbols">{[{notification.code}]}</div>
+                                                        <div class="notif-content"><b>{[{notification.questionNbreInutile}]}</b>
+                                                                <span ng-if="notification.questionNbreInutile==1"><b>utilisateur</b></span>
+                                                                <span ng-if="notification.questionNbreInutile>1"><b>utilisateurs</b></span>
+                                                            <span ng-if="notification.questionNbreInutile==1"> a signalé</span>
+                                                            <span ng-if="notification.questionNbreInutile>1"> ont signalés</span>
+                                                            une question du contenu :<span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
+                                                            <b>{[{(notification.questionLibelle | limitTo: 65) + (notification.questionLibelle.length > 65 ? '...' : '')}]}</b> <br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
-                                                </a></li><li class="notifications-li  notif" >
-                                                <a href="http://localhost/projet_pensonslibre/?controller=utilisateur&amp;action=posterpensee&amp;p=1" class="notif-link">
+                                                </a>
+                                                <a href="/dashboard#!/contenusSignales/reponses" class="notif-link" ng-if="notification.code=='Sr'" ng-click="notificationHasBeenRead(notification.id)">
                                                     <div class="notif-row">
-                                                        <div class="notif-symbolq">Q</div>
-                                                        <div class="notif-content"><b>Amblard</b> vient de publier le contenu : <i>Pensez vous aussi quefdfdfdff?</i> dans la matière <b>Traitement du signal</b> <br><span class="notif-date">15-09-2016  17:07</span></div>
+                                                        <div class="notif-symbols">{[{notification.code}]}</div>
+                                                        <div class="notif-content"><b>{[{notification.reponseNbreInutile}]}</b>
+                                                            <span ng-if="notification.reponseNbreInutile==1"><b>utilisateur</b></span>
+                                                            <span ng-if="notification.reponseNbreInutile>1"><b>utilisateurs</b></span>
+                                                            <span ng-if="notification.reponseNbreInutile==1"> a signalé</span>
+                                                            <span ng-if="notification.reponseNbreInutile>1"> ont signalés</span>
+                                                            une réponse du contenu : <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
+                                                            <b ng-bind-html="(notification.reponseLibelle | limitTo: 65) + (notification.reponseLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
-                                                </a></li><li class="notifications-li  notif">
-                                                <a href="http://localhost/projet_pensonslibre/?controller=utilisateur&amp;action=posterpensee&amp;p=1" class="notif-link">
+                                                </a>
+                                                <a href="/dashboard#!/contenusSignales/commentaires" class="notif-link" ng-if="notification.code=='Sc'" ng-click="notificationHasBeenRead(notification.id)">
                                                     <div class="notif-row">
-                                                        <div class="notif-symbols">S</div>
-                                                        <div class="notif-content"><b>1 utilisateur</b> a signalé la réponse : <b>Pensez vous aussi que ce projet va réussir ?</b> <br><span class="notif-date">15-09-2016  17:06</span></div>
+                                                        <div class="notif-symbols">{[{notification.code}]}</div>
+                                                        <div class="notif-content"><b>{[{notification.commentaireNbreInutile}]}</b>
+                                                            <span ng-if="notification.commentaireNbreInutile==1"><b>utilisateur</b></span>
+                                                            <span ng-if="notification.commentaireNbreInutile>1"><b>utilisateurs</b></span>
+                                                            <span ng-if="notification.commentaireNbreInutile==1"> a signalé</span>
+                                                            <span ng-if="notification.commentaireNbreInutile>1"> ont signalés</span>
+                                                            un commentaire du contenu
+                                                            <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
+                                                            <b ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
-                                                </a></li><li class="notifications-li  notif" >
-                                                <a href="http://localhost/projet_pensonslibre/?controller=utilisateur&amp;action=posterpensee&amp;p=1" class="notif-link">
+                                                </a>
+                                                <a href="/lectureContenu/{[{notification.contenuID}]}" class="notif-link" ng-if="notification.code=='P'" ng-click="notificationHasBeenRead(notification.id)">
                                                     <div class="notif-row">
-                                                        <div class="notif-symbolc">C</div>
-                                                        <div class="notif-content"><b>Edgar</b> a commenté la votre réponse : <b>Je ne suis pas contre ceci</b><br><span class="notif-date">15-09-2016  16:24</span></div>
+                                                        <div class="notif-symbolp">{[{notification.code}]}</div>
+                                                        <div class="notif-content">
+                                                            <b>{[{notification.prenom+' '+notification.nom}]}</b>
+                                                            a publié le contenu <b>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}</b> <br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
-                                                </a></li><li class="notifications-li  notif" >
-                                                <a href="http://localhost/projet_pensonslibre/?controller=utilisateur&amp;action=posterpensee&amp;p=1" class="notif-link">
+                                                </a>
+                                                <a href="/lectureContenu/{[{notification.contenuID}]}" class="notif-link" ng-if="notification.code=='Q'">
                                                     <div class="notif-row">
-                                                        <div class="notif-symbolc">A</div>
-                                                        <div class="notif-content"><b>Serge</b> a aussi commenté votre réponse : <b>Je ne suis pas contre ceci</b><br><span class="notif-date">15-09-2016  11:08</span></div>
+                                                        <div class="notif-symbolq">{[{notification.code}]}</div>
+                                                        <div class="notif-content">
+                                                            <b ng-if="!notification.questionAnonyme">{[{notification.prenom+' '+notification.nom}]}</b>
+                                                            <b ng-if="notification.questionAnonyme">Anonyme</b>
+                                                            a posé une question dans le contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
+                                                            <b>{[{(notification.questionLibelle | limitTo: 65) + (notification.questionLibelle.length > 65 ? '...' : '')}]}</b><br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
-                                                </a></li><li class="  notif" >
-                                                <a href="http://localhost/projet_pensonslibre/?controller=utilisateur&amp;action=posterpensee&amp;p=1" class="notif-link">
+                                                </a>
+                                                <a href="http://localhost:8000/lectureContenu/{[{notification.contenuID}]}" class="notif-link" ng-if="notification.code=='R'" ng-click="notificationHasBeenRead(notification.id)">
                                                     <div class="notif-row">
-                                                        <div class="notif-symbolr">R</div>
-                                                        <div class="notif-content"><b>Amblard</b></b> a répondu à votre <br><span class="notif-date">15-09-2016  09:00</span></div>
+                                                        <div class="notif-symbolr">{[{notification.code}]}</div>
+                                                        <div class="notif-content">
+                                                            <b ng-if="!notification.reponseAnonyme">{[{notification.prenom+' '+notification.nom}]}</b>
+                                                            <b ng-if="notification.reponseAnonyme">Anonyme</b>
+                                                            a répondu a une question du contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
+                                                            <b ng-bind-html="(notification.reponseLibelle | limitTo: 65) + (notification.reponseLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
-                                                </a></li>
-                                               <li class="notifications-li  notif" data-pensee="106" data-contribution="0" data-commentaire="0" data-code="11">
-                                                <a href="http://localhost/projet_pensonslibre/?controller=utilisateur&amp;action=posterpensee&amp;p=1" class="notif-link">
+                                                </a>
+                                                <a href="/lectureContenu/{[{notification.contenuID}]}" class="notif-link" ng-if="notification.code=='C'" ng-click="notificationHasBeenRead(notification.id)">
                                                     <div class="notif-row">
-                                                        <div class="notif-symbolp">P</div>
-                                                        <div class="notif-content"><b>Amblard</b> a publié un contenu <br><span class="notif-date">15-09-2016  08:51</span></div>
+                                                        <div class="notif-symbolc">{[{notification.code}]}</div>
+                                                        <div class="notif-content">
+                                                            <b>{[{notification.prenom+' '+notification.nom}]}</b>
+                                                            a commenté une réponse du contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
+                                                            <b ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
-                                                </a></li></ul>
+                                                </a>
+                                                <a href="/lectureContenu/{[{notification.contenuID}]}" class="notif-link" ng-if="notification.code=='Ca'" ng-click="notificationHasBeenRead(notification.id)">
+                                                    <div class="notif-row">
+                                                        <div class="notif-symbolc">{[{notification.code}]}</div>
+                                                        <div class="notif-content">
+                                                            <b>{[{notification.prenom+' '+notification.nom}]}</b>
+                                                            a aussi commenté une réponse du contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
+                                                            <b ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div id="notificationFooter"><a href="#" class="notif-link-footer"><i class="material-icons">sentiment_satisfied</i></a></div>
                                 </div>
@@ -144,7 +200,7 @@
                                     {[{authToken.user.prenom}]}<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/3il/{[{username}]}">Profil</a></li>
-                                    <li ng-if="authToken.user.isPersonnel"><a href="/{[{authToken.user.id}]}/dashboard">Tableau de Bord</a></li>
+                                    <li ng-if="authToken.user.isPersonnel"><a href="/dashboard">Tableau de Bord</a></li>
                                     <li><a href="" ng-click="logOut()">Se Déconnecter</a></li>
                                 </ul>
                             </li>
@@ -172,7 +228,7 @@
                                 </select>
                             </div>
 
-                            <div class="sel1" style="width: 50%; margin: 8px 2px 2px 8px" >
+                            <div class="sel1" style="width: 65%; margin: 8px 2px 2px 8px" >
                                 <select class="form-control"
                                         ng-model="selectedValue.anneeid"
                                         ng-change="reload()"
@@ -198,6 +254,7 @@
                     </ul>
 
                     <ul class="courses " style="margin-top: 15px !important;">
+
                         <div class="side-menu-head">Matières</div>
                         <li ng-cloak><a  ng-class="{active: rubriqueCourante=='Tous'}" ng-click="selectionRubrique('Tous')" href="#home"><img ng-src="{{asset('img/All.png')}}" class="side-menu-image">Tous</a></li>
                         <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'libelle_rubrique'" ng-cloak>
@@ -246,9 +303,10 @@
                             <div class="span12">
                                 {#Début Affichage de contenus courant concernant une rubrique cliquée#}
                                 <div>
-                                    <div class="loader" ng-if="chargementRubrique">
+                                   {# <div class="loader" ng-if="chargementRubrique">
                                         <img src="{{ asset('img/preloader.gif') }}" class="ajax-loader" height="70" width="70"/>
                                     </div>
+                                    #}
 
                         <div>
                             <div>

@@ -135,12 +135,13 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
 
     $scope.publierQuestion = function(newQuestion)
     {
-        console.log(newQuestion);
+        //console.log(newQuestion);
         contenuService.postQuestion(newQuestion, sessionStorage.idContenuCourant, $scope.authToken.user.id, 1).then(function(data){
 
             $scope.afficherNewQuestion = false;
             $location.path("/");
             $window.location.reload();
+
         });
 
     }
@@ -162,11 +163,12 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     $scope.newReponse = {};
     $scope.publierReponse = function(newReponse, questionID)
     {
+
         if(newReponse.libelle==undefined || newReponse.libelle.length<=30){
             alert("Une réponse doit contenir au minimum 30 caractères !");
             return;
         }
-
+        $rootScope.blockLoading=false;
         contenuService.postReponse(newReponse, questionID, $scope.authToken.user.id).then(function(data){
 
             var reponseQuestion = angular.toJson(data);

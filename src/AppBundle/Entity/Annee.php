@@ -40,6 +40,12 @@ class Annee
      */
     protected $promotionNotifications;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="annee")
+     * @var Notification[]
+     */
+    protected $notifications;
+
 
 
     /**
@@ -150,5 +156,39 @@ class Annee
     public function getPromotionNotifications()
     {
         return $this->promotionNotifications;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     *
+     * @return Annee
+     */
+    public function addNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

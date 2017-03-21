@@ -49,6 +49,7 @@ class VisiteContenu
     /**
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="visiteContenus")
      * @var Contenu
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $contenu;
 

@@ -94,6 +94,7 @@ class Contenu
     /**
      * @ORM\ManyToOne(targetEntity="SousRubrique", inversedBy="contenus", cascade={"persist", "merge"})
      * @var SousRubrique
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $sousRubrique;
 
@@ -102,6 +103,7 @@ class Contenu
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="contenu", cascade={"persist", "remove", "merge"})
      * @var Question[]
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $questions;
 
@@ -110,22 +112,31 @@ class Contenu
     /**
      * @ORM\OneToMany(targetEntity="UserContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
      * @var UserContenu[]
+     *
      */
     protected $userContenus;
 
     /**
      * @ORM\OneToMany(targetEntity="VisiteContenu", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var VisiteContenu[]
+     *
      */
     protected $visiteContenus;
 
 
     /**
      * @ORM\OneToMany(targetEntity="Conteneur", mappedBy="contenu", cascade={"persist", "remove", "merge"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var Conteneur[]
      */
     protected $conteneurs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="contenu")
+     * @var Notification[]
+     */
+    protected $notifications;
 
 
     /**
@@ -585,5 +596,39 @@ class Contenu
     public function getVisiteContenus()
     {
         return $this->visiteContenus;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     *
+     * @return Contenu
+     */
+    public function addNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

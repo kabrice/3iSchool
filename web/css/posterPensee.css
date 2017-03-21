@@ -607,7 +607,7 @@ body {
 
     min-height:300px;
     height: auto;
-    max-height: 500px;
+    max-height: 400px;
     color: rgba(0, 0, 0, 0.83);
 }
 #notificationFooter {
@@ -659,8 +659,17 @@ div.scroll {
     font-size: 10pt !important;
     color: #2a3136;
     font-weight: 400;
-
+    display: inline-block;
 }
+
+.notif-link p{
+    font-family:"Helvetica Neue", sans-serif;
+    font-size: 10pt !important;
+    color: #2a3136;
+    font-weight: 900;
+    display: inline-block;
+}
+
 
 .notif-link-footer{
     color: darkgray;
@@ -714,15 +723,16 @@ div.scroll {
     color: #5c6b76;
 }
 
-.no-notif1,
-.no-notif2{
+.no-notif1{
     color: grey;
-    margin-top: 40px;
+    top:0;
+    bottom: 0;
+    height: 90px;
+    line-height: 90px;
     text-align: center;
 }
-.no-notif2{
-    font-size: 20pt !important;
-}
+
+
 
 /*pagination*/
 

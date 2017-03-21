@@ -13,7 +13,6 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
             return {
                 request: function (config) {
                     nbreReqs++;
-
                     if($rootScope.blockLoading != undefined && $rootScope.blockLoading)
                     {
                         $rootScope.chargementEnCours = false;
@@ -341,7 +340,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
                 if($scope.authToken.user.isPersonnel)
                 {
                     sessionStorage.goToDashboard = true;
-                    $window.location.href = 'http://localhost:8000//dashboard';
+                    $window.location.href = 'http://localhost:8000/dashboard';
 
                 }else{
 

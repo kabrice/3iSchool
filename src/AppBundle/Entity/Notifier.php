@@ -26,12 +26,12 @@ class Notifier
      *
      * @ORM\Column(name="lu", type="boolean")
      */
-    private $lu;
+    private $lu=0;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_lu", type="datetime")
+     * @ORM\Column(name="date_lu", type="datetime", nullable=true)
      */
     private $dateLu;
 
@@ -40,24 +40,19 @@ class Notifier
      *
      * @ORM\Column(name="vu", type="boolean")
      */
-    private $vu;
+    private $vu=0;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_vu", type="datetime")
+     * @ORM\Column(name="date_vu", type="datetime", nullable=true)
      */
     private $dateVu;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_notifier", type="datetime")
-     */
-    private $dateNotifier;
 
     /**
      * @ORM\ManyToOne(targetEntity="Notification", inversedBy="notifiers")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var Notification
      */
     protected $notification;
@@ -174,27 +169,52 @@ class Notifier
         return $this->dateVu;
     }
 
+
     /**
-     * Set dateNotifier
+     * Set notification
      *
-     * @param \DateTime $dateNotifier
+     * @param \AppBundle\Entity\Notification $notification
      *
      * @return Notifier
      */
-    public function setDateNotifier($dateNotifier)
+    public function setNotification(\AppBundle\Entity\Notification $notification = null)
     {
-        $this->dateNotifier = $dateNotifier;
+        $this->notification = $notification;
 
         return $this;
     }
 
     /**
-     * Get dateNotifier
+     * Get notification
      *
-     * @return \DateTime
+     * @return \AppBundle\Entity\Notification
      */
-    public function getDateNotifier()
+    public function getNotification()
     {
-        return $this->dateNotifier;
+        return $this->notification;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Notifier
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

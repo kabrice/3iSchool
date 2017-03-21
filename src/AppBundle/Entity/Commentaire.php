@@ -82,11 +82,10 @@ class Commentaire
 
     /**
      * @ORM\ManyToOne(targetEntity="Reponse", inversedBy="commentaires")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var Reponse
      */
     protected $reponse;
-
-
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="commentaires")
@@ -95,7 +94,8 @@ class Commentaire
     protected $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Notification", mappedBy="commentaire")
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="commentaire", cascade={"persist", "remove", "merge"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var Notification[]
      */
     protected $notifications;
@@ -369,5 +369,39 @@ class Commentaire
     public function getHasVoted()
     {
         return $this->hasVoted;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     *
+     * @return Commentaire
+     */
+    public function addNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

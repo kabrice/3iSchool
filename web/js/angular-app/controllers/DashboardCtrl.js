@@ -1,5 +1,5 @@
 app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $scope, $sce, $location, $anchorScroll,
-                                             $interval, $timeout, Upload, $uibModal,$uibModalStack, contenuService) {
+                                          $interval, $timeout, Upload, $uibModal,$uibModalStack, contenuService) {
 
     $scope.showPublierContenu = true;
     $scope.fileModel = null;
@@ -22,79 +22,82 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
     }
 
-    
-      function initFields() {
+
+    function initFields() {
 
 
-          $scope.selectedDashBoardValue = {
-              anneeid: "2"
-          };
+        $scope.selectedDashBoardValue = {
+            anneeid: "2"
+        };
 
 
-          $scope.selectedRubrique = {
-              selected: {
-                  id:1,
-                  libelle: "Analyse Numérique"
-              }
-          };
+        $scope.selectedRubrique = {
+            selected: {
+                id:1,
+                libelle: "Analyse Numérique"
+            }
+        };
 
 
-          $scope.selectedNiveau = {
-              selected: null
-          };
+        $scope.selectedNiveau = {
+            selected: null
+        };
 
 
-          $scope.selectedGroupe = {
-              selected: null
-          };
+        $scope.selectedGroupe = {
+            selected: null
+        };
 
-          $scope.selectedSousRubrique = {
-              selected: {
-                  id:1,
-                  libelle: "Cours"
-              }
-          };
+        $scope.selectedSousRubrique = {
+            selected: {
+                id:1,
+                libelle: "Cours"
+            }
+        };
 
-          if(previousData!=undefined) {
-              $scope.selectedDashBoardValue.anneeid = previousData.anneeid;
-              $scope.selectedDashBoardValue.titre = previousData.titre;
-              $scope.selectedDashBoardValue.description = previousData.description;
-              $scope.selectedRubrique.selected = previousData.rubrique;
-              $scope.selectedSousRubrique.selected = previousData.sousRubrique;
-          }
+        if(previousData!=undefined) {
+            $scope.selectedDashBoardValue.anneeid = previousData.anneeid;
+            $scope.selectedDashBoardValue.titre = previousData.titre;
+            $scope.selectedDashBoardValue.description = previousData.description;
+            $scope.selectedRubrique.selected = previousData.rubrique;
+            $scope.selectedSousRubrique.selected = previousData.sousRubrique;
+        }
 
-              contenuService.getAnnee().$promise.then(function (data) {
-                  $scope.annees = data;
-              });
+        contenuService.getAnnee().$promise.then(function (data) {
+            $scope.annees = data;
+        });
 
-              contenuService.getGroupe().$promise.then(function (data) {
-                  $scope.groupes = data;
+        contenuService.getGroupe().$promise.then(function (data) {
+            $scope.groupes = data;
 
-                  if(previousData!=undefined) {
-                      $scope.selectedGroupe.selected = previousData.listeGroupes;
-                  }else{
-                      $scope.selectedGroupe.selected = [$scope.groupes[0]];
-                  }
+            if(previousData!=undefined) {
+                $scope.selectedGroupe.selected = previousData.listeGroupes;
+            }else{
+                $scope.selectedGroupe.selected = [$scope.groupes[0]];
+            }
 
-              });
+        });
 
-              contenuService.getNiveau().$promise.then(function (data) {
-                  $scope.niveaux = data;
-                  if(previousData!=undefined) {
-                      $scope.selectedNiveau.selected = previousData.listeNiveaux;
-                  }else{
-                      $scope.selectedNiveau.selected = [$scope.niveaux[1]];
-                  }
+        contenuService.getNiveau().$promise.then(function (data) {
+            $scope.niveaux = data;
+            if(previousData!=undefined) {
+                $scope.selectedNiveau.selected = previousData.listeNiveaux;
+                console.log("previousData.listeNiveaux", previousData.listeNiveaux);
+                console.log("$scope.niveaux", $scope.niveaux);
 
-              });
+            }else{
+                $scope.selectedNiveau.selected = [$scope.niveaux[1], $scope.niveaux[0]];
+            }
 
-              contenuService.getRubriques().$promise.then(function (data) {
-                  $scope.rubriques = data;
-              });
+        });
 
-              contenuService.getSousRubriques().$promise.then(function (data) {
-                  $scope.sousRubriques = data;
-              });
+        contenuService.getRubriques().$promise.then(function (data) {
+            $scope.rubriques = data;
+        });
+
+        contenuService.getSousRubriques().$promise.then(function (data) {
+            $scope.sousRubriques = data;
+        });
 
     }
 
@@ -168,8 +171,8 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         }
         if(angular.equals($scope.fileExtension, "pdf") || angular.equals($scope.fileExtension, "mp4"))
         {
-             var imageName = "cover_"+$scope.fileName.substring(0, $scope.fileName.lastIndexOf('.')+1)+"png";
-             var canvas = document.getElementById('canvas');
+            var imageName = "cover_"+$scope.fileName.substring(0, $scope.fileName.lastIndexOf('.')+1)+"png";
+            var canvas = document.getElementById('canvas');
             contenu.imgB64 = canvas.toDataURL();
             contenu.imageRoot = "cover/"+imageName;
         }else{
@@ -180,12 +183,13 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         contenu.titre = selectedDashBoardValue.titre;
         contenu.description = selectedDashBoardValue.description;
         contenu.contenuRoot = $scope.contenuRoot;
-        console.log()
+        //console.log()
         contenu.listeGroupes = $scope.selectedGroupe.selected;
         contenu.listeNiveaux = $scope.selectedNiveau.selected;
         $window.location.reload();
         contenuService.postConteneur(contenu, selectedDashBoardValue.anneeid, selectedRubrique.selected.id, selectedSousRubrique.selected.id, $scope.authToken.user.id).$promise.then(function (data) {
             sessionStorage.success = true;
+            delete localStorage.previousData;
             var previousData = {
                 titre: contenu.titre,
                 description: contenu.description,
@@ -197,8 +201,8 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
             }
 
-             localStorage.previousData = angular.toJson(previousData);
-              console.log(data);
+            localStorage.previousData = angular.toJson(previousData);
+            console.log(data);
         }, function (error) {
             sessionStorage.success = false;
             console.warn(error.data);
@@ -232,7 +236,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         function clickShowSousRubrique(numSousRubrique, enseignantRecherche) {
             $scope.labels = [];
             $scope.data = [];
-           // $scope.enseignantCourant = enseignantRecherche;
+            // $scope.enseignantCourant = enseignantRecherche;
             contenuService.getUser(enseignantRecherche + "@3il.fr").$promise.then(function (data) {
                 console.log(data[0].id);
                 $scope.showQuestionManager = false;
@@ -289,7 +293,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             if(a.length == 0) console.log(start, end);
             $scope.labels = a;
             $scope.data = [d];
-           // console.log( a, d);
+            // console.log( a, d);
             return a;
         }
 
@@ -324,14 +328,14 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
                     })
                     if(reponse.user!=undefined)
-                    contenuService.getUserNote(contenuID, reponse.user.id).$promise.then(function (data) {
+                        contenuService.getUserNote(contenuID, reponse.user.id).$promise.then(function (data) {
                             if(data[0] != undefined) {
                                 $scope.userNote[reponse.user.id] = data[0].valeur;
                                 console.log("reponse.user.id", reponse.user.id);
                                 console.log("data", data[0].valeur);
                             }
 
-                    })
+                        })
                     if(reponse.user==undefined) $scope.userNote[reponse.user.id]=0;
                     console.log(reponse.user.id, dureeTotalTmp)
 
@@ -372,22 +376,22 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
             console.log("index",index);
 
-                $scope.contenuStat = $scope.sousRubriqueData[index];
-                console.log("test", $scope.sousRubriqueData[index]);
-                $scope.labels = [];
-                $scope.data = [];
-                if(index!=undefined)
+            $scope.contenuStat = $scope.sousRubriqueData[index];
+            console.log("test", $scope.sousRubriqueData[index]);
+            $scope.labels = [];
+            $scope.data = [];
+            if(index!=undefined)
                 getVisiteData($scope.contenuStat.id);
-                $location.hash("contenuStat");
-                $anchorScroll();
+            $location.hash("contenuStat");
+            $anchorScroll();
 
 
         }
-       /* $scope.getUserID = function (userID) {
+        /* $scope.getUserID = function (userID) {
 
-            sessionStorage.userID = userID;
+         sessionStorage.userID = userID;
 
-        }*/
+         }*/
 
         if(tabPath.length>1)
         {
@@ -397,7 +401,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                 case 'nouveauContenu':
                     $scope.clickShowRubrique(true, false, false, false);
                     if($scope.annees==undefined)
-                    initFields();
+                        initFields();
                     break;
 
                 case 'gestionQuestions':
@@ -406,25 +410,25 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                     $scope.currentPage = 1; // keeps track of the current page
                     $scope.pageSize = 10; // holds the number of items per page
 
-                        contenuService.getUser(enseignantRecherche + "@3il.fr").$promise.then(function (data) {
-                            console.log(data[0].id);
-                            $scope.showQuestionManager = false;
-                            contenuService.getRubriqueDashboard(data[0].id, 1).$promise.then(function (data) {
-                                $scope.questionsEtudiants = data;
-                                $scope.showQuestionManager = true;
-                                $scope.clickShowRubrique(false, true, false, false);
+                    contenuService.getUser(enseignantRecherche + "@3il.fr").$promise.then(function (data) {
+                        console.log(data[0].id);
+                        $scope.showQuestionManager = false;
+                        contenuService.getRubriqueDashboard(data[0].id, 1).$promise.then(function (data) {
+                            $scope.questionsEtudiants = data;
+                            $scope.showQuestionManager = true;
+                            $scope.clickShowRubrique(false, true, false, false);
 
-                                console.log($scope.questionsEtudiants);
-                            })
-                        }, function (error) {
-                            contenuService.getRubriqueDashboard($scope.authToken.user.id, 1).$promise.then(function (data) {
-                                $scope.questionsEtudiants = data;
-                                $scope.showQuestionManager = true;
-                                $scope.clickShowRubrique(false, true, false, false);
-                                console.log($scope.questionsEtudiants);
-                            })
-                            console.log(error.data);
+                            console.log($scope.questionsEtudiants);
                         })
+                    }, function (error) {
+                        contenuService.getRubriqueDashboard($scope.authToken.user.id, 1).$promise.then(function (data) {
+                            $scope.questionsEtudiants = data;
+                            $scope.showQuestionManager = true;
+                            $scope.clickShowRubrique(false, true, false, false);
+                            console.log($scope.questionsEtudiants);
+                        })
+                        console.log(error.data);
+                    })
 
                     //if($scope.gestionQuestions != undefined)
                     //console.log($scope.gestionQuestions );
@@ -436,24 +440,24 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
 
                     var sousRubrique = tabPath[2];
-                     enseignantRecherche = tabPath[3];
+                    enseignantRecherche = tabPath[3];
 
-                        switch(sousRubrique) {
-                            case 'questions':
-                                clickShowSousRubrique(2, enseignantRecherche);
-                                break;
+                    switch(sousRubrique) {
+                        case 'questions':
+                            clickShowSousRubrique(2, enseignantRecherche);
+                            break;
 
-                            case 'reponses':
-                                clickShowSousRubrique(3, enseignantRecherche);
-                                break;
+                        case 'reponses':
+                            clickShowSousRubrique(3, enseignantRecherche);
+                            break;
 
-                            case "commentaires":
-                                clickShowSousRubrique(4, enseignantRecherche);
-                                break;
+                        case "commentaires":
+                            clickShowSousRubrique(4, enseignantRecherche);
+                            break;
 
-                            default:
-                                clickShowSousRubrique(2);
-                        }
+                        default:
+                            clickShowSousRubrique(2);
+                    }
 
                     break;
 
@@ -472,8 +476,9 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             }
 
         }else{
-            if($scope.annees==undefined)
-            initFields();
+
+          //  if($scope.annees==undefined)
+               // initFields();
         }
 
     });
@@ -627,7 +632,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
     //$scope.thumbnail.fileType = null;
 
     function isFileValid(file) {
-         $scope.fileExtension = file.name.substr(file.name.lastIndexOf('.')+1);
+        $scope.fileExtension = file.name.substr(file.name.lastIndexOf('.')+1);
         var result = true;
         console.log($scope.ileExtension);
 
@@ -635,21 +640,21 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         switch($scope.fileExtension) {
             case 'doc': case 'docx': case 'docm': case 'dot'||  'dotx': case 'dotm': case 'html': case 'plain': case 'txt': case 'rtf'  :
 
-                $scope.thumbnail.fileType = 'document';
+            $scope.thumbnail.fileType = 'document';
 
-                break;
+            break;
 
             case 'xls': case 'xlsx': case 'xlsm': case 'xlt': case 'xltx': case 'xltm': case 'ods': case 'csv': case 'tsv': case 'tab':
 
-                $scope.thumbnail.fileType = 'spreadsheet';
+            $scope.thumbnail.fileType = 'spreadsheet';
 
-                break;
+            break;
 
             case 'ppt': case 'pptx': case 'pptm': case 'pps': case 'ppsx'|| 'ppsm': case 'pot': case 'potx': case 'potm' :
 
-                $scope.thumbnail.fileType = 'presentation';
+            $scope.thumbnail.fileType = 'presentation';
 
-                break;
+            break;
 
             case 'mp4':
 
@@ -673,12 +678,12 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                 $scope.thumbnail.fileType = 'pdf';
 
                 break;
-            
+
             case 'jpg': case 'gif': case 'png' :
 
-                $scope.thumbnail.fileType = 'image';
+            $scope.thumbnail.fileType = 'image';
 
-                break;
+            break;
 
             default:
                 $scope.thumbnail.fileType = 'unknown';
@@ -704,7 +709,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             request.open('HEAD', url, false);
             request.send();
             if(request.status == 200) {
-                 fileExist = true;
+                fileExist = true;
             }
         }
         return fileExist;
@@ -714,20 +719,20 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
         switch($scope.thumbnail.fileType) {
             case 'document': case 'spreadsheet': case "presentation": case "zip": case "unknown":
-                
-                $scope.thumbnail.source = "cover/"+$scope.thumbnail.fileType+".png";
-                console.log($scope.fileName);
+
+            $scope.thumbnail.source = "cover/"+$scope.thumbnail.fileType+".png";
+            console.log($scope.fileName);
             $scope.thumbnail.fileType = "image";
-                break;
+            break;
             default:
 
                 $scope.thumbnail.source = "media/"+$scope.fileName;
         }
     }
     /*$scope.option = {
-        name: 'Name (hover over for more details)',
-        longDescription: 'This is my detailed description...  lots of text here'
-    }*/
+     name: 'Name (hover over for more details)',
+     longDescription: 'This is my detailed description...  lots of text here'
+     }*/
     $scope.showOptionDetails = function(userid, contenuid, titre, nom) {
         //console.log("Yeah");
         $scope.option = {
@@ -780,7 +785,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             var previousData = angular.fromJson(localStorage.previousData);
         }
 
-         initFields();
+        initFields();
 
     }
 

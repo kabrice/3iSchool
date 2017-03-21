@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Notifier;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserContenu;
 use AppBundle\Entity\VisiteContenu;
@@ -436,14 +437,92 @@ class StatsController extends Controller
 
     }
 
+    /**
+     * @Rest\View()
+     * @Rest\Get("/notifier/{user_id}")
+     */
+    public function getNotifierByUserAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $notifiers = [];
+        $nbreDeNotifs=0;
+        $user = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
+
+        if(!empty($user)) {
+            $notifiers = $em->getRepository('AppBundle:Notifier')->findNotifierByUser($user);
+            $nbreDeNotifs = $em->getRepository('AppBundle:Notifier')->findNombreNotifByUser($user);
+            $nbreDeNotifs = $nbreDeNotifs["1"];
+        }
+
+        if(empty($notifiers)) {
+            $notifiers["id"]=0;
+            $notifiers = [$notifiers];
+        }
+
+        return  array($notifiers,array("nbreDeNotifs"=>$nbreDeNotifs));
+
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"notifier", "notification","annee", "niveau", "groupe", "contenu"}, statusCode=Response::HTTP_CREATED)
+     * @Rest\Patch("/notifier/vu/{user_id}/{notification_id}")
+     */
+    public function patchNotificationsToVuAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $notification = $em->getRepository('AppBundle:Notification')->find($request->get('notification_id'));
+        $user = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
+
+        if (empty($notification)) {
+            return  \FOS\RestBundle\View\View::create(['message' => 'Notification not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (empty($user)) {
+            return $this->userNotFound();
+        }
+
+        $notifiers = $em->getRepository('AppBundle:Notifier')
+                ->findPreviousNotifGroup($user, $notification);
 
 
+        foreach ($notifiers as $notifier) {
+            $notifier->setVu(1);
+            $notifier->setDateVu(new DateTime());
+            $em->persist($notifier);
 
+        }
+        $em->flush();
+        return $notifiers;
+
+
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"notifier", "notification","annee", "niveau", "groupe", "contenu"}, statusCode=Response::HTTP_CREATED)
+     * @Rest\Patch("/notifier/lu/{notifier_id}")
+     */
+    public function patchNotificationToLuAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $notifier = $em->getRepository('AppBundle:Notifier')->find($request->get('notifier_id'));
+        if (empty($notifier)) {
+            return  \FOS\RestBundle\View\View::create(['message' => 'Notifier not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $notifier->setLu(1);
+        $notifier->setDateLu(new DateTime());
+        $em->persist($notifier);
+        $em->flush();
+        return $notifier;
+
+
+    }
 
     private function contenuNotFound()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'contenu not found'], Response::HTTP_NOT_FOUND);
     }
+
 
     private function userNotFound()
     {

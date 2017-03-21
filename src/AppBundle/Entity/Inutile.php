@@ -51,6 +51,12 @@ class Inutile
     private $dateInutile;
 
     /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="inutile")
+     * @var Notification[]
+     */
+    protected $notifications;
+
+    /**
      * Inutile constructor.
      * @param \DateTime $dateInutile
      */
@@ -166,5 +172,39 @@ class Inutile
     public function getDateInutile()
     {
         return $this->dateInutile;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     *
+     * @return Inutile
+     */
+    public function addNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

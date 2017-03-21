@@ -36,10 +36,11 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
         scope: {
             fullscreen: '=',
             showError: '=',
+            authToken: '=',
             ssRubriqueLibelle: '=',
             publierQuestion: '&'
         },
-        controller: function ($scope, $location, $anchorScroll, $sce) {
+        controller: function ($scope, $location, $anchorScroll, $sce, contenuService) {
 
             $scope.initNewQuestion = function () {
                 $scope.newQuestion = {
@@ -87,14 +88,44 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
                     if (meta.filetype == 'image') {
                         $('#upload').trigger('click');
                         $('#upload').on('change', function() {
-                            console.log(value);
                             var file = this.files[0];
                             var reader = new FileReader();
                             reader.onload = function(e) {
+                                /*myImages.push(e.target.result);
 
-                                callback(e.target.result, {
-                                    alt: ''
-                                });
+                                 console.log(myImages);*/
+                                console.log(file);
+                                var fileExtension = file.name.substr(file.name.lastIndexOf('.')+1);
+                                console.log(fileExtension);
+                                if(!angular.equals(fileExtension, "png") &&
+                                    !angular.equals(fileExtension, "jpeg") &&
+                                    !angular.equals(fileExtension, "jpg") &&
+                                    !angular.equals(fileExtension, "gif"))
+                                {
+                                    alert("Veuillez sélectionner une image");
+                                    return;
+                                }
+
+                                if(file.size>1000000)
+                                {
+                                    alert("L'image doit être inférieur à 1Mb");
+                                    return;
+                                }
+                                var imageData = {
+                                    userID: $scope.authToken.user.id,
+                                    name: file.name,
+                                    imgB64: e.target.result
+
+                                };
+                                //console.log(imageData);
+                                contenuService.postImage(imageData).$promise.then(function (data) {
+                                    console.log(data);
+                                    callback(data.imageRoot, {
+                                        alt: ''
+                                    });
+                                    alert("Ne pas oublier de redimensionner l'image si nécessaire !");
+                                })
+
                             };
                             reader.readAsDataURL(file);
                         });
@@ -110,7 +141,6 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
 
 
             };
-
             $scope.prism = function () {
                 Prism.highlightAll();
                 return true;
@@ -150,7 +180,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
                    // $scope.newQuestion.description = null;
 
                 }else{
-                    window.alert("Veuillez renseigner un numéro de page ou de ligne valide (entre 1 et 999) !");
+                    window.alert("Veuillez renseigner un numéro de page ou de ligne valide (entre 1 et 999) !\n(Mettre page=1 et ligne=1 si aucunes)");
                     return;
                 }
 

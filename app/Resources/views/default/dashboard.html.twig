@@ -158,18 +158,12 @@
                                         <div class="form-group">
                                             <label for="inputEmail3" class="col-sm-3  control-label">Section</label>
                                             <div class="col-sm-9 " >
-
-
-
                                                 <ui-select multiple sortable="true" ng-model="selectedNiveau.selected"  title="Choisir une section">
                                                     <ui-select-match placeholder="Selectionner ou rechercher une ou plusieurs sections">{[{$item.libelle }]}</ui-select-match>
                                                     <ui-select-choices repeat="item in niveaux | filter: $select.search ">
                                                         <span ng-bind-html="item.libelle | highlight: $select.search"></span>
                                                     </ui-select-choices>
                                                 </ui-select>
-
-
-
                                             </div>
 
                                         </div>
@@ -343,7 +337,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div ng-if="showBox" style="color:grey; font-size: 8pt"><i>Fichiers supportés: mp4 (10min maximum), pdf, word, powerpoint, excel et zip</i></div>
+                                                <div ng-if="showBox" style="color:grey; font-size: 8pt"><i>Fichiers facilement supportés: mp4 (10min maximum), pdf, word, powerpoint, excel et zip</i></div>
                                             </div>
 
                                             {#<div class="preview">

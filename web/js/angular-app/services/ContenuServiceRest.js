@@ -31,7 +31,7 @@ angular.module("ContenuServiceRest", ['ngResource'])
                      "getUserByCode": {method: 'GET', isArray: false, url: "/api/user/:userid/:validationCode"},
             "getConteneurByRubrique": {method: 'GET', isArray: true, url: "/api/rubrique/:isEnseignant/:libelleRubrique/:anneeid/:groupeid/:niveauid"},
           "getPromotionNotification": {method: 'GET', isArray: false, url: "/api/promotionNotification/:userid"},
-
+                 "getNotifierByUser": {method: 'GET', isArray: true, url: "/api/notifier/:userid"},
 
                          "patchUser": {method: 'PATCH', url: "/api/users/:userid", userid: 'userid'},
                        "patchRating": {method: 'PATCH', url: "/api/rate"},
@@ -41,7 +41,8 @@ angular.module("ContenuServiceRest", ['ngResource'])
                      "patchQuestion": {method: 'PATCH',  url: "/api/lectureContenu/Questions/:questionid"},
                       "patchReponse": {method: 'PATCH',  url: "/api/lectureContenu/Question/Reponses/:reponseid"},
         "patchPromotionNotification": {method: 'PATCH',  url: "/api/promotionNotification/:promotionNotificationid/:anneeid/:groupeid/:niveauid/:userid"},
-
+            "patchNotificationsToVu": {method: 'PATCH',  isArray: true, url: "/api/notifier/vu/:userid/:notificationid"},
+             "patchNotificationToLu": {method: 'PATCH',  url: "/api/notifier/lu/:notificationid"},
 
                     "postAuthTokens": {method: 'POST', url: "/api/auth-tokens/:countClick"},
                       "postQuestion": {method: "POST", url: "/api/lectureContenu/:contenuid/:userid/:typequestionid/Questions"},
@@ -115,6 +116,9 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 getPromotionNotification: function (user_id) {
                     return apiData.getPromotionNotification({userid: user_id});
                 },
+                getNotifierByUser: function (user_id) {
+                    return apiData.getNotifierByUser({userid: user_id});
+                },
 
 
                 isPasswordEmpty: function (user_email) {
@@ -174,6 +178,20 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 },
                 patchPromotionNotification: function (promotionNotificationData, promotionNotification_id, annee_id, groupe_id, niveau_id, user_id) {
                     return apiData.patchPromotionNotification({promotionNotificationid: promotionNotification_id, anneeid: annee_id, groupeid: groupe_id, niveauid: niveau_id, userid:user_id }, promotionNotificationData, function() {
+                        console.log("Success !");
+                    }, function(error) {
+                        console.log(error.data);
+                    });
+                },
+                patchNotificationsToVu: function (notificationsToVuData, user_id, notification_id) {
+                    return apiData.patchNotificationsToVu({userid: user_id, notificationid: notification_id}, notificationsToVuData, function() {
+                        console.log("Success !");
+                    }, function(error) {
+                        console.log(error.data);
+                    });
+                },
+                patchNotificationToLu: function (notificationToLuData, notification_id) {
+                    return apiData.patchNotificationToLu({notificationid: notification_id}, notificationToLuData, function() {
                         console.log("Success !");
                     }, function(error) {
                         console.log(error.data);

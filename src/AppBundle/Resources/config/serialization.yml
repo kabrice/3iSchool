@@ -294,3 +294,47 @@ AppBundle\Entity\PromotionNotification:
             groups: ['promotionNotification']
         user:
             groups: ['promotionNotification']
+
+AppBundle\Entity\Notification:
+    attributes:
+        id:
+            groups: ['user', 'annee', 'niveau', 'groupe', 'contenu', 'question', 'reponse', 'commentaire', 'notification']
+        dateNotification:
+            groups: ['notification']
+        code:
+            groups: ['notification']
+        user:
+            groups: ['notification']
+        annee:
+            groups: ['notification']
+        niveau:
+            groups: ['notification']
+        groupe:
+            groups: ['notification']
+        contenu:
+            groups: ['notification']
+        question:
+            groups: ['notification']
+        reponse:
+            groups: ['notification']
+        commentaire:
+            groups: ['notification']
+
+
+AppBundle\Entity\Notifier:
+    attributes:
+        id:
+            groups: ['notification', 'user', 'notifier']
+        lu:
+            groups: ['notifier']
+        dateLu:
+            groups: ['notifier']
+        vu:
+            groups: ['notifier']
+        dateVu:
+            groups: ['notifier']
+        notification:
+            groups: ['notifier']
+        user:
+            groups: ['notifier']
+

@@ -1,6 +1,9 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Notification;
+use AppBundle\Entity\Notifier;
+use AppBundle\Entity\User;
 
 /**
  * NotifierRepository
@@ -10,4 +13,62 @@ namespace AppBundle\Repository;
  */
 class NotifierRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function findNotifierByUser(User $user)
+    {
+        $qb = $this->createQueryBuilder('n');
+        $qb->select("n.id", "n.lu", "n.dateLu", "n.vu", "n.dateVu", "notification.id as notificationID", "notification.dateNotification",
+            "notification.code", "user.nom", "user.prenom", "user.email", "contenu.id as contenuID", "contenu.titre as contenuTitre",
+            "question.id as questionID", "question.libelle as questionLibelle", "question.nbreInutile as questionNbreInutile", "question.anonyme as questionAnonyme",
+            "reponse.id as reponseID", "reponse.libelle as reponseLibelle", "reponse.nbreInutile as reponseNbreInutile", "reponse.anonyme as reponseAnonyme",
+            "commentaire.id as commentaireID", "commentaire.libelle as commentaireLibelle", "commentaire.nbreInutile as commentaireNbreInutile");
+        $qb->join('n.notification', 'notification');
+        $qb->leftJoin('notification.user', 'user');
+        $qb->leftJoin('notification.contenu', 'contenu');
+        $qb->leftJoin('notification.question', 'question');
+        $qb->leftJoin('notification.reponse', 'reponse');
+        $qb->leftJoin('notification.commentaire', 'commentaire');
+        $qb->where('n.user=:userNotifier');
+        $qb->setParameter('userNotifier', $user);
+        $qb->orderBy('notification.dateNotification' , "DESC");
+        $qb->setFirstResult(0);
+        $qb->setMaxResults(50);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findNombreNotifByUser(User $user)
+    {
+        $qb = $this->createQueryBuilder('n');
+        $qb->select("count(n.id)");
+        $qb->join('n.notification', 'notification');
+        $qb->leftJoin('notification.user', 'user');
+        $qb->leftJoin('notification.contenu', 'contenu');
+        $qb->leftJoin('notification.question', 'question');
+        $qb->leftJoin('notification.reponse', 'reponse');
+        $qb->leftJoin('notification.commentaire', 'commentaire');
+        $qb->where('n.user=:userNotifier');
+        $qb->andWhere('n.vu=false');
+        $qb->setParameter('userNotifier', $user);
+        $qb->orderBy('notification.dateNotification' , "DESC");
+        $qb->setFirstResult(0);
+        $qb->setMaxResults(50);
+
+        return $qb->getQuery()->getSingleResult();
+    }
+
+    public function findPreviousNotifGroup(User $user, Notification $notification)
+    {
+        $qb = $this->createQueryBuilder('n');
+        $qb->select("n");
+        $qb->join('n.notification', 'notification');
+        $qb->where('n.user=:user');
+        $qb->andWhere('notification.dateNotification<=:dateNotification');
+        $qb->setParameter('user', $user);
+        $qb->setParameter('dateNotification', $notification->getDateNotification());
+        $qb->orderBy('notification.dateNotification' , "DESC");
+
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -10,4 +10,20 @@ namespace AppBundle\Repository;
  */
 class PromotionNotificationRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findUsersByPromotionNotification($criteres)
+    {
+        $qb = $this->createQueryBuilder('pn');
+        $qb->select(array("pn.
+        
+        user", "pn"));
+        $qb->join('pn.user', 'user');
+        $qb->where('pn.annee=:annee');
+        $qb->andWhere('pn.niveau=:niveau');
+        $qb->andWhere('pn.groupe=:groupe');
+        $qb->setParameter('annee', $criteres["annee"]);
+        $qb->setParameter('niveau', $criteres["niveau"]);
+        $qb->setParameter('groupe', $criteres["groupe"]);
+        return $qb->getQuery()->getResult();
+    }
+
 }

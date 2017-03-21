@@ -10,8 +10,11 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Commentaire;
+use AppBundle\Entity\Notification;
+use AppBundle\Entity\Notifier;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\Reponse;
+use AppBundle\Entity\User;
 use AppBundle\Form\Type\CommentaireType;
 use AppBundle\Form\Type\QuestionType;
 use AppBundle\Form\Type\ReponseType;
@@ -86,7 +89,7 @@ class ContenuController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $contenu = $em->getRepository('AppBundle:Contenu')->find($request->get('contenu_id'));
         $typeQuestion = $em->getRepository('AppBundle:TypeQuestion')->find($request->get('type_question_id'));
-
+        $usersTemp = [];
 
         $thisUser = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
 
@@ -107,10 +110,50 @@ class ContenuController extends Controller
 
         if ($form->isValid()) {
 
-            $em->persist($question);
-            $em->persist($thisUser);
-            $em->flush();
-            return $question;
+            //Recupération de l'année, le niveau et le groupe du contenu
+            $conteneur =  $em->getRepository('AppBundle:Conteneur')->findOneBy(array("contenu"=>$contenu));
+            $annee = $em->getRepository('AppBundle:Annee')->find($conteneur->getAnnee()->getId());
+            $niveau = $em->getRepository('AppBundle:Niveau')->find($conteneur->getNiveau()->getId());
+            $groupe = $em->getRepository('AppBundle:Groupe')->find($conteneur->getGroupe()->getId());
+            $userContenuTemp = $em->getRepository('AppBundle:UserContenu')->findOneBy(array("contenu"=>$contenu, "aPublie"=>true));
+            $enseignant = $userContenuTemp->getUser();
+
+            //Création de notifications
+            $notification = new Notification();
+            $notification->setAnnee($annee)->setNiveau($niveau)->setGroupe($groupe)->setUser($thisUser)
+                ->setContenu($contenu)->setQuestion($question)->setCode("Q");
+
+                $em->persist($question);
+                $em->persist($thisUser);
+                $em->persist($notification);
+                $em->flush();
+            //Envoyer la notification
+            if($thisUser->getId() != $enseignant->getId()) {
+
+               $this->sendNotification($enseignant, $notification);
+
+            }else{
+                // Envoie de notifications aux users concernés
+                $promotionNotifications =$em->getRepository('AppBundle:PromotionNotification')
+                    ->findBy(array("annee"=>$annee, "niveau"=>$niveau, "groupe"=>$groupe));
+
+                if(!empty($promotionNotifications))
+                {
+
+                    foreach($promotionNotifications as $promotionNotification)
+                    {
+
+                        if(!in_array($promotionNotification->getUser(), $usersTemp))
+                        {
+                            $this->sendNotification($promotionNotification->getUser(), $notification);
+                            $usersTemp[] = $promotionNotification->getUser();
+                        }
+
+                    }
+
+                }
+            }
+                return $question;
 
         } else {
             return $form;
@@ -127,7 +170,7 @@ class ContenuController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $question = $em->getRepository('AppBundle:Question')->find($request->get('question_id'));
 
-// Todo configurer plutard
+    //Todo configurer plutard
 
         $thisUser = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
 
@@ -144,12 +187,47 @@ class ContenuController extends Controller
 
         $form = $this->createForm(ReponseType::class, $reponse);
         $form->submit($request->request->all());
-
+        $usersTemp = [];
         if ($form->isValid()) {
 
+            //Recupération de l'année, le niveau et le groupe de la question
+            $contenu = $question->getContenu();
+            $conteneur =  $em->getRepository('AppBundle:Conteneur')->findOneBy(array("contenu"=>$contenu));
+            $annee = $em->getRepository('AppBundle:Annee')->find($conteneur->getAnnee());
+            $niveau = $em->getRepository('AppBundle:Niveau')->find($conteneur->getNiveau());
+            $groupe = $em->getRepository('AppBundle:Groupe')->find($conteneur->getGroupe());
+            //Création de notifications
+            $notification = new Notification();
+            $notification->setAnnee($annee)->setNiveau($niveau)->setGroupe($groupe)->setUser($thisUser)
+                         ->setContenu($contenu)->setQuestion($question)->setReponse($reponse)->setCode("R");
             $em->persist($reponse);
             $em->persist($thisUser);
+            $em->persist($notification);
             $em->flush();
+
+            if($thisUser->getId() != $question->getUser()->getId()) {
+                $this->sendNotification($question->getUser(), $notification);
+            }else if(!empty($em->getRepository('AppBundle:UserContenu')->findOneBy(array("contenu"=>$contenu, "aPublie"=>true, "user"=>$thisUser)))){
+                // Envoie de notifications aux users concernés
+                $promotionNotifications =$em->getRepository('AppBundle:PromotionNotification')
+                    ->findBy(array("annee"=>$annee, "niveau"=>$niveau, "groupe"=>$groupe));
+
+                if(!empty($promotionNotifications))
+                {
+
+                    foreach($promotionNotifications as $promotionNotification)
+                    {
+
+                        if(!in_array($promotionNotification->getUser(), $usersTemp))
+                        {
+                            $this->sendNotification($promotionNotification->getUser(), $notification);
+                            $usersTemp[] = $promotionNotification->getUser();
+                        }
+
+                    }
+
+                }
+            }
             return $reponse;
 
         } else {
@@ -166,7 +244,7 @@ class ContenuController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $reponse = $em->getRepository('AppBundle:Reponse')->find($request->get('reponse_id'));
         $thisUser = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
-
+        $usersTemp = [];
 
         if (empty($reponse) || empty($thisUser) ) {
             $this->entityNotFound();
@@ -186,10 +264,58 @@ class ContenuController extends Controller
 
         if ($form->isValid()) {
 
+            //Recupération de l'année, le niveau et le groupe de la question
+            $question = $reponse->getQuestion();
+            $contenu = $question->getContenu();
+            $conteneur =  $em->getRepository('AppBundle:Conteneur')->findOneBy(array("contenu"=>$contenu));
+            $annee = $em->getRepository('AppBundle:Annee')->find($conteneur->getAnnee());
+            $niveau = $em->getRepository('AppBundle:Niveau')->find($conteneur->getNiveau());
+            $groupe = $em->getRepository('AppBundle:Groupe')->find($conteneur->getGroupe());
+
+            //Création de notifications
+            $previousNotification = $em->getRepository('AppBundle:Notification')->findOneBy(array("reponse"=>$reponse, "code"=>"C"));
+            $notification = new Notification();
+            $notification->setAnnee($annee)->setNiveau($niveau)->setGroupe($groupe)->setUser($thisUser)
+                ->setContenu($contenu)->setQuestion($question)->setReponse($reponse)->setCommentaire($commentaire);
+            if(empty($previousNotification))
+            {
+                $notification->setCode("C");
+            }else{
+                $notification->setCode("Ca");
+            }
+
+
+
+
             $em->persist($commentaire);
             $thisUser->addCommentaire($commentaire);
             $em->persist($thisUser);
+            $em->persist($notification);
             $em->flush();
+            //envoyer la notification
+            if(strcmp($notification->getCode(), "Ca")==0) {
+                $commentsNotificationOfThisReponse = $em->getRepository('AppBundle:Notification')
+                                                 ->findBy(array("annee"=>$annee, "niveau"=>$niveau, "groupe"=>$groupe,
+                                                                "contenu"=>$contenu, "question"=>$question, "reponse"=>$reponse));
+
+                foreach($commentsNotificationOfThisReponse as $commentNotificationOfThisReponse) {
+
+                    if($commentNotificationOfThisReponse->getUser()->getId()!=$thisUser->getId()) {
+                        if(!in_array($commentNotificationOfThisReponse->getUser(), $usersTemp))
+                        {
+                            $this->sendNotification($commentNotificationOfThisReponse->getUser(), $notification);
+                            $usersTemp[] = $commentNotificationOfThisReponse->getUser();
+                        }
+                    }
+
+
+                }
+            }else{
+                if($notification->getUser()->getId()!=$thisUser->getId()) {
+                    $this->sendNotification($reponse->getUser(), $notification);
+                }
+            }
+
             return $commentaire;
 
         } else {
@@ -356,6 +482,16 @@ class ContenuController extends Controller
     private function entityNotFound()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'entity not found'], Response::HTTP_NOT_FOUND);
+    }
+
+    private  function sendNotification(User $user, Notification $notification)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $notifier = new Notifier();
+        $notifier->setUser($user)->setNotification($notification);
+        $em->persist($notifier);
+        $em->flush();
+
     }
 
 }

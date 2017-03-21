@@ -14,6 +14,8 @@ use AppBundle\Entity\Commentaire;
 use AppBundle\Entity\Conteneur;
 use AppBundle\Entity\Contenu;
 use AppBundle\Entity\Niveau;
+use AppBundle\Entity\Notification;
+use AppBundle\Entity\Notifier;
 use AppBundle\Entity\Question;
 use AppBundle\Entity\Reponse;
 use AppBundle\Entity\Rubrique;
@@ -49,7 +51,7 @@ class DashboardController extends Controller
      */
     public function postConteneurAction(Request $request)
     {
-        $tab["test"] = true;
+
         $em = $this->getDoctrine()->getEntityManager();
         $annee      = $em->getRepository('AppBundle:Annee')->find($request->get('annee_id'));
         $rubrique   = $em->getRepository('AppBundle:Rubrique')->find($request->get('rubrique_id'));
@@ -59,7 +61,7 @@ class DashboardController extends Controller
         $listeGroupes = $request->get('listeGroupes');
         $listeNiveaux = $request->get('listeNiveaux');
 
-        $tab["ok"]= true;
+        $usersTemp = [];
 
         if(empty($annee)  || empty($user) || empty($rubrique) || empty($sousRubrique))
             return new JsonResponse(['message' => 'Entity not found'], Response::HTTP_NOT_FOUND);
@@ -79,7 +81,7 @@ class DashboardController extends Controller
         $contenu    = new Contenu();
 
         $userContenu = new UserContenu();
-        $listeconteneurs[]=null;
+        $listeconteneurs[]=null; $test[]=null;
 
         $form = $this->createForm(ContenuType::class, $contenu);
         $form->submit($request->request->all());
@@ -104,11 +106,37 @@ class DashboardController extends Controller
                         ->setAPublie(1)
                         ->setNbreVue(1);
 
+                    //Création de notifications
+                    $notification = new Notification();
+                    $notification->setAnnee($annee)->setNiveau($niveau)->setGroupe($groupe)->setUser($user)->setContenu($contenu)->setCode("P");
+
 
                     $em->persist($conteneur);
                     $em->persist($contenu);
                     $em->persist($userContenu);
+                    $em->persist($notification);
                     $em->flush();
+
+                    // Envoie de notifications aux users concernés
+                    $promotionNotifications =$em->getRepository('AppBundle:PromotionNotification')
+                        ->findBy(array("annee"=>$annee, "niveau"=>$niveau, "groupe"=>$groupe));
+
+                    if(!empty($promotionNotifications))
+                    {
+
+                        foreach($promotionNotifications as $promotionNotification)
+                        {
+                           
+                            if(!in_array($promotionNotification->getUser(), $usersTemp))
+                            {
+                                $this->sendNotification($promotionNotification->getUser(), $notification);
+                                $usersTemp[] = $promotionNotification->getUser();
+                            }
+                            
+                        }
+
+                    }
+
 
                     $listeconteneurs[] = $conteneur;
 
@@ -207,6 +235,17 @@ class DashboardController extends Controller
         return  $em->getRepository('AppBundle:Vote')->findBy(array("userID"=>$request->get('user_id'),
             "refID"=>$request->get('contenu_id'),
             "ref"=>'Contenu'));
+
+    }
+
+    private  function sendNotification(User $user, Notification $notification)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $notifier = new Notifier();
+        $notifier->setUser($user)->setNotification($notification);
+        $em->persist($notifier);
+        $em->flush();
 
     }
 

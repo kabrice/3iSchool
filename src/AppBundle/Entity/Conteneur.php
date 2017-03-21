@@ -43,6 +43,7 @@ class Conteneur
     /**
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="conteneurs")
      * @var Contenu
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $contenu;
 

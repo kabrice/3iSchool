@@ -43,6 +43,12 @@ class Groupe
      */
     protected $promotionNotifications;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="groupe")
+     * @var Notification[]
+     */
+    protected $notifications;
+
 
     /**
      * Constructor
@@ -152,5 +158,39 @@ class Groupe
     public function getPromotionNotifications()
     {
         return $this->promotionNotifications;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     *
+     * @return Groupe
+     */
+    public function addNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

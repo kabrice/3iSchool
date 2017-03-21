@@ -46,14 +46,6 @@ class PromotionNotification
      */
     protected $user;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Notification", mappedBy="promotionNotification")
-     * @var Notification[]
-     */
-    protected $notifications;
-
-
-
 
     /**
      * Get id
@@ -163,4 +155,6 @@ class PromotionNotification
     {
         return $this->user;
     }
+
+
 }

@@ -53,6 +53,7 @@ class UserContenu
 
     /**
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="userContenus")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var Contenu
      */
     protected $contenu;

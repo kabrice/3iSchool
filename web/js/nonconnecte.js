@@ -1,10 +1,21 @@
-$(document).ready(function(){
-    swal({
-        title: 'Accès Impossible !',
-        type: 'error',
-        html: 'Inscris ou connectes toi d\'abord pour  accéder à la pensée :)',
-        showCloseButton: true,
-        confirmButtonText:
-            'OK'
-    })
-});
+app.controller("NotifCtrl", function ($scope, notificationService) {
+
+    $scope.updateNotifications = function() {
+        if(!$rootScope.chargementEnCours)
+        {
+            $rootScope.blockLoading=true;
+            contenuService.getNotificationByUser($scope.user.id).$promise.then(function (data) {
+                $scope.notifications = data[0];
+                console.log("$scope.notifications", $scope.notifications);
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    };
+
+    $interval($scope.updateNotifications,3000);
+
+
+
+})
+

@@ -744,4 +744,72 @@ class User implements UserInterface
     {
         return $this->promotionNotifications;
     }
+
+    /**
+     * Add notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     *
+     * @return User
+     */
+    public function addNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \AppBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\AppBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * Add notifier
+     *
+     * @param \AppBundle\Entity\Notifier $notifier
+     *
+     * @return User
+     */
+    public function addNotifier(\AppBundle\Entity\Notifier $notifier)
+    {
+        $this->notifiers[] = $notifier;
+
+        return $this;
+    }
+
+    /**
+     * Remove notifier
+     *
+     * @param \AppBundle\Entity\Notifier $notifier
+     */
+    public function removeNotifier(\AppBundle\Entity\Notifier $notifier)
+    {
+        $this->notifiers->removeElement($notifier);
+    }
+
+    /**
+     * Get notifiers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifiers()
+    {
+        return $this->notifiers;
+    }
 }

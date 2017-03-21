@@ -33,6 +33,7 @@ class SousRubrique
      * @ORM\OneToMany(targetEntity="Contenu", mappedBy="rubrique")
      * @ORM\OneToMany(targetEntity="Contenu", mappedBy="sousRubrique")
      * @var Contenu
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $contenus;
 
