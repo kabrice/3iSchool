@@ -254,7 +254,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
             if(sessionStorage.goToDashboard != undefined)
             {
                 console.log("ok");
-                $window.location.href = 'http://localhost:8000/dashboard';
+                $window.location.href = 'http://www.3ilcours.fr/dashboard';
                 delete sessionStorage.goToDashboard;
             }
 
@@ -340,7 +340,7 @@ var app = angular.module("3ischool", ["ngSanitize", 'angular.filter', 'ui.tinymc
                 if($scope.authToken.user.isPersonnel)
                 {
                     sessionStorage.goToDashboard = true;
-                    $window.location.href = 'http://localhost:8000/dashboard';
+                    $window.location.href = 'http://www.3ilcours.fr/dashboard';
 
                 }else{
 

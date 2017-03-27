@@ -7,7 +7,7 @@
                 <div class="col-sm-3 "></div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-6 ">
                     <div class="panel panel-default course-pointer">
-                        <a target="_blank" href="http://localhost:8000/lectureContenu/{[{contenu.id}]}">
+                        <a target="_blank" href="http://www.3ilcours.fr/lectureContenu/{[{contenu.id}]}">
                             <div class="panel-heading">
                                 <div class="panel-heading image" data-content="{[{contenu.description}]}">
                                 <img ng-src="{{ asset('{[{contenu.imageRoot}]}') }}" class="img-wrapper " />
@@ -76,7 +76,7 @@
                 <tr ng-repeat="userVisiteur  in userContenuByContenu">
                     <td><a style="text-decoration: none;"
                            target="_blank"
-                           href="http://localhost:8000/3il/{[{userVisiteur.user.email | substringEmail:userVisiteur.user.email}]}">
+                           href="http://www.3ilcours.fr/3il/{[{userVisiteur.user.email | substringEmail:userVisiteur.user.email}]}">
                             {[{userVisiteur.user.email}]}</a></td>
                     <td>{[{userVisiteur.nbreVue}]}</td>
                     <td     ng-if="dureeTotalVisiteur[userVisiteur.user.id]!=undefined"
@@ -154,7 +154,7 @@
                                            placeholder="Trouvez les cours d'un autre enseignant en entrant son pseudo"
                                            ng-model="search.username"/>
                                     <span class="input-group-btn">
-                       <a href="http://localhost:8000/dashboard#!/mesCours/{[{search.username}]}">
+                       <a href="http://www.3ilcours.fr/dashboard#!/mesCours/{[{search.username}]}">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>

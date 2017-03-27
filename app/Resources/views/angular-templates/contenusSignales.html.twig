@@ -43,13 +43,13 @@
                         <div>
                             <a
                                 target="_blank"
-                                href="http://localhost:8000/lectureContenu/{[{item.contenuID}]}#!/questions/{[{item.contenuID}]}"
+                                href="http://www.3ilcours.fr/lectureContenu/{[{item.contenuID}]}#!/questions/{[{item.contenuID}]}"
                                 style="text-decoration: none; font-size: 13pt;"
                                 ng-bind-html="(item.libelle | limitTo: 200) + (item.libelle.length > 200 ? '...' : '')">
                             </a></div>
                         <div style="font-size: 9pt; color: grey;"><span>Le {[{item.datePublication | date:'dd MMM yyyy à HH:mm'}]}, du contenu: </span><i>"{[{item.contenuTitre}]}"</i></div>
                     </td>
-                    <td><a target="_blank" style="text-decoration: none;" href="http://localhost:8000/3il/{[{item.auteurEmail | substringEmail:item.auteurEmail}]}"> {[{item.auteurPrenom}]} {[{item.auteurNom}]}</a></td>
+                    <td><a target="_blank" style="text-decoration: none;" href="http://www.3ilcours.fr/3il/{[{item.auteurEmail | substringEmail:item.auteurEmail}]}"> {[{item.auteurPrenom}]} {[{item.auteurNom}]}</a></td>
                     <td style="text-align: center; font-size: 13pt; color: red"><b>{[{item.nbreInutile}]}</b></td>
 
                 </tr>
@@ -63,18 +63,18 @@
                                        placeholder="Trouvez les contenus signalés d'un autre enseignant en entrant son pseudo"
                                        ng-model="search.username"/>
                                 <span class="input-group-btn">
-                       <a href="http://localhost:8000/dashboard#!/contenusSignales/questions/{[{search.username}]}"
+                       <a href="http://www.3ilcours.fr/dashboard#!/contenusSignales/questions/{[{search.username}]}"
                           ng-if="numSousRubrique==2">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                                         </a>
-                                    <a href="http://localhost:8000/1/dashboard#!/contenusSignales/reponses/{[{search.username}]}" ng-if="numSousRubrique==3">
+                                    <a href="http://www.3ilcours.fr/1/dashboard#!/contenusSignales/reponses/{[{search.username}]}" ng-if="numSousRubrique==3">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                                         </a>
-                                    <a href="http://localhost:8000/1/dashboard#!/contenusSignales/commentaires/{[{search.username}]}" ng-if="numSousRubrique==4">
+                                    <a href="http://www.3ilcours.fr/1/dashboard#!/contenusSignales/commentaires/{[{search.username}]}" ng-if="numSousRubrique==4">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>

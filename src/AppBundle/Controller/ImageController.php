@@ -47,7 +47,7 @@ class ImageController extends Controller
 
             // Todo à changer une fois hébergée sur le site
             file_put_contents("img/imgUpload/".$file_name, $data);
-            $image->setImageRoot("http://localhost:8000/img/imgUpload/".$file_name);
+            $image->setImageRoot("http://www.3ilcours.fr/img/imgUpload/".$file_name);
             $em->persist($image);
             $em->flush();
             return $image;

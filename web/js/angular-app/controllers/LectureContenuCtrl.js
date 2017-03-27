@@ -216,7 +216,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
             $scope.familleFichier = fileFamily($scope.contenuRoot);
             console.log("$scope.contenuRoot", $scope.contenuRoot);
             $scope.contenuRootTrusted = $sce.trustAsResourceUrl($scope.contenuRoot);
-            $scope.imageRootTrusted = $sce.trustAsResourceUrl("http://localhost:8000/"+$scope.imageRoot);
+            $scope.imageRootTrusted = $sce.trustAsResourceUrl("http://www.3ilcours.fr/"+$scope.imageRoot);
             console.log("$scope.imageRootTrusted", $scope.imageRootTrusted);
             $scope.contenuURL = $sce.trustAsResourceUrl("https://docs.google.com/viewer?embedded=true&url=" + $scope.contenuRoot);
             $scope.sousRubriqueLibelle = ($scope.conteneurCourant.contenu.sousRubrique!=null)?$scope.conteneurCourant.contenu.sousRubrique.libelle:"contenu";

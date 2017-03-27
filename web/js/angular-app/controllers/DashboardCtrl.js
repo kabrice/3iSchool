@@ -729,7 +729,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
     {
         var fileExist = false;
         if(filename) {
-            var url = 'http://localhost:8000/media/' + filename;
+            var url = 'http://www.3ilcours.fr/media/' + filename;
             var request = new XMLHttpRequest();
             request.open('HEAD', url, false);
             request.send();

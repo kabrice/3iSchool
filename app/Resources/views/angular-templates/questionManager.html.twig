@@ -26,12 +26,12 @@
                 </tr>
                 <tr ng-repeat="questionsEtudiant in questionsEtudiants | start: (currentPage - 1) * pageSize | limitTo: pageSize">
                     <td>
-                        <div><a target="_blank" style="text-decoration: none; font-size: 13pt;" href="http://localhost:8000/lectureContenu/{[{questionsEtudiant.contenuID}]}#!/questions/{[{questionsEtudiant.contenuID}]}">{[{questionsEtudiant.questionLibelle}]}</a></div>
+                        <div><a target="_blank" style="text-decoration: none; font-size: 13pt;" href="http://www.3ilcours.fr/lectureContenu/{[{questionsEtudiant.contenuID}]}#!/questions/{[{questionsEtudiant.contenuID}]}">{[{questionsEtudiant.questionLibelle}]}</a></div>
                         <div style="font-size: 9pt; color: grey;"><span>Le {[{questionsEtudiant.questionDatePublication | date:'dd MMM yyyy à HH:mm'}]}, du contenu: </span><i>"{[{questionsEtudiant.contenuTitre}]}"</i></div>
                     </td>
                     <td style="text-align: center; font-size: 13pt"><span style="text-decoration: none; ">
                             <b ng-class="questionsEtudiant.nbreReponses==0 ? 'nbreReponsesRed' : 'nbreReponsesBlue'">{[{questionsEtudiant.nbreReponses}]}</b></span></td>
-                    <td><a target="_blank" style="text-decoration: none;" href="http://localhost:8000/3il/{[{questionsEtudiant.auteurEmail | substringEmail:questionsEtudiant.auteurEmail}]}"> {[{questionsEtudiant.auteurPrenom}]} {[{questionsEtudiant.auteurNom}]}</a></td>
+                    <td><a target="_blank" style="text-decoration: none;" href="http://www.3ilcours.fr/3il/{[{questionsEtudiant.auteurEmail | substringEmail:questionsEtudiant.auteurEmail}]}"> {[{questionsEtudiant.auteurPrenom}]} {[{questionsEtudiant.auteurNom}]}</a></td>
                     <td style="text-align: center; font-size: 13pt; border-bottom: none!important;"><b>{[{questionsEtudiant.questionNombreVu}]}</b></td>
                     <td style="text-align: center; font-size: 13pt"><b style="color: mediumseagreen;">{[{questionsEtudiant.questionNombreVu}]}</b></td>
 
@@ -57,7 +57,7 @@
                                         type="text" class="form-control input-lg" placeholder="Trouvez les questions d'un autre enseignant en entrant son pseudo (exemple: duvalet)"
                                         ng-model="search.username"/>
                                 <span class="input-group-btn">
-                                    <a href="http://localhost:8000/dashboard#!/gestionQuestions/{[{search.username}]}">
+                                    <a href="http://www.3ilcours.fr/dashboard#!/gestionQuestions/{[{search.username}]}">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>

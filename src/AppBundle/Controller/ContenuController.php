@@ -497,7 +497,7 @@ class ContenuController extends Controller
             move_uploaded_file($_FILES['file']['tmp_name'], $upload_folder.$filename);
         }
 
-        $tab["contenuRoot"] = "http://localhost:8000/$upload_folder$filename";
+        $tab["contenuRoot"] = "http://www.3ilcours.fr/$upload_folder$filename";
         return $tab;
 
     }

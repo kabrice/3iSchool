@@ -262,7 +262,7 @@ class UserController extends Controller
                 //Build post data to make request with fetch_file_contents
                 $postdata = http_build_query(
                     array(
-                        'secret' => '6LfLyBAUAAAAAHy-mq02Sk1ukQ5SYEosEL_1nFc5', //secret key provided by google
+                        'secret' => '6LcQAhcUAAAAAAlDVRkLd6rVqOAzdfLroXf8cXOi', //secret key provided by google
                         'response' => $captcha,                    // g-captcha-response string sent from client
                         'remoteip' => $_SERVER['REMOTE_ADDR']
                     )
