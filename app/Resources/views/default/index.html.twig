@@ -45,9 +45,9 @@
 
                     <div id="navbar" class="collapse navbar-collapse" style="border-top: none">
                         <ul class="nav navbar-nav ">
-                            <li>
-                                <form id="custom-search-input" role="search">
-                                    <div class="input-group col-md-12">
+                            <li style="padding-left: 100px;!important;">
+                                <form id="custom-search-input" role="search" ng-show="!chargementEnCours">
+                                    <div class="input-group col-md-12" >
                                         <input type="search"
                                                ng-model="data.rechercheContenu"
                                                class="search-query form-control"
@@ -64,7 +64,7 @@
                         </ul>
                         <ul class="nav navbar-nav navbar-right pull-right" style="margin-top: -6px">
                             <li id="notification_li" ng-controller="NotifCtrl" ng-show="!chargementEnCours">
-                                <span id="notification_count" ng-hide="notificationCount<1">{[{notificationCount}]}</span>
+                                <span id="notification_count" ng-if="notificationCount>0">{[{notificationCount}]}</span>
                                 <a href='' class="header-text" id="notificationLink" ng-click="notficationHasBeenSeen()">
                                     <i class="material-icons">notifications</i>
                                 </a>
@@ -84,8 +84,8 @@
                                                                 <span ng-if="notification.questionNbreInutile>1"><b>utilisateurs</b></span>
                                                             <span ng-if="notification.questionNbreInutile==1"> a signalé</span>
                                                             <span ng-if="notification.questionNbreInutile>1"> ont signalés</span>
-                                                            une question du contenu :<span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
-                                                            <b>{[{(notification.questionLibelle | limitTo: 65) + (notification.questionLibelle.length > 65 ? '...' : '')}]}</b> <br>
+                                                            une question du contenu :<i>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]} : </i>
+                                                            <span>"{[{(notification.questionLibelle | limitTo: 65) + (notification.questionLibelle.length > 65 ? '...' : '')}]}"</span> <br>
                                                             <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
                                                 </a>
@@ -97,8 +97,8 @@
                                                             <span ng-if="notification.reponseNbreInutile>1"><b>utilisateurs</b></span>
                                                             <span ng-if="notification.reponseNbreInutile==1"> a signalé</span>
                                                             <span ng-if="notification.reponseNbreInutile>1"> ont signalés</span>
-                                                            une réponse du contenu : <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
-                                                            <b ng-bind-html="(notification.reponseLibelle | limitTo: 65) + (notification.reponseLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            une réponse du contenu : <i>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]} : </i>
+                                                            "<span ng-bind-html="(notification.reponseLibelle | limitTo: 65) + (notification.reponseLibelle.length > 65 ? '...' : '')"></span>" <br>
                                                             <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
                                                 </a>
@@ -111,8 +111,8 @@
                                                             <span ng-if="notification.commentaireNbreInutile==1"> a signalé</span>
                                                             <span ng-if="notification.commentaireNbreInutile>1"> ont signalés</span>
                                                             un commentaire du contenu
-                                                            <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
-                                                            <b ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            <i>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]} :</i>
+                                                            "<span ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')">"</span> <br>
                                                             <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
                                                 </a>
@@ -121,7 +121,7 @@
                                                         <div class="notif-symbolp">{[{notification.code}]}</div>
                                                         <div class="notif-content">
                                                             <b>{[{notification.prenom+' '+notification.nom}]}</b>
-                                                            a publié le contenu <b>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}</b> <br>
+                                                            a publié le contenu : <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}"</span> <br>
                                                             <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
                                                 </a>
@@ -131,9 +131,9 @@
                                                         <div class="notif-content">
                                                             <b ng-if="!notification.questionAnonyme">{[{notification.prenom+' '+notification.nom}]}</b>
                                                             <b ng-if="notification.questionAnonyme">Anonyme</b>
-                                                            a posé une question dans le contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
-                                                            <b>{[{(notification.questionLibelle | limitTo: 65) + (notification.questionLibelle.length > 65 ? '...' : '')}]}</b><br>
-                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
+                                                            a posé une question dans le contenu <i>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]} : </i>
+                                                            <span>"{[{(notification.questionLibelle | limitTo: 65) + (notification.questionLibelle.length > 65 ? '...' : '')}]}"</span><br>
+                                                            <span class="notif-date">"{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span>"</div>
                                                     </div>
                                                 </a>
                                                 <a href="http://localhost:8000/lectureContenu/{[{notification.contenuID}]}" class="notif-link" ng-if="notification.code=='R'" ng-click="notificationHasBeenRead(notification.id)">
@@ -142,9 +142,9 @@
                                                         <div class="notif-content">
                                                             <b ng-if="!notification.reponseAnonyme">{[{notification.prenom+' '+notification.nom}]}</b>
                                                             <b ng-if="notification.reponseAnonyme">Anonyme</b>
-                                                            a répondu a une question du contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
-                                                            <b ng-bind-html="(notification.reponseLibelle | limitTo: 65) + (notification.reponseLibelle.length > 65 ? '...' : '')"></b> <br>
-                                                            <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
+                                                            a répondu a une question du contenu <i>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]} : </i>
+                                                            "<span ng-bind-html="(notification.reponseLibelle | limitTo: 65) + (notification.reponseLibelle.length > 65 ? '...' : '')"></span>" <br>
+                                                            <span class="notif-date">"{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}"</span></div>
                                                     </div>
                                                 </a>
                                                 <a href="/lectureContenu/{[{notification.contenuID}]}" class="notif-link" ng-if="notification.code=='C'" ng-click="notificationHasBeenRead(notification.id)">
@@ -152,8 +152,8 @@
                                                         <div class="notif-symbolc">{[{notification.code}]}</div>
                                                         <div class="notif-content">
                                                             <b>{[{notification.prenom+' '+notification.nom}]}</b>
-                                                            a commenté une réponse du contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
-                                                            <b ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            a commenté une réponse du contenu <i>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]} : </i>
+                                                            "<span ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></span>" <br>
                                                             <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
                                                 </a>
@@ -162,8 +162,8 @@
                                                         <div class="notif-symbolc">{[{notification.code}]}</div>
                                                         <div class="notif-content">
                                                             <b>{[{notification.prenom+' '+notification.nom}]}</b>
-                                                            a aussi commenté une réponse du contenu <span>"{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]}" :</span>
-                                                            <b ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></b> <br>
+                                                            a aussi commenté une réponse du contenu <i>{[{(notification.contenuTitre | limitTo: 65) + (notification.contenuTitre.length > 65 ? '...' : '')}]} : </i>
+                                                            "<span ng-bind-html="(notification.commentaireLibelle | limitTo: 65) + (notification.commentaireLibelle.length > 65 ? '...' : '')"></span>"<br>
                                                             <span class="notif-date">{[{notification.dateNotification | date:'dd MMM yyyy à HH:mm'}]}</span></div>
                                                     </div>
                                                 </a>
@@ -271,7 +271,7 @@
                     <ul class="courses">
                         <div class="side-menu-head">Enseignants</div>
                         <li ng-repeat="unConteneur in groupesContenus.CONTENEUR | unique:'user_id'" ng-cloak>
-                            <a ng-href="#!/enseignants/{[{unConteneur.nom}]}"><img ng-src="{{ asset('{[{unConteneur.userProfilRoot}]}') }}" class="prof-image">{[{unConteneur.nom}]}</a>
+                            <a ng-href="#!/enseignants/{[{unConteneur.nom}]}"><img ng-src="{{ asset('{[{unConteneur.userProfilRoot}]}') }}" class="prof-image" style="border-radius: 50%">{[{unConteneur.nom}]}</a>
                         </li>
                     </ul>
 

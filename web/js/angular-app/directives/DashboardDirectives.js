@@ -68,6 +68,7 @@ angular.module("DashboardDirectives", ['angular.filter', "MesFiltres", "vcRecapt
                 contenu: "=",
                 labels: "=",
                 data: "=",
+                deleteContenu: "&",
                 showOptionDetails: "&"
             },
             controller: function ($scope, $location,$uibModal,$uibModalStack) {
@@ -78,6 +79,10 @@ angular.module("DashboardDirectives", ['angular.filter', "MesFiltres", "vcRecapt
                 $scope.hoverShowOptionDetails = function (userid, contenuid, titre, nom) {
                     console.log(userid, contenuid, titre);
                     $scope.showOptionDetails({userid: userid, contenuid: contenuid, titre:titre, nom:nom});
+                }
+
+                $scope.clickIconDeleteContenu = function (contenuid) {
+                    $scope.deleteContenu({contenuid:contenuid});
                 }
 
                 $scope.series = ['Durée en min'];

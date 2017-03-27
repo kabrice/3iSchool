@@ -131,9 +131,9 @@
 
 #custom-search-input{
     display: inline-block;
-    max-width: 750px!important;
-
+    width: 750px!important;
     margin-top: 8px;
+
 }
 
 

@@ -662,15 +662,6 @@ div.scroll {
     display: inline-block;
 }
 
-.notif-link p{
-    font-family:"Helvetica Neue", sans-serif;
-    font-size: 10pt !important;
-    color: #2a3136;
-    font-weight: 900;
-    display: inline-block;
-}
-
-
 .notif-link-footer{
     color: darkgray;
 }
@@ -1084,5 +1075,15 @@ body>.container-fluid,
     display: inline-block;
     vertical-align: middle;
     height: 200px;
+}
+
+
+/*autobreak long word html*/
+table td {
+    word-break: break-all !important;
+}
+
+div {
+    word-break: break-all !important;
 }
 

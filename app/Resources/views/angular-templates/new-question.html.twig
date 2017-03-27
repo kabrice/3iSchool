@@ -41,10 +41,11 @@
                 </div>#}
                 <div class="col-sm-9  padding-question-search" style="float: right; width: 200px">
                     <label class="checkbox-inline"><input type="checkbox" ng-model="newQuestion.anonyme">Anonyme</label>
-                    <button ng-click="clicPublierQuestion()" class="btn btn-lg btn-primary btn-block review" >
+                    <button ng-click="clicPublierQuestion()" class="btn btn-lg btn-primary btn-block review" ng-disabled="disabling" >
                         <span >Publier ma question</span>
                     </button>
                 </div>
+                <div style="color:dimgrey; font-size: 8pt"><i>NB: Une question anonyme l'est pour vos camarades mais pas pour l'enseignant.</i></div>
                 <div style="clear: both"></div>
 
             </form>

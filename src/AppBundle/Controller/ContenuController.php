@@ -131,6 +131,8 @@ class ContenuController extends Controller
             if($thisUser->getId() != $enseignant->getId()) {
 
                $this->sendNotification($enseignant, $notification);
+               $this->sendEmailQuestion($enseignant->getEmail(), $enseignant->getPrenom(), $thisUser->getPrenom()." ".$thisUser->getNom(),
+                    $contenu->getId(), $contenu->getTitre(), $question->getId(), $question->getLibelle());
 
             }else{
                 // Envoie de notifications aux users concernés
@@ -146,6 +148,8 @@ class ContenuController extends Controller
                         if(!in_array($promotionNotification->getUser(), $usersTemp))
                         {
                             $this->sendNotification($promotionNotification->getUser(), $notification);
+                            $this->sendEmailQuestion($promotionNotification->getUser()->getEmail(), $promotionNotification->getUser()->getPrenom(), $thisUser->getPrenom()." ".$thisUser->getNom(),
+                                $contenu->getId(), $contenu->getTitre(), $question->getId(), $question->getLibelle());
                             $usersTemp[] = $promotionNotification->getUser();
                         }
 
@@ -207,6 +211,9 @@ class ContenuController extends Controller
 
             if($thisUser->getId() != $question->getUser()->getId()) {
                 $this->sendNotification($question->getUser(), $notification);
+                $this->sendEmailReponse($question->getUser()->getEmail(), $question->getUser()->getPrenom(),
+                    $thisUser->getPrenom()." ".$thisUser->getNom(), $contenu->getId(), $contenu->getTitre(),
+                    $question->getId(), $question->getLibelle());
             }else if(!empty($em->getRepository('AppBundle:UserContenu')->findOneBy(array("contenu"=>$contenu, "aPublie"=>true, "user"=>$thisUser)))){
                 // Envoie de notifications aux users concernés
                 $promotionNotifications =$em->getRepository('AppBundle:PromotionNotification')
@@ -221,6 +228,10 @@ class ContenuController extends Controller
                         if(!in_array($promotionNotification->getUser(), $usersTemp))
                         {
                             $this->sendNotification($promotionNotification->getUser(), $notification);
+
+                            $this->sendEmailReponse($promotionNotification->getUser()->getEmail(), $promotionNotification->getUser()->getPrenom(),
+                                $thisUser->getPrenom()." ".$thisUser->getNom(), $contenu->getId(), $contenu->getTitre(),
+                                $question->getId(), $question->getLibelle());
                             $usersTemp[] = $promotionNotification->getUser();
                         }
 
@@ -241,6 +252,7 @@ class ContenuController extends Controller
      */
     public function postCommentaireAction(Request $request)
     {
+       // return $request->request->all();
         $em = $this->getDoctrine()->getEntityManager();
         $reponse = $em->getRepository('AppBundle:Reponse')->find($request->get('reponse_id'));
         $thisUser = $em->getRepository('AppBundle:User')->find($request->get('user_id'));
@@ -304,6 +316,8 @@ class ContenuController extends Controller
                         if(!in_array($commentNotificationOfThisReponse->getUser(), $usersTemp))
                         {
                             $this->sendNotification($commentNotificationOfThisReponse->getUser(), $notification);
+                            $this->sendEmailCommentaire($commentNotificationOfThisReponse->getUser()->getEmail(), $commentNotificationOfThisReponse->getUser()->getPrenom(),
+                                                        $thisUser->getPrenom()." ".$thisUser->getNom(), $contenu->getId(), $contenu->getTitre(), $question->getId());
                             $usersTemp[] = $commentNotificationOfThisReponse->getUser();
                         }
                     }
@@ -311,7 +325,7 @@ class ContenuController extends Controller
 
                 }
             }else{
-                if($notification->getUser()->getId()!=$thisUser->getId()) {
+                if($reponse->getUser()->getId()!=$thisUser->getId()) {
                     $this->sendNotification($reponse->getUser(), $notification);
                 }
             }
@@ -321,6 +335,15 @@ class ContenuController extends Controller
         } else {
             return $form;
         }
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/lectureContenu/Contenus/{id}")
+     */
+    public function removeContenuAction(Request $request)
+    {
+        $this->deleteEntity($request, "Contenu");
     }
 
 
@@ -479,6 +502,15 @@ class ContenuController extends Controller
 
     }
 
+    /**
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/notAnEntity/{fileName}")
+     */
+    public function removeFileAction(Request $request)
+    {
+       return unlink("media/".$request->get("fileName"));
+    }
+
     private function entityNotFound()
     {
         return \FOS\RestBundle\View\View::create(['message' => 'entity not found'], Response::HTTP_NOT_FOUND);
@@ -491,6 +523,68 @@ class ContenuController extends Controller
         $notifier->setUser($user)->setNotification($notification);
         $em->persist($notifier);
         $em->flush();
+
+    }
+
+    private function sendEmailQuestion($email, $name, $expediteur, $idContenu, $titreContenu, $idQuestion, $libelleQuestion)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($expediteur.' vient de poser une question sur un contenu')
+            ->setFrom('noreply@3ilcours.fr')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                    'default/question-email.html.twig',
+                    array('name' => $name, 'email' =>$email, 'expediteur'=>$expediteur, 'idContenu'=>$idContenu,
+                        'titreContenu'=>$titreContenu, "idQuestion"=>$idQuestion, "libelleQuestion"=>$libelleQuestion)
+                ),
+                'text/html'
+            )
+
+        ;
+        $this->get('mailer')->send($message);
+
+    }
+
+    private function sendEmailReponse($email, $name, $expediteur, $idContenu, $titreContenu, $idQuestion, $libelleQuestion)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($expediteur.' vient de répondre à une question')
+            ->setFrom('noreply@3ilcours.fr')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                    'default/reponse-email.html.twig',
+                    array('name' => $name, 'email' =>$email, 'expediteur'=>$expediteur, 'idContenu'=>$idContenu,'titreContenu'=>$titreContenu,
+                          "idQuestion"=>$idQuestion, "libelleQuestion"=>$libelleQuestion)
+                ),
+                'text/html'
+            )
+
+        ;
+        $this->get('mailer')->send($message);
+
+    }
+
+    private function sendEmailCommentaire($email, $name, $expediteur, $idContenu, $titreContenu, $idQuestion)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($expediteur.' vient de commenter une réponse')
+            ->setFrom('noreply@3ilcours.fr')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                    'default/commentaire-email.html.twig',
+                    array('name' => $name, 'email' =>$email, 'expediteur'=>$expediteur, 'idContenu'=>$idContenu,'titreContenu'=>$titreContenu,
+                        "idQuestion"=>$idQuestion)
+                ),
+                'text/html'
+            )
+
+        ;
+        $this->get('mailer')->send($message);
 
     }
 

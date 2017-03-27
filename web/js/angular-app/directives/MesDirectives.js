@@ -37,6 +37,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
             fullscreen: '=',
             showError: '=',
             authToken: '=',
+            disabling: '=',
             ssRubriqueLibelle: '=',
             publierQuestion: '&'
         },
@@ -440,6 +441,7 @@ angular.module("MesDirectives", ['angular.filter', "MesFiltres", "vcRecaptcha"])
             comment: "=",
         isPersonnel: "=",
              answer: "=",
+          disabling: "=",
            checkRef: '&',
        checkInutile: '&',
   deleteCommentaire: '&',

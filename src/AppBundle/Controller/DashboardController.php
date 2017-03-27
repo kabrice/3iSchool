@@ -130,6 +130,11 @@ class DashboardController extends Controller
                             if(!in_array($promotionNotification->getUser(), $usersTemp))
                             {
                                 $this->sendNotification($promotionNotification->getUser(), $notification);
+                                $this->sendEmailPublicationContenu($promotionNotification->getUser()->getEmail(),
+                                                                    $promotionNotification->getUser()->getPrenom(),
+                                                                        $user->getPrenom()." ".$user->getNom(),
+                                                                            $contenu->getId(),
+                                                                                $contenu->getTitre());
                                 $usersTemp[] = $promotionNotification->getUser();
                             }
                             
@@ -249,5 +254,34 @@ class DashboardController extends Controller
 
     }
 
+    private function sendEmailPublicationContenu($email, $name, $enseignant, $idContenu, $titreContenu)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($enseignant.' vient de publier un contenu')
+            ->setFrom('noreply@3ilcours.fr')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                    'default/publier-cours-email.html.twig',
+                    array('name' => $name, 'enseignant'=>$enseignant, 'email' =>$email, 'idContenu'=>$idContenu, 'titreContenu'=>$titreContenu)
+                ),
+                'text/html'
+            )
+
+            //If you also want to include a plaintext version of the message
+            /*  ->addPart(
+                  $this->renderView(
+                      'Emails/registration.txt.twig',
+                      array('name' => $name)
+                  ),
+                  'text/plain'
+              )*/
+
+        ;
+        $this->get('mailer')->send($message);
+
+        //return $this->render(...);
+    }
 
 }

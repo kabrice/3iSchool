@@ -9,6 +9,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     $scope.conteneurCourant = null;
     // panel question
     $scope.questionFullscreen = false;
+    $scope.disabling = false;
     $scope.questionDetailFullscreen = null;
 
     $scope.backToQuestion = function()
@@ -136,10 +137,12 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     $scope.publierQuestion = function(newQuestion)
     {
         //console.log(newQuestion);
+        $scope.disabling = true;
         contenuService.postQuestion(newQuestion, sessionStorage.idContenuCourant, $scope.authToken.user.id, 1).then(function(data){
 
             $scope.afficherNewQuestion = false;
             $location.path("/");
+            $scope.disabling = false;
             $window.location.reload();
 
         });
@@ -169,9 +172,11 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
             return;
         }
         $rootScope.blockLoading=false;
+        $scope.disabling = true;
         contenuService.postReponse(newReponse, questionID, $scope.authToken.user.id).then(function(data){
 
             var reponseQuestion = angular.toJson(data);
+            $scope.disabling = false;
             $scope.questionSelectionnee.reponses.push(angular.fromJson(reponseQuestion));
             console.log($scope.questionSelectionnee.reponses);
             $scope.newReponse.libelle = null;
@@ -184,7 +189,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
     $scope.posterComment = function(newComment, answerID)
     {
         var commentaire = {"libelle":newComment};
-
+        $scope.disabling = true;
         contenuService.postCommentaire(commentaire, answerID, $scope.authToken.user.id).then(function(data){
             var commentResponse = angular.toJson(data);
             //console.log(angular.fromJson(commentResponse));
@@ -194,6 +199,7 @@ app.controller("LectureContenuCtrl", function ($scope, $filter,  $http, $sce,con
                     if(reponse.id == answerID) reponse.commentaires.push(angular.fromJson(commentResponse));
                     console.log(reponse);
                 });
+            $scope.disabling = false;
         });
     }
 

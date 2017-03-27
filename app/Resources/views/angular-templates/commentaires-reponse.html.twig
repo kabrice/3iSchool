@@ -1,6 +1,6 @@
 <tr>
     <td class="td-comment" colspan="2" >
-        <div style="float: right" ng-if="isPersonnel"><i class="material-icons delete-data" uib-tooltip="Supprimer ce commentaire" ng-click="clickIconDeleteCommentaire({commentaireid: comment.id})">delete</i></div>
+        <div style="float: right" ng-if="isPersonnel && answer.commentaires.length>0"><i class="material-icons delete-data" uib-tooltip="Supprimer ce commentaire" ng-click="clickIconDeleteCommentaire({commentaireid: comment.id})">delete</i></div>
 
         <div class="panel panel-default noborder"
              style="
@@ -51,7 +51,10 @@
                                                           Placeholder = "Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires."></textarea>
                 </div>
                 <div class="hidden-xs col-sm-3 col-md-3 col-lg-3 nopadding-button">
-                    <button style="width: 100%" type="submit" class="btn btn-question" ng-click="clickPosterCommentaire(newComment.libelle, answer.id)">
+                    <button style="width: 100%; margin-top: 1px" type="submit"
+                            class="btn btn-question"
+                            ng-click="clickPosterCommentaire(newComment.libelle, answer.id)"
+                            ng-disabled="disabling">
                         Commenter
                     </button>
                 </div>
@@ -63,7 +66,11 @@
                                                           Placeholder = "Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires."></textarea>
                 </div>
                 <div class="col-xs-12 hidden-sm hidden-md hidden-lg " >
-                    <button style="width: 100%" type="submit" class="btn btn-question" ng-click="clickPosterCommentaire(newComment.libelle, answer.id)">
+                    <button style="width: 100%"
+                            type="submit"
+                            class="btn btn-question"
+                            ng-click="clickPosterCommentaire(newComment.libelle, answer.id)"
+                            ng-disabled="disabling">
                         Commenter
                     </button>
                 </div>

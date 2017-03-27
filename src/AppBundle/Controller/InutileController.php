@@ -9,9 +9,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Commentaire;
+use AppBundle\Entity\Contenu;
 use AppBundle\Entity\Inutile;
 use AppBundle\Entity\Notification;
 use AppBundle\Entity\Notifier;
+use AppBundle\Entity\Question;
 use AppBundle\Entity\Reponse;
 use AppBundle\Entity\User;
 use AppBundle\Form\Type\InutileType;
@@ -133,7 +135,36 @@ class InutileController extends Controller
                 $enseignant = $userContenuTemp->getUser();
 
                 if($user->getId()!=$enseignant->getId())
-                $this->sendNotification($enseignant, $notification);
+                {
+                    $this->sendNotification($enseignant, $notification);
+                    switch ($ref) {
+
+                        case 'Question':
+
+                            $this->sendEmailElementSignalee($enseignant->getEmail(), $enseignant->getPrenom(), $refEntity->getNbreInutile(),
+                                                            $contenu->getId(), $contenu->getTitre(), $refEntity->getId(), $refEntity->getLibelle(),
+                                                            strtolower($ref));
+                         break;
+
+                        case 'Reponse':
+
+                            $this->sendEmailElementSignalee($enseignant->getEmail(), $enseignant->getPrenom(), $refEntity->getNbreInutile(),
+                                $contenu->getId(), $contenu->getTitre(), $refEntity->getQuestion()->getId(), $refEntity->getLibelle(),
+                                strtolower($ref));
+                        break;
+
+                        case 'Commentaire':
+                            $this->sendEmailCommentaireSignalee($enseignant->getEmail(), $enseignant->getPrenom(), $refEntity->getNbreInutile(),
+                                $contenu->getId(), $contenu->getTitre(), $commentaire->getReponse()->getQuestion()->getId(), $refEntity->getLibelle(),
+                                strtolower($ref));
+                        break;
+
+                        default:
+                            break;
+                    }
+
+                }
+
 
                 return $refEntity;
 
@@ -151,6 +182,60 @@ class InutileController extends Controller
         $notifier->setUser($user)->setNotification($notification);
         $em->persist($notifier);
         $em->flush();
+
+    }
+
+    private function sendEmailElementSignalee($email, $name, $nbre, $idContenu, $titreContenu, $idQuestion, $libelleRef, $ref)
+    {
+        if($nbre>1)
+        {
+            $subMessage = $nbre.'utilisateurs ont';
+        }else{
+            $subMessage = '1 utilisateur a';
+        }
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subMessage." signalé une $ref")
+            ->setFrom('noreply@3ilcours.fr')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                    'default/elementSignale-email.html.twig',
+                    array('name' => $name, 'email' =>$email, 'subMessage'=>$subMessage, 'idContenu'=>$idContenu,
+                        'titreContenu'=>$titreContenu, "idQuestion"=>$idQuestion, "libelleRef"=>$libelleRef, "ref"=>$ref)
+                ),
+                'text/html'
+            )
+
+        ;
+        $this->get('mailer')->send($message);
+
+    }
+
+    private function sendEmailCommentaireSignalee($email, $name, $nbre, $idContenu, $titreContenu, $idQuestion, $libelleCommentaire, $ref)
+    {
+        if($nbre>1)
+        {
+            $subMessage = $nbre.'utilisateurs ont';
+        }else{
+            $subMessage = '1 utilisateur a';
+        }
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subMessage." signalé un commentaire")
+            ->setFrom('noreply@3ilcours.fr')
+            ->setTo($email)
+            ->setBody(
+                $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                    'default/commentaireSignale-email.html.twig',
+                    array('name' => $name, 'email' =>$email, 'subMessage'=>$subMessage, 'idContenu'=>$idContenu,
+                        'titreContenu'=>$titreContenu, "idQuestion"=>$idQuestion, "libelleCommentaire"=>$libelleCommentaire)
+                ),
+                'text/html'
+            )
+
+        ;
+        $this->get('mailer')->send($message);
 
     }
 

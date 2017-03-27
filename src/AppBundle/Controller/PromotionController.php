@@ -71,7 +71,7 @@ class PromotionController extends Controller
     public function getRubriqueAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $rubrique = $em->getRepository('AppBundle:Rubrique')->findAll();
+        $rubrique = $em->getRepository('AppBundle:Rubrique')->findBy([],array("libelle"=>"ASC"));
 
         if (empty($rubrique)) {
             return \FOS\RestBundle\View\View::create(['message' => 'Rubrique introuvable'], Response::HTTP_NOT_FOUND);

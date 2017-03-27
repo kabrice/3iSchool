@@ -167,6 +167,11 @@ class UserController extends Controller
             return $this->userNotFound();
         }
 
+        if($user->getIsPersonnel())
+        {
+            $this->sendEmailBroadcast($user->getPrenom()." ".$user->getNom());
+        }
+
         $user->setActive(1);
         $user->setValidationCode(0);
 
@@ -403,6 +408,24 @@ class UserController extends Controller
         //return $this->render(...);
     }
 
+    private function sendEmailBroadcast($enseignant)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($enseignant.' a rejoint 3ilCours')
+            ->setFrom('noreply@3ilcours.fr')
+            ->setTo(array('kamdeme@3il.fr', 'briceouabo@3il.fr'))
+            ->setBody(
+                $this->renderView(
+                    'default/broadcast-email.html.twig',
+                    array('name' => $name, 'email' =>$email, 'enseignant'=>$enseignant)
+                ),
+                'text/html'
+            )
+
+        ;
+        $this->get('mailer')->send($message);
+
+    }
 
 
 }

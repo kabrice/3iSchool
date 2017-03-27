@@ -20,19 +20,17 @@ $(document).ready(function () {
         return false;
     });
 
-    //$('#AddNew').on('click', function () {
-    //    $('#notificationsBody ul').append('<li>New Message</li>');
-    //});
-
 });
+
 app.controller("NotifCtrl", function ($filter, $http,$rootScope , $window, $scope, $sce, $location, $anchorScroll,
-                                          $interval, $timeout, Upload, $uibModal,$uibModalStack, contenuService) {
+                                      $interval, $timeout, Upload, $uibModal,$uibModalStack, contenuService) {
 
     var authToken = angular.fromJson(localStorage.userData);
     $scope.user = authToken.user;
+    $scope.notification = {};
     var firstNotif = false;
     contenuService.getNotifierByUser($scope.user.id).$promise.then(function (data) {
-        //Ce notification correspond à notifier de l'api
+        //Cette notification correspond à notifier de l'api
         $scope.notifications = data[0];
         $scope.notificationCount = data[1]["nbreDeNotifs"];
 
@@ -42,7 +40,7 @@ app.controller("NotifCtrl", function ($filter, $http,$rootScope , $window, $scop
 
 
 
-    $scope.updateNotifications = function() {
+    var updateNotifications = function() {
         if(!$rootScope.chargementEnCours)
         {
             $rootScope.blockLoading=true;
@@ -57,13 +55,14 @@ app.controller("NotifCtrl", function ($filter, $http,$rootScope , $window, $scop
             });
         }
     };
-    $interval($scope.updateNotifications,3000);
+  //  $interval(updateNotifications,30000);
 
 
 
     $scope.notficationHasBeenSeen = function () {
         $rootScope.blockLoading = true;
-        //console.log("hasSeen", $scope.notifications[0]);
+        $scope.notificationCount = 0;
+        console.log("hasSeen", $scope.notifications[0]);
         contenuService.patchNotificationsToVu({}, $scope.user.id, $scope.notifications[0].notificationID).$promise.then(function (data) {
 
         }, function (error) {
@@ -72,7 +71,6 @@ app.controller("NotifCtrl", function ($filter, $http,$rootScope , $window, $scop
     }
     $scope.notificationHasBeenRead = function (notififierID) {
         $rootScope.blockLoading = true;
-        //console.log("notificationHasBeenRead", notififierID);
         contenuService.patchNotificationToLu({}, notififierID).$promise.then(function (data) {
         }, function (error) {
             console.log(error);

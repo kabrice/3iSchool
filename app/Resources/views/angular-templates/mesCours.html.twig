@@ -127,6 +127,7 @@
                         <th>Année</th>
                         <th>Section</th>
                         <th>Groupe</th>
+                        <th>Supprimer</th>
                     </tr>
                     <tr ng-repeat="item in sousRubriqueData | start: (currentPage - 1) * pageSize | limitTo: pageSize">
                         <td>
@@ -139,8 +140,9 @@
                             <div style="font-size: 9pt; color: grey;"><i>Publié le {[{item.datePublication | date:'dd MMM yyyy à HH:mm'}]}</i></div>
                         </td>
                         <td>{[{item.anneeLibelle}]}</td>
-                        <td>{[{item.niveauLibelle}]}</td>
+                        <td>{[{item.niveauLibelle}]} </td>
                         <td>{[{item.groupeLibelle}]}</td>
+                        <td><i class="material-icons delete-data" uib-tooltip="Supprimer ce cours" ng-click="clickIconDeleteContenu(item.id)">delete</i></td>
                     </tr>
                     <tr><td colspan="3"><ul uib-pagination total-items="sousRubriqueData.length" items-per-page="pageSize" ng-model="currentPage" max-size="10"
                                             class="pagination-sm"></ul></td></tr>
@@ -152,7 +154,7 @@
                                            placeholder="Trouvez les cours d'un autre enseignant en entrant son pseudo"
                                            ng-model="search.username"/>
                                     <span class="input-group-btn">
-                       <a href="http://localhost:8000/1/dashboard#!/mesCours/{[{search.username}]}">
+                       <a href="http://localhost:8000/dashboard#!/mesCours/{[{search.username}]}">
                         <button class="btn btn-info btn-lg" type="button">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>

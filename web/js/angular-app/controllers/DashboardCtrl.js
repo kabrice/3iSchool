@@ -69,9 +69,17 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
         contenuService.getGroupe().$promise.then(function (data) {
             $scope.groupes = data;
-
             if(previousData!=undefined) {
                 $scope.selectedGroupe.selected = previousData.listeGroupes;
+                angular.forEach($scope.selectedGroupe.selected, function(reponseFromCookie, key) {
+                    angular.forEach($scope.groupes, function(reponseFromPromise, key) {
+                        if(reponseFromPromise.id == reponseFromCookie.id){
+                            $scope.groupes[$scope.groupes.indexOf(reponseFromPromise)] = reponseFromCookie;
+                        }
+                    });
+
+                });
+                console.log("$scope.groupes", $scope.groupes);
             }else{
                 $scope.selectedGroupe.selected = [$scope.groupes[0]];
             }
@@ -82,8 +90,15 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
             $scope.niveaux = data;
             if(previousData!=undefined) {
                 $scope.selectedNiveau.selected = previousData.listeNiveaux;
-                console.log("previousData.listeNiveaux", previousData.listeNiveaux);
-                console.log("$scope.niveaux", $scope.niveaux);
+                angular.forEach($scope.selectedNiveau.selected, function(reponseFromCookie, key) {
+                    angular.forEach($scope.niveaux, function(reponseFromPromise, key) {
+                        if(reponseFromPromise.id == reponseFromCookie.id){
+                            $scope.niveaux[$scope.niveaux.indexOf(reponseFromPromise)] = reponseFromCookie;
+                        }
+
+                    });
+
+                });
 
             }else{
                 $scope.selectedNiveau.selected = [$scope.niveaux[1], $scope.niveaux[0]];
@@ -161,7 +176,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
     var contenu = {};
     $scope.creerContenu = function (selectedDashBoardValue, selectedGroupe, selectedNiveau, selectedRubrique, selectedSousRubrique) {
         console.log(selectedDashBoardValue, selectedGroupe, selectedNiveau, selectedRubrique, selectedSousRubrique);
-
+        $scope.disabling = true;
         if(!selectedDashBoardValue.titre || !selectedDashBoardValue.description) {
             alert("Impossible de publier!\nVérifiez que tous les champs sont remplis et valides.");
             return;
@@ -189,7 +204,9 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         $window.location.reload();
         contenuService.postConteneur(contenu, selectedDashBoardValue.anneeid, selectedRubrique.selected.id, selectedSousRubrique.selected.id, $scope.authToken.user.id).$promise.then(function (data) {
             sessionStorage.success = true;
+            $scope.disabling = false;
             delete localStorage.previousData;
+            console.log("$scope.fileName", $scope.fileName);
             var previousData = {
                 titre: contenu.titre,
                 description: contenu.description,
@@ -198,14 +215,14 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
                 listeNiveaux: $scope.selectedNiveau.selected,
                 rubrique: selectedRubrique.selected,
                 sousRubrique: selectedSousRubrique.selected
-
             }
 
             localStorage.previousData = angular.toJson(previousData);
             console.log(data);
         }, function (error) {
             sessionStorage.success = false;
-            console.warn(error.data);
+            console.warn(error);
+            contenuService.removeFile(sessionStorage.fileName);
         })
 
     }
@@ -351,11 +368,8 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
 
         function getStatContenuData(userID, numSousRubrique) {
             $scope.userTemp=userID;
-            console.log("$scope.userTemp", $scope.userTemp);
             contenuService.getRubriqueDashboard(userID, numSousRubrique).$promise.then(function (data) {
                 $scope.sousRubriqueData = data;
-                console.log("$scope.sousRubriqueData = data", $scope.sousRubriqueData = data);
-                console.log("$scope.indexContenu", $scope.indexContenu);
                 if($scope.indexContenu==undefined && numSousRubrique==5)
                 {
                     $scope.contenuStat = $scope.sousRubriqueData[0];
@@ -392,6 +406,17 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
          sessionStorage.userID = userID;
 
          }*/
+
+        $scope.deleteContenu= function(contenuid){
+
+            if (window.confirm("Êtes-vous certain de vouloir supprimer ce cours ?\nCette opération est irréversible ! Il sera supprimé dans les groupes.")) {
+                contenuService.removeContenu(contenuid).$promise.then(function () {
+                    $window.location.reload();
+                }, function (error) {
+                    console.log(error);
+                });
+            }
+        }
 
         if(tabPath.length>1)
         {
@@ -557,7 +582,7 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
     $scope.chunkSize = '500KB';
     function uploadUsingUpload(file, resumable) {
         $scope.fileName = file.name;
-
+        sessionStorage.fileName=  file.name;
         if($scope.contenuRoot!=undefined) $scope.contenuRoot=undefined;
 
         if(isFileExist(file.name))
@@ -771,11 +796,11 @@ app.controller("DashboardCtrl", function ($filter, $http,$rootScope , $window, $
         //$scope.enseignantCourant=$scope.username;
         $scope.logged = true;
 
-
+        
         if(sessionStorage.success != undefined)
         {
-            console.log(sessionStorage.success);
-            $scope.sendSuccess = sessionStorage.success;
+            console.log(JSON.parse(sessionStorage.success));
+            $scope.sendSuccess = JSON.parse(sessionStorage.success);
             delete sessionStorage.success;
         }
 

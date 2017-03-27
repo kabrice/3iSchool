@@ -50,7 +50,7 @@
                         {#Change made for hidden#}
                         <div class="row">
                             <div class="col-xl-4 col-lg-3 col-md-3 col-sm-1" ng-if="questionFullscreen"></div> {#Change made for questionFullscreen#}
-                            <div ng-class="{'col-sm-10 col-md-6 col-lg-6 col-xl-4': questionFullscreen}" class=" panel-body noborder " style="box-shadow: none !important; ">
+                            <div ng-class="{'col-sm-10 col-md-6 col-lg-6 col-xl-4': questionFullscreen}" class="panel-body noborder" style="box-shadow: none !important">
 
                                 <liste-questions  ng-if="!afficherNewQuestion" conteneur-question= "conteneurQuestion"></liste-questions>
 
@@ -64,6 +64,7 @@
                             class="container-fluid question-panel padding-smpanel"
                             auth-token="authToken"
                             ng-show="afficherNewQuestion"
+                            disabling="disabling"
                             publier-question="publierQuestion(newQuestion)"
                             fullscreen = "questionFullscreen"
                             show-error = "showQuestionError"
@@ -338,6 +339,7 @@
                                     <tr commentaires-reponse
                                         ng-repeat="unCommentaire in uneReponse.commentaires"
                                         ng-show="showDetails"
+                                        disabling="disabling"
                                         is-personnel = "authToken.user.isPersonnel"
                                         poster-comment="posterComment(newComment, answerID)"
                                         comment="unCommentaire"
@@ -350,6 +352,7 @@
                                         ng-show="showDetails && uneReponse.commentaires.length==0"
                                         poster-comment="posterComment(newComment, answerID)"
                                         answer="uneReponse"
+                                        disabling="disabling"
                                         is-personnel = "authToken.user.isPersonnel"
                                         delete-commentaire="deleteCommentaire(commentaireid)"
                                         check-ref="checkRef(ref, refID)"
@@ -377,10 +380,11 @@
 
                                                 <div class="col-sm-9  padding-question-search" style="float: right; width: 200px" ng-if="tinyMceReponse && idQuestion == questionSelectionnee.id">
                                                     <label class="checkbox-inline"><input type="checkbox" ng-model="newReponse.anonyme" value="false">Anonyme</label>
-                                                    <button ng-click="publierReponse(newReponse, questionSelectionnee.id)" class="btn btn-lg btn-primary btn-block review" >
+                                                    <button ng-click="publierReponse(newReponse, questionSelectionnee.id)" class="btn btn-lg btn-primary btn-block review" ng-disabled="disabling">
                                                         <span >Publier ma réponse</span>
                                                     </button>
                                                 </div>
+                                                <div style="color:dimgrey; font-size: 8pt"><i>NB: Une réponse anonyme l'est pour vos camarades mais pas pour l'enseignant.</i></div>
                                             </form>
 
                                         </td>

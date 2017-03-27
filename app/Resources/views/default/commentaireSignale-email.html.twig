@@ -1,0 +1,18 @@
+Salut {{name}} ! Juste pour t'informer que :
+<p>
+    <b>{{ subMessage }}</b> signalé le commentaire :
+    <i> {{ libelleCommentaire}}</i></p> dans le contenu : "{{ titreContenu}}".
+
+<h2>
+    <a  href="https://www.3ilcours.fr/lectureContenu/{{ idContenu }}#!/questions/{{ idQuestion }}"  style="display:inline-block;width:100%;
+    background-color:rgba(240, 79, 15, 0.29);
+    text-decoration:none;
+    color:#e84e0f;
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;padding:15px 0px 15px 0px;border-radius:2px">Réagir</a>
+</h2>
+Merci et bon courage à vous.
+
+{# Makes an absolute URL to the /images/logo.png file #}
+<img src="{{ absolute_url(asset('img/happystudent.png')) }}" height="40" width="50" style="margin-bottom: -10px; margin-left: -10px">

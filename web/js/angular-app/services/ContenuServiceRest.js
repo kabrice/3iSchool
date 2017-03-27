@@ -54,10 +54,12 @@ angular.module("ContenuServiceRest", ['ngResource'])
                      "postConteneur": {method: "POST", isArray: true, url: "/api/conteneur/:anneeid/:rubriqueid/:sousRubriqueid/:userid"},
          "postPromotionNotification": {method: 'POST',  url: "/api/promotionNotification/:anneeid/:groupeid/:niveauid/:userid"},
 
-                   "removeQuestion": {method: 'DELETE', url: "/api/lectureContenu/Questions/:questionid"},
-                    "removeReponse": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponses/:reponseid"},
-                "removeCommentaire": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponse/Commentaires/:commentaireid"},
-                  "deleteAuthToken": {method: 'DELETE', url: "/api/auth-tokens/:id"}
+                     "removeContenu": {method: 'DELETE', url: "/api/lectureContenu/Contenus/:contenuid"},
+                    "removeQuestion": {method: 'DELETE', url: "/api/lectureContenu/Questions/:questionid"},
+                     "removeReponse": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponses/:reponseid"},
+                 "removeCommentaire": {method: 'DELETE', url: "/api/lectureContenu/Question/Reponse/Commentaires/:commentaireid"},
+                        "removeFile": {method: 'DELETE', url: "/api/notAnEntity/:filename"},
+                   "deleteAuthToken": {method: 'DELETE', url: "/api/auth-tokens/:id"}
             });
 
             return {
@@ -296,6 +298,13 @@ angular.module("ContenuServiceRest", ['ngResource'])
                         console.log("Error " + error.status + " when sending request : " + error.data);
                     });
                 },
+                removeContenu: function(contenu_id) {
+                    return apiData.removeContenu({contenuid: contenu_id}, function() {
+                        console.log("Sucsess !");
+                    }, function(error) {
+                        console.log("Error " + error.status + " when sending request : " + error.data);
+                    });
+                },
                 removeQuestion: function(question_id) {
                     return apiData.removeQuestion({questionid: question_id}, function() {
                         console.log("Sucsess !");
@@ -312,6 +321,13 @@ angular.module("ContenuServiceRest", ['ngResource'])
                 },
                 removeCommentaire: function(commentaire_id) {
                     return apiData.removeCommentaire({commentaireid: commentaire_id}, function() {
+                        console.log("Sucsess !");
+                    }, function(error) {
+                        console.log("Error " + error.status + " when sending request : " + error.data);
+                    });
+                },
+                removeFile: function(file_name) {
+                    apiData.removeFile({filename: file_name}, function() {
                         console.log("Sucsess !");
                     }, function(error) {
                         console.log("Error " + error.status + " when sending request : " + error.data);
